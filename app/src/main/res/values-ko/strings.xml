@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">오프라인 환율 변환기</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">환율 변환</string>
+    <string name="nav_settings">설정</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">설정</string>
+    <string name="exchange_rate_sync">환율 동기화</string>
+    <string name="sync_interval">동기화 간격</string>
+    <string name="sync_now">지금 동기화</string>
+    <string name="syncing">동기화 중…</string>
+    <string name="sync_completed">동기화가 성공적으로 완료되었습니다</string>
+    <string name="sync_failed">동기화 실패: %1$s</string>
+    <string name="never_synced">동기화됨</string>
+    <string name="last_synced_just_now">마지막 동기화: 방금</string>
+    <string name="last_synced_minutes">마지막 동기화: %1$d분 전</string>
+    <string name="last_synced_date">마지막 동기화: %1$s</string>
+    <string name="sync_interval_6_hours">6시간</string>
+    <string name="sync_interval_12_hours">12시간</string>
+    <string name="sync_interval_24_hours">24시간</string>
+    <string name="sync_interval_48_hours">48시간</string>
+    <string name="sync_interval_weekly">매주</string>
+    <string name="about">정보</string>
+    <string name="version_format">버전 %1$s</string>
+    <string name="about_description">Frankfurter API로 구동되는 환율 변환기. 160개 이상의 통화를 지원합니다.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">환율 변환기</string>
+    <string name="amount">금액</string>
+    <string name="from">에서</string>
+    <string name="to">으로</string>
+    <string name="result">결과</string>
+    <string name="converting">변환 중…</string>
+    <string name="enter_amount">변환할 금액 입력</string>
+    <string name="swap_currencies">통화 교환</string>
+    <string name="recent_conversions">최근 변환</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">통화 선택</string>
+    <string name="search_currencies">통화 검색…</string>
+    <string name="clear_search">지우기</string>
+    <string name="recently_used">최근 사용</string>
+    <string name="frequently_used">자주 사용하는 통화</string>
+    <string name="all_currencies">모든 통화</string>
+    <string name="search_results">검색 결과</string>
+
+    <!-- Error Messages -->
+    <string name="error">오류</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

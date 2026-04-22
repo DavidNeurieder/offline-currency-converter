@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">离线货币转换器</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">货币转换</string>
+    <string name="nav_settings">设置</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">设置</string>
+    <string name="exchange_rate_sync">汇率同步</string>
+    <string name="sync_interval">同步间隔</string>
+    <string name="sync_now">立即同步</string>
+    <string name="syncing">同步中…</string>
+    <string name="sync_completed">同步成功完成</string>
+    <string name="sync_failed">同步失败: %1$s</string>
+    <string name="never_synced">从未同步</string>
+    <string name="last_synced_just_now">上次同步: 刚刚</string>
+    <string name="last_synced_minutes">上次同步: %1$d分钟前</string>
+    <string name="last_synced_date">上次同步: %1$s</string>
+    <string name="sync_interval_6_hours">6小时</string>
+    <string name="sync_interval_12_hours">12小时</string>
+    <string name="sync_interval_24_hours">24小时</string>
+    <string name="sync_interval_48_hours">48小时</string>
+    <string name="sync_interval_weekly">每周</string>
+    <string name="about">关于</string>
+    <string name="version_format">版本 %1$s</string>
+    <string name="about_description">由Frankfurter API驱动的货币转换器。支持160多种货币。</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">货币转换器</string>
+    <string name="amount">金额</string>
+    <string name="from">从</string>
+    <string name="to">到</string>
+    <string name="result">结果</string>
+    <string name="converting">转换中…</string>
+    <string name="enter_amount">输入要转换的金额</string>
+    <string name="swap_currencies">交换货币</string>
+    <string name="recent_conversions">最近的转换</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">选择货币</string>
+    <string name="search_currencies">搜索货币…</string>
+    <string name="clear_search">清除</string>
+    <string name="recently_used">最近使用</string>
+    <string name="frequently_used">常用货币</string>
+    <string name="all_currencies">所有货币</string>
+    <string name="search_results">搜索结果</string>
+
+    <!-- Error Messages -->
+    <string name="error">错误</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

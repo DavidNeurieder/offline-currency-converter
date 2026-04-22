@@ -1,0 +1,11 @@
+# Built outputs
+app/build/
+.gradle/
+build/
+
+# Local config
+local.properties
+
+# Planning docs
+plan.md
+test_plan.md

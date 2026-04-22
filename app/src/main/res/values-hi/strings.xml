@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">ऑफ़लाइन मुद्रा परिवर्तक</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">मुद्रा परिवर्तन</string>
+    <string name="nav_settings">सेटिंग्स</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">सेटिंग्स</string>
+    <string name="exchange_rate_sync">विनिमय दर सिंक्रनाइज़ेशन</string>
+    <string name="sync_interval">सिंक्रनाइज़ेशन अंतराल</string>
+    <string name="sync_now">अभी सिंक करें</string>
+    <string name="syncing">सिंक हो रहा है…</string>
+    <string name="sync_completed">सिंक्रनाइज़ेशन सफलतापूर्वक पूर्ण</string>
+    <string name="sync_failed">सिंक विफल: %1$s</string>
+    <string name="never_synced">कभी सिंक नहीं हुआ</string>
+    <string name="last_synced_just_now">अंतिम सिंक: अभी</string>
+    <string name="last_synced_minutes">अंतिम सिंक: %1$d मिनट पहले</string>
+    <string name="last_synced_date">अंतिम सिंक: %1$s</string>
+    <string name="sync_interval_6_hours">6 घंटे</string>
+    <string name="sync_interval_12_hours">12 घंटे</string>
+    <string name="sync_interval_24_hours">24 घंटे</string>
+    <string name="sync_interval_48_hours">48 घंटे</string>
+    <string name="sync_interval_weekly">साप्ताहिक</string>
+    <string name="about">के बारे में</string>
+    <string name="version_format">संस्करण %1$s</string>
+    <string name="about_description">Frankfurter API द्वारा संचालित मुद्रा कनवर्टर। 160+ मुद्राओं का समर्थन करता है।</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">मुद्रा कनवर्टर</string>
+    <string name="amount">राशि</string>
+    <string name="from">से</string>
+    <string name="to">में</string>
+    <string name="result">परिणाम</string>
+    <string name="converting">परिवर्तित हो रहा है…</string>
+    <string name="enter_amount">परिवर्तित करने के लिए राशि दर्ज करें</string>
+    <string name="swap_currencies">मुद्राएं बदलें</string>
+    <string name="recent_conversions">हाल के परिवर्तन</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">मुद्रा चुनें</string>
+    <string name="search_currencies">मुद्राएं खोजें…</string>
+    <string name="clear_search">साफ़ करें</string>
+    <string name="recently_used">हाल में उपयोग किया गया</string>
+    <string name="frequently_used">अक्सर उपयोग की जाने वाली</string>
+    <string name="all_currencies">सभी मुद्राएं</string>
+    <string name="search_results">खोज परिणाम</string>
+
+    <!-- Error Messages -->
+    <string name="error">त्रुटि</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

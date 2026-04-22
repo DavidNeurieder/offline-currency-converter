@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Offline valutaomzetter</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">Valutaomrekening</string>
+    <string name="nav_settings">Instellingen</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Instellingen</string>
+    <string name="exchange_rate_sync">Wisselkoersynchronisatie</string>
+    <string name="sync_interval">Synchronisatie-interval</string>
+    <string name="sync_now">Nu synchroniseren</string>
+    <string name="syncing">Synchroniseren…</string>
+    <string name="sync_completed">Synchronisatie succesvol voltooid</string>
+    <string name="sync_failed">Synchronisatie mislukt: %1$s</string>
+    <string name="never_synced">Nooit gesynchroniseerd</string>
+    <string name="last_synced_just_now">Laatst gesynchroniseerd: Zojuist</string>
+    <string name="last_synced_minutes">Laatst gesynchroniseerd: %1$d min geleden</string>
+    <string name="last_synced_date">Laatst gesynchroniseerd: %1$s</string>
+    <string name="sync_interval_6_hours">6 uur</string>
+    <string name="sync_interval_12_hours">12 uur</string>
+    <string name="sync_interval_24_hours">24 uur</string>
+    <string name="sync_interval_48_hours">48 uur</string>
+    <string name="sync_interval_weekly">Wekelijks</string>
+    <string name="about">Over</string>
+    <string name="version_format">Versie %1$s</string>
+    <string name="about_description">Valutaconverter aangedreven door Frankfurter API. Ondersteunt 160+ valuta.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">Valutaconverter</string>
+    <string name="amount">Bedrag</string>
+    <string name="from">Van</string>
+    <string name="to">Naar</string>
+    <string name="result">Resultaat</string>
+    <string name="converting">Omrekenen…</string>
+    <string name="enter_amount">Voer een bedrag in om te converteren</string>
+    <string name="swap_currencies">Valuta omwisselen</string>
+    <string name="recent_conversions">Recente conversies</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">Valuta selecteren</string>
+    <string name="search_currencies">Valuta zoeken…</string>
+    <string name="clear_search">Wissen</string>
+    <string name="recently_used">Recent gebruikt</string>
+    <string name="frequently_used">Vaak gebruikt</string>
+    <string name="all_currencies">Alle valuta</string>
+    <string name="search_results">Zoekresultaten</string>
+
+    <!-- Error Messages -->
+    <string name="error">Fout</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Offline-Währungsrechner</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">Währungsumrechner</string>
+    <string name="nav_settings">Einstellungen</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Einstellungen</string>
+    <string name="exchange_rate_sync">Wechselkurs-Synchronisierung</string>
+    <string name="sync_interval">Synchronisierungsintervall</string>
+    <string name="sync_now">Jetzt synchronisieren</string>
+    <string name="syncing">Synchronisiere…</string>
+    <string name="sync_completed">Synchronisierung erfolgreich abgeschlossen</string>
+    <string name="sync_failed">Synchronisierung fehlgeschlagen: %1$s</string>
+    <string name="never_synced">Nie synchronisiert</string>
+    <string name="last_synced_just_now">Zuletzt synchronisiert: Gerade eben</string>
+    <string name="last_synced_minutes">Zuletzt synchronisiert: %1$d Min. ago</string>
+    <string name="last_synced_date">Zuletzt synchronisiert: %1$s</string>
+    <string name="sync_interval_6_hours">6 Stunden</string>
+    <string name="sync_interval_12_hours">12 Stunden</string>
+    <string name="sync_interval_24_hours">24 Stunden</string>
+    <string name="sync_interval_48_hours">48 Stunden</string>
+    <string name="sync_interval_weekly">Wöchentlich</string>
+    <string name="about">Über</string>
+    <string name="version_format">Version %1$s</string>
+    <string name="about_description">Währungsumrechner powered by Frankfurter API. Unterstützt 160+ Währungen.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">Währungsumrechner</string>
+    <string name="amount">Betrag</string>
+    <string name="from">Von</string>
+    <string name="to">Nach</string>
+    <string name="result">Ergebnis</string>
+    <string name="converting">Umrechnen…</string>
+    <string name="enter_amount">Geben Sie einen Betrag zum Umrechnen ein</string>
+    <string name="swap_currencies">Währungen tauschen</string>
+    <string name="recent_conversions">Letzte Umrechnungen</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">Währung auswählen</string>
+    <string name="search_currencies">Währungen suchen…</string>
+    <string name="clear_search">Löschen</string>
+    <string name="recently_used">Kürzlich verwendet</string>
+    <string name="frequently_used">Häufig verwendet</string>
+    <string name="all_currencies">Alle Währungen</string>
+    <string name="search_results">Suchergebnisse</string>
+
+    <!-- Error Messages -->
+    <string name="error">Fehler</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

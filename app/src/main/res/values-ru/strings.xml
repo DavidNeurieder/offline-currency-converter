@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Офлайн конвертер валют</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">Конвертация</string>
+    <string name="nav_settings">Настройки</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Настройки</string>
+    <string name="exchange_rate_sync">Синхронизация курсов валют</string>
+    <string name="sync_interval">Интервал синхронизации</string>
+    <string name="sync_now">Синхронизировать сейчас</string>
+    <string name="syncing">Синхронизация…</string>
+    <string name="sync_completed">Синхронизация успешно завершена</string>
+    <string name="sync_failed">Синхронизация не удалась: %1$s</string>
+    <string name="never_synced">Никогда не синхронизировалось</string>
+    <string name="last_synced_just_now">Последняя синхронизация: только что</string>
+    <string name="last_synced_minutes">Последняя синхронизация: %1$d мин. назад</string>
+    <string name="last_synced_date">Последняя синхронизация: %1$s</string>
+    <string name="sync_interval_6_hours">6 часов</string>
+    <string name="sync_interval_12_hours">12 часов</string>
+    <string name="sync_interval_24_hours">24 часа</string>
+    <string name="sync_interval_48_hours">48 часов</string>
+    <string name="sync_interval_weekly">Еженедельно</string>
+    <string name="about">О приложении</string>
+    <string name="version_format">Версия %1$s</string>
+    <string name="about_description">Конвертер валют на базе Frankfurter API. Поддерживает более 160 валют.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">Конвертер валют</string>
+    <string name="amount">Сумма</string>
+    <string name="from">Из</string>
+    <string name="to">В</string>
+    <string name="result">Результат</string>
+    <string name="converting">Конвертация…</string>
+    <string name="enter_amount">Введите сумму для конвертации</string>
+    <string name="swap_currencies">Обменять валюты</string>
+    <string name="recent_conversions">Недавние конвертации</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">Выбрать валюту</string>
+    <string name="search_currencies">Поиск валют…</string>
+    <string name="clear_search">Очистить</string>
+    <string name="recently_used">Недавно использованные</string>
+    <string name="frequently_used">Часто используемые</string>
+    <string name="all_currencies">Все валюты</string>
+    <string name="search_results">Результаты поиска</string>
+
+    <!-- Error Messages -->
+    <string name="error">Ошибка</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

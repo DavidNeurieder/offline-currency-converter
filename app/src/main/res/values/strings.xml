@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Offline Currency Converter</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">Convert</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Settings</string>
+    <string name="exchange_rate_sync">Exchange Rate Sync</string>
+    <string name="sync_interval">Sync Interval</string>
+    <string name="sync_now">Sync Now</string>
+    <string name="syncing">Syncing…</string>
+    <string name="sync_completed">Sync completed successfully</string>
+    <string name="sync_failed">Sync failed: %1$s</string>
+    <string name="never_synced">Never synced</string>
+    <string name="last_synced_just_now">Last synced: Just now</string>
+    <string name="last_synced_minutes">Last synced: %1$d min ago</string>
+    <string name="last_synced_date">Last synced: %1$s</string>
+    <string name="sync_interval_6_hours">6 hours</string>
+    <string name="sync_interval_12_hours">12 hours</string>
+    <string name="sync_interval_24_hours">24 hours</string>
+    <string name="sync_interval_48_hours">48 hours</string>
+    <string name="sync_interval_weekly">Weekly</string>
+    <string name="about">About</string>
+    <string name="version_format">Version %1$s</string>
+    <string name="about_description">Currency converter powered by Frankfurter API. Supports 160+ currencies.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">Currency Converter</string>
+    <string name="amount">Amount</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="result">Result</string>
+    <string name="converting">Converting…</string>
+    <string name="enter_amount">Enter an amount to convert</string>
+    <string name="swap_currencies">Swap currencies</string>
+    <string name="recent_conversions">Recent Conversions</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">Select Currency</string>
+    <string name="search_currencies">Search currencies…</string>
+    <string name="clear_search">Clear</string>
+    <string name="recently_used">Recently Used</string>
+    <string name="frequently_used">Frequently Used</string>
+    <string name="all_currencies">All Currencies</string>
+    <string name="search_results">Search Results</string>
+
+    <!-- Error Messages -->
+    <string name="error">Error</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

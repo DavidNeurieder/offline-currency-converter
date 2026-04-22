@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">محول العملات بدون إنترنت</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">تحويل العملات</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">الإعدادات</string>
+    <string name="exchange_rate_sync">مزامنة أسعار الصرف</string>
+    <string name="sync_interval">فترة المزامنة</string>
+    <string name="sync_now">مزامنة الآن</string>
+    <string name="syncing">جارٍ المزامنة…</string>
+    <string name="sync_completed">تمت المزامنة بنجاح</string>
+    <string name="sync_failed">فشلت المزامنة: %1$s</string>
+    <string name="never_synced">لم تتم المزامنة</string>
+    <string name="last_synced_just_now">آخر مزامنة: الآن</string>
+    <string name="last_synced_minutes">آخر مزامنة: منذ %1$d دقيقة</string>
+    <string name="last_synced_date">آخر مزامنة: %1$s</string>
+    <string name="sync_interval_6_hours">6 ساعات</string>
+    <string name="sync_interval_12_hours">12 ساعة</string>
+    <string name="sync_interval_24_hours">24 ساعة</string>
+    <string name="sync_interval_48_hours">48 ساعة</string>
+    <string name="sync_interval_weekly">أسبوعي</string>
+    <string name="about">حول</string>
+    <string name="version_format">الإصدار %1$s</string>
+    <string name="about_description">محول العملات مدعوم من Frankfurter API. يدعم أكثر من 160 عملة.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">محول العملات</string>
+    <string name="amount">المبلغ</string>
+    <string name="from">من</string>
+    <string name="to">إلى</string>
+    <string name="result">النتيجة</string>
+    <string name="converting">جارٍ التحويل…</string>
+    <string name="enter_amount">أدخل مبلغًا للتحويل</string>
+    <string name="swap_currencies">تبديل العملات</string>
+    <string name="recent_conversions">التحويلات الأخيرة</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">اختر العملة</string>
+    <string name="search_currencies">البحث عن العملات…</string>
+    <string name="clear_search">مسح</string>
+    <string name="recently_used">المستخدمة مؤخرًا</string>
+    <string name="frequently_used">المستخدمة بشكل متكرر</string>
+    <string name="all_currencies">جميع العملات</string>
+    <string name="search_results">نتائج البحث</string>
+
+    <!-- Error Messages -->
+    <string name="error">خطأ</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

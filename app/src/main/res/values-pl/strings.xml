@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Offline konwerter walut</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">Konwersja walut</string>
+    <string name="nav_settings">Ustawienia</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Ustawienia</string>
+    <string name="exchange_rate_sync">Synchronizacja kursów wymiany</string>
+    <string name="sync_interval">Interwał synchronizacji</string>
+    <string name="sync_now">Synchronizuj teraz</string>
+    <string name="syncing">Synchronizacja…</string>
+    <string name="sync_completed">Synchronizacja zakończona pomyślnie</string>
+    <string name="sync_failed">Synchronizacja nieudana: %1$s</string>
+    <string name="never_synced">Nigdy nie synchronizowano</string>
+    <string name="last_synced_just_now">Ostatnia synchronizacja: Teraz</string>
+    <string name="last_synced_minutes">Ostatnia synchronizacja: %1$d min temu</string>
+    <string name="last_synced_date">Ostatnia synchronizacja: %1$s</string>
+    <string name="sync_interval_6_hours">6 godzin</string>
+    <string name="sync_interval_12_hours">12 godzin</string>
+    <string name="sync_interval_24_hours">24 godziny</string>
+    <string name="sync_interval_48_hours">48 godzin</string>
+    <string name="sync_interval_weekly">Co tydzień</string>
+    <string name="about">O aplikacji</string>
+    <string name="version_format">Wersja %1$s</string>
+    <string name="about_description">Konwerter walut oparty na Frankfurter API. Obsługuje ponad 160 walut.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">Konwerter walut</string>
+    <string name="amount">Kwota</string>
+    <string name="from">Z</string>
+    <string name="to">Na</string>
+    <string name="result">Wynik</string>
+    <string name="converting">Konwersja…</string>
+    <string name="enter_amount">Wprowadź kwotę do konwersji</string>
+    <string name="swap_currencies">Zamień waluty</string>
+    <string name="recent_conversions">Ostatnie konwersje</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">Wybierz walutę</string>
+    <string name="search_currencies">Szukaj walut…</string>
+    <string name="clear_search">Wyczyść</string>
+    <string name="recently_used">Ostatnio używane</string>
+    <string name="frequently_used">Często używane</string>
+    <string name="all_currencies">Wszystkie waluty</string>
+    <string name="search_results">Wyniki wyszukiwania</string>
+
+    <!-- Error Messages -->
+    <string name="error">Błąd</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App -->
+    <string name="app_name">Conversor de moneda sin conexión</string>
+
+    <!-- Navigation -->
+    <string name="nav_convert">Conversión</string>
+    <string name="nav_settings">Ajustes</string>
+
+    <!-- Settings Screen -->
+    <string name="settings">Ajustes</string>
+    <string name="exchange_rate_sync">Sincronización de Tipo de Cambio</string>
+    <string name="sync_interval">Intervalo de Sincronización</string>
+    <string name="sync_now">Sincronizar Ahora</string>
+    <string name="syncing">Sincronizando…</string>
+    <string name="sync_completed">Sincronización completada exitosamente</string>
+    <string name="sync_failed">Sincronización fallida: %1$s</string>
+    <string name="never_synced">Nunca sincronizado</string>
+    <string name="last_synced_just_now">Última sincronización: Hace un momento</string>
+    <string name="last_synced_minutes">Última sincronización: Hace %1$d min</string>
+    <string name="last_synced_date">Última sincronización: %1$s</string>
+    <string name="sync_interval_6_hours">6 horas</string>
+    <string name="sync_interval_12_hours">12 horas</string>
+    <string name="sync_interval_24_hours">24 horas</string>
+    <string name="sync_interval_48_hours">48 horas</string>
+    <string name="sync_interval_weekly">Semanal</string>
+    <string name="about">Acerca de</string>
+    <string name="version_format">Versión %1$s</string>
+    <string name="about_description">Conversor de moneda impulsado por Frankfurter API. Soporta más de 160 monedas.</string>
+
+    <!-- Conversion Screen -->
+    <string name="currency_converter">Conversor de Moneda</string>
+    <string name="amount">Cantidad</string>
+    <string name="from">De</string>
+    <string name="to">A</string>
+    <string name="result">Resultado</string>
+    <string name="converting">Convirtiendo…</string>
+    <string name="enter_amount">Ingresa una cantidad para convertir</string>
+    <string name="swap_currencies">Intercambiar monedas</string>
+    <string name="recent_conversions">Conversiones Recientes</string>
+    <string name="rate_format">1 %1$s = %2$s %3$s</string>
+
+    <!-- Currency Picker -->
+    <string name="select_currency">Seleccionar Moneda</string>
+    <string name="search_currencies">Buscar monedas…</string>
+    <string name="clear_search">Limpiar</string>
+    <string name="recently_used">Usado Recientemente</string>
+    <string name="frequently_used">Frecuentemente Usado</string>
+    <string name="all_currencies">Todas las Monedas</string>
+    <string name="search_results">Resultados de Búsqueda</string>
+
+    <!-- Error Messages -->
+    <string name="error">Error</string>
+
+    <!-- Currency Formatting -->
+    <string name="currency_format">%1$s%2$s</string>
+    <string name="conversion_result_format">%1$s %2$s</string>
+</resources>
