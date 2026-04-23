@@ -1,0 +1,7 @@
+Initial release of Offline Currency Converter:
+- Works completely offline with 160+ currencies
+- Automatic exchange rate sync from Frankfurter API
+- Recent conversion history
+- Material Design 3 interface
+
+This app is free and open source (AGPLv3).

@@ -2,9 +2,14 @@
 app/build/
 .gradle/
 build/
+fdroid_release
 
 # Local config
 local.properties
+.idea/
+
+# Signing
+app/keystore.jks
 
 # Planning docs
 plan.md
