@@ -10,10 +10,11 @@ android {
     namespace = "com.offlinecurrencyconverter.app"
     compileSdk = 36
 
+
     defaultConfig {
         applicationId = "com.offlinecurrencyconverter.app"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "0.1.0"
 
@@ -48,6 +49,7 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("release")
+            vcsInfo.include = false
         }
         debug {
             enableUnitTestCoverage = true
