@@ -1,10 +1,10 @@
-Offline Currency Converter is a privacy-focused currency converter app that works offline. Sync exchange rates from the free Frankfurter API and convert currencies even when you're not connected to the internet.
-
-Features:
-- Works completely offline
-- Supports 160+ currencies
-- Automatic exchange rate sync
-- Recent conversion history
-- Material Design 3 interface
-
+<b>Offline Currency Converter</b> is a privacy-focused currency converter app that works offline. Sync exchange rates from the free Frankfurter API and convert currencies even when you're not connected to the internet.<br><br>
+<b>Features:</b><br>
+<ul>
+  <li>Works completely offline</li>
+  <li>Supports 160+ currencies</li>
+  <li>Automatic exchange rate sync</li>
+  <li>Recent conversion history</li>
+  <li>Material Design 3 interface</li>
+</ul>
 This app is free and open source (AGPLv3).
