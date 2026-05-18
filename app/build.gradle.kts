@@ -32,14 +32,6 @@ android {
         disable += "RemoveWorkManagerInitializer"
     }
 
-    signingConfigs {
-        create("release") {
-            storeFile = file("keystore.jks")
-            storePassword = "changeit"
-            keyAlias = "offlinecurrencyconverter"
-            keyPassword = "changeit"
-        }
-    }
 
     buildTypes {
         release {
@@ -48,7 +40,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
             vcsInfo.include = false
         }
         debug {
