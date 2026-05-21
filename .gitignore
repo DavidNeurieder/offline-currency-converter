@@ -9,7 +9,7 @@ local.properties
 .idea/
 
 # Signing
-app/keystore.jks
+keys/
 
 # Planning docs
 plan.md

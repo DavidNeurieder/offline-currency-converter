@@ -10,6 +10,11 @@ android {
     namespace = "com.offlinecurrencyconverter.app"
     compileSdk = 36
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
 
     defaultConfig {
         applicationId = "com.offlinecurrencyconverter.app"
