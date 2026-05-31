@@ -26,6 +26,9 @@
     <string name="sync_interval_weekly">Weekly</string>
     <string name="about">About</string>
     <string name="version_format">Version %1$s</string>
+    <string name="author_label">Author</string>
+    <string name="author_name">David Neurieder</string>
+    <string name="website_label">Website</string>
     <string name="about_description">Currency converter powered by Frankfurter API. Supports 160+ currencies.</string>
 
     <!-- Conversion Screen -->
