@@ -8,9 +8,8 @@ fdroid_release
 local.properties
 .idea/
 
-# Signing
-keys/
-
 # Planning docs
-plan.md
-test_plan.md
+/docs
+
+# python
+/__pycache__
