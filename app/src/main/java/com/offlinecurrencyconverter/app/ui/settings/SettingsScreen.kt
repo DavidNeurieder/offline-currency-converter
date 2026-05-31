@@ -44,6 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.offlinecurrencyconverter.app.BuildConfig
 import com.offlinecurrencyconverter.app.R
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -281,7 +282,7 @@ private fun AboutSection() {
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = stringResource(R.string.version_format, "1.0.0"),
+                text = stringResource(R.string.version_format, BuildConfig.VERSION_NAME),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
