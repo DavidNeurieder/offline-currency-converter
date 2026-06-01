@@ -1,12 +1,9 @@
 Version 0.2.0:
 - Copy result button for quick clipboard copy
-- Pull-to-refresh to manually sync exchange rates
 - Hardcoded flag images (no network needed, loads instantly)
 - Reliable offline first-launch: clear error message + retry actually works
-- Fixed app crash on update from previous version
 - Removed Coil image loading dependency (flags are now bundled)
 - Flag attribution to Flagpedia.net in About section
-- Removed unnecessary permissions for F-Droid
 - Removed portrait lock for better tablet/multi-window support
 - Improved settings: version from build config, author info, website link
 - Added Done button on keyboard for easier conversion
