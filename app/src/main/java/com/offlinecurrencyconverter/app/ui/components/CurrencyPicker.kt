@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,10 +36,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.domain.model.Currency
 
@@ -210,9 +211,9 @@ private fun CurrencyListItem(
     ListItem(
         headlineContent = {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                currency.flagUrl?.let { url ->
-                    AsyncImage(
-                        model = url,
+                FlagDrawables.getFlagResource(currency.code)?.let { resId ->
+                    Image(
+                        painter = painterResource(id = resId),
                         contentDescription = "${currency.name} flag",
                         modifier = Modifier
                             .size(28.dp)

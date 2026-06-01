@@ -322,6 +322,17 @@ private fun AboutSection() {
                     }
                 )
             }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = "Flags from Flagpedia.net",
+                style = MaterialTheme.typography.bodySmall.copy(
+                    textDecoration = TextDecoration.Underline
+                ),
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.clickable {
+                    uriHandler.openUri("https://flagpedia.net")
+                }
+            )
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.ui.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ContentCopy
@@ -39,7 +41,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import android.widget.Toast
-import coil.compose.AsyncImage
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
 import com.offlinecurrencyconverter.app.domain.model.Currency
@@ -223,9 +224,9 @@ fun CurrencySelectorButton(
         modifier = modifier
     ) {
         if (currency != null) {
-            currency.flagUrl?.let { url ->
-                AsyncImage(
-                    model = url,
+            FlagDrawables.getFlagResource(currency.code)?.let { resId ->
+                Image(
+                    painter = painterResource(id = resId),
                     contentDescription = "${currency.name} flag",
                     modifier = Modifier
                         .size(20.dp)
