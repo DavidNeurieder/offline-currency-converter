@@ -12,6 +12,5 @@ data class CurrencyEntity(
     val isoNumeric: String? = null,
     val startDate: String? = null,
     val endDate: String? = null,
-    val isSelectedForOffline: Boolean = false,
-    val flagUrl: String? = null
+    val isSelectedForOffline: Boolean = false
 )

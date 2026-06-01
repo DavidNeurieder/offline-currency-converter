@@ -22,7 +22,6 @@ class CurrencyEntityTest {
         assertNull(entity.isoNumeric)
         assertNull(entity.startDate)
         assertNull(entity.endDate)
-        assertNull(entity.flagUrl)
     }
 
     @Test
@@ -34,14 +33,12 @@ class CurrencyEntityTest {
             isoNumeric = null,
             startDate = null,
             endDate = null,
-            isSelectedForOffline = false,
-            flagUrl = null
+            isSelectedForOffline = false
         )
 
         assertNull(entity.isoNumeric)
         assertNull(entity.startDate)
         assertNull(entity.endDate)
-        assertNull(entity.flagUrl)
     }
 
     @Test
@@ -53,8 +50,7 @@ class CurrencyEntityTest {
             isoNumeric = "826",
             startDate = "1971-01-01",
             endDate = null,
-            isSelectedForOffline = true,
-            flagUrl = "https://flagcdn.com/w40/gb.png"
+            isSelectedForOffline = true
         )
 
         assertEquals("GBP", entity.code)
@@ -64,7 +60,6 @@ class CurrencyEntityTest {
         assertEquals("1971-01-01", entity.startDate)
         assertNull(entity.endDate)
         assertTrue(entity.isSelectedForOffline)
-        assertEquals("https://flagcdn.com/w40/gb.png", entity.flagUrl)
     }
 
     private fun assertTrue(value: Boolean) {
