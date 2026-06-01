@@ -54,6 +54,7 @@ class ConvertViewModelTest {
         coEvery { convertCurrencyUseCase(any(), any(), any()) } returns Result.success(
             TestFixtures.createConversionResult()
         )
+        coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
         every { preferencesManager.targetCurrency } returns flowOf("EUR")

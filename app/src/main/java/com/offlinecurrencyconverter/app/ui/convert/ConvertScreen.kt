@@ -53,24 +53,7 @@ fun ConvertScreen(
         viewModel.refreshLastSyncTime()
     }
 
-    if (uiState.isCurrenciesLoading && currencies.isEmpty()) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                CircularProgressIndicator(modifier = Modifier.testTag("loading_indicator"))
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Loading currencies…",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-        }
-    } else if (uiState.currenciesError != null && currencies.isEmpty()) {
+    if (uiState.currenciesError != null && currencies.isEmpty()) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -93,6 +76,15 @@ fun ConvertScreen(
                     Text("Retry")
                 }
             }
+        }
+    } else if (currencies.isEmpty()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator(modifier = Modifier.testTag("loading_indicator"))
         }
     } else {
         val pullRefreshState = rememberPullRefreshState(

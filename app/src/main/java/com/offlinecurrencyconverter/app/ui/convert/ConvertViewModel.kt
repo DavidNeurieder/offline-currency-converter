@@ -60,7 +60,7 @@ class ConvertViewModel @Inject constructor(
         loadSavedCurrencies()
         loadLastSyncTime()
         loadRecentCurrencies()
-        checkCurrenciesLoaded()
+        retryLoadingCurrencies()
     }
 
     private fun loadSavedCurrencies() {
@@ -88,19 +88,6 @@ class ConvertViewModel @Inject constructor(
         }
     }
 
-    private fun checkCurrenciesLoaded() {
-        viewModelScope.launch {
-            currencies.collect { list ->
-                if (list.isNotEmpty()) {
-                    _uiState.value = _uiState.value.copy(
-                        isCurrenciesLoading = false,
-                        currenciesError = null
-                    )
-                }
-            }
-        }
-    }
-
     fun retryLoadingCurrencies() {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
@@ -115,7 +102,7 @@ class ConvertViewModel @Inject constructor(
                 onFailure = { error ->
                     _uiState.value = _uiState.value.copy(
                         isCurrenciesLoading = false,
-                        currenciesError = error.message ?: "Failed to load currencies"
+                        currenciesError = "Internet connection is required on first launch to download currency data"
                     )
                 }
             )
