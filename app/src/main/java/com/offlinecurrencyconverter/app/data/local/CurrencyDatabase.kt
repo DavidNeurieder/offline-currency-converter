@@ -15,7 +15,7 @@ import com.offlinecurrencyconverter.app.data.local.entity.RecentConversionEntity
         ExchangeRateEntity::class,
         RecentConversionEntity::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 abstract class CurrencyDatabase : RoomDatabase() {
