@@ -24,9 +24,7 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 
 ## Screenshots
 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="200" alt="Conversion screen">
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20260517-104736.png" width="200" alt="Currency picker">
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20260517-104810.png" width="200" alt="Settings">
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="180" alt="Screenshot 1"> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="180" alt="Screenshot 2"> <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="180" alt="Screenshot 3"> 
 
 ## Building
 
