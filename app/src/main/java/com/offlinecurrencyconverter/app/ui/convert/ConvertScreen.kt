@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -33,7 +37,7 @@ import com.offlinecurrencyconverter.app.ui.components.ConversionCard
 import com.offlinecurrencyconverter.app.ui.components.CurrencyPickerBottomSheet
 import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 
-@OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterialApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun ConvertScreen(
     viewModel: ConvertViewModel = hiltViewModel()
@@ -91,54 +95,70 @@ fun ConvertScreen(
             }
         }
     } else {
-        LazyColumn(
+        val pullRefreshState = rememberPullRefreshState(
+            refreshing = uiState.isRefreshing,
+            onRefresh = viewModel::refresh
+        )
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .pullRefresh(pullRefreshState)
         ) {
-            item {
-                Text(
-                    text = stringResource(R.string.currency_converter),
-                    style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.testTag("currency_converter_header")
-                )
-            }
-
-            item {
-                ConversionCard(
-                    amount = uiState.amount,
-                    onAmountChange = viewModel::onAmountChange,
-                    sourceCurrency = uiState.sourceCurrency,
-                    targetCurrency = uiState.targetCurrency,
-                    currencies = currencies,
-                    recentCurrencies = uiState.recentCurrencies,
-                    onSourceCurrencyClick = { showSourceCurrencyPicker = true },
-                    onTargetCurrencyClick = { showTargetCurrencyPicker = true },
-                    onSwap = viewModel::swapCurrencies,
-                    conversionResult = uiState.conversionResult,
-                    error = uiState.error,
-                    isLoading = uiState.isLoading,
-                    lastSyncTime = uiState.lastSyncTime
-                )
-            }
-
-            if (recentConversions.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
                 item {
-                    Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = stringResource(R.string.recent_conversions),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        modifier = Modifier.testTag("recent_conversions_header")
+                        text = stringResource(R.string.currency_converter),
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.testTag("currency_converter_header")
                     )
                 }
 
-                items(recentConversions.take(5)) { conversion ->
-                    RecentConversionItem(conversion = conversion)
+                item {
+                    ConversionCard(
+                        amount = uiState.amount,
+                        onAmountChange = viewModel::onAmountChange,
+                        sourceCurrency = uiState.sourceCurrency,
+                        targetCurrency = uiState.targetCurrency,
+                        currencies = currencies,
+                        recentCurrencies = uiState.recentCurrencies,
+                        onSourceCurrencyClick = { showSourceCurrencyPicker = true },
+                        onTargetCurrencyClick = { showTargetCurrencyPicker = true },
+                        onSwap = viewModel::swapCurrencies,
+                        conversionResult = uiState.conversionResult,
+                        error = uiState.error,
+                        isLoading = uiState.isLoading,
+                        lastSyncTime = uiState.lastSyncTime
+                    )
+                }
+
+                if (recentConversions.isNotEmpty()) {
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Text(
+                            text = stringResource(R.string.recent_conversions),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold,
+                            modifier = Modifier.testTag("recent_conversions_header")
+                        )
+                    }
+
+                    items(recentConversions.take(5)) { conversion ->
+                        RecentConversionItem(conversion = conversion)
+                    }
                 }
             }
+
+            PullRefreshIndicator(
+                refreshing = uiState.isRefreshing,
+                state = pullRefreshState,
+                modifier = Modifier.align(Alignment.TopCenter)
+            )
         }
     }
 

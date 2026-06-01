@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -27,13 +28,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import android.widget.Toast
 import coil.compose.AsyncImage
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
@@ -168,6 +173,31 @@ fun ConversionCard(
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    val clipboardManager = LocalClipboardManager.current
+                    val context = LocalContext.current
+                    OutlinedButton(
+                        onClick = {
+                            val copyText = "${conversionResult.sourceCurrency.symbol}${
+                                DecimalFormat("#,##0.00").format(conversionResult.sourceAmount)
+                            } ${conversionResult.sourceCurrency.code} = ${conversionResult.targetCurrency.symbol}${
+                                DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
+                            } ${conversionResult.targetCurrency.code} (1 ${conversionResult.sourceCurrency.code} = ${
+                                DecimalFormat("#,##0.####").format(conversionResult.rate)
+                            } ${conversionResult.targetCurrency.code})"
+                            clipboardManager.setText(AnnotatedString(copyText))
+                            Toast.makeText(context, R.string.result_copied, Toast.LENGTH_SHORT).show()
+                        },
+                        modifier = Modifier.testTag("copy_result_button")
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ContentCopy,
+                            contentDescription = stringResource(R.string.copy_result),
+                            modifier = Modifier.size(16.dp)
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        Text(stringResource(R.string.copy_result))
+                    }
                 }
             } else {
                 Text(

@@ -52,4 +52,7 @@
     <string name="search_results">Search Results</string>
 
 
+    <string name="copy_result">Copy</string>
+    <string name="result_copied">Result copied</string>
+
 </resources>

@@ -29,6 +29,7 @@ data class ConvertUiState(
     val isLoading: Boolean = false,
     val isCurrenciesLoading: Boolean = true,
     val currenciesError: String? = null,
+    val isRefreshing: Boolean = false,
     val lastSyncTime: Long? = null,
     val recentCurrencies: List<Currency> = emptyList()
 )
@@ -143,6 +144,28 @@ class ConvertViewModel @Inject constructor(
 
     fun refreshLastSyncTime() {
         loadLastSyncTime()
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            val result = exchangeRateRepository.fetchLatestRates(
+                baseCurrency = "EUR",
+                targetCurrencies = emptyList()
+            )
+            result.fold(
+                onSuccess = {
+                    val lastSync = exchangeRateRepository.getLastUpdateTime()
+                    _uiState.value = _uiState.value.copy(
+                        isRefreshing = false,
+                        lastSyncTime = lastSync
+                    )
+                },
+                onFailure = {
+                    _uiState.value = _uiState.value.copy(isRefreshing = false)
+                }
+            )
+        }
     }
 
     fun onAmountChange(newAmount: String) {
