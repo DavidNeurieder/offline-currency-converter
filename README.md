@@ -19,7 +19,6 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **Copy result** — tap to copy any conversion to clipboard
 - **Pull-to-refresh** — manually trigger a rate sync from the convert screen
 - **Bundled flags** — country flags are built into the app, no network loading
-- **Recent conversions** — your last 5 conversions are saved
 - **Material Design 3** — modern UI with dynamic theming
 - **Privacy first** — no accounts, no tracking, no network permissions at runtime
 
