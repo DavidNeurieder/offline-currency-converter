@@ -38,7 +38,6 @@
     <string name="enter_amount">변환할 금액 입력</string>
     <string name="swap_currencies">통화 교환</string>
     <string name="recent_conversions">최근 변환</string>
-    <string name="rate_format">1 %1$s = %2$s %3$s</string>
 
     <!-- Currency Picker -->
     <string name="select_currency">통화 선택</string>
@@ -50,9 +49,6 @@
     <string name="search_results">검색 결과</string>
 
     <!-- Error Messages -->
-    <string name="error">오류</string>
 
     <!-- Currency Formatting -->
-    <string name="currency_format">%1$s%2$s</string>
-    <string name="conversion_result_format">%1$s %2$s</string>
 </resources>

@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.ui.convert
 
 import com.offlinecurrencyconverter.app.TestFixtures
+import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
@@ -32,6 +33,7 @@ class ConvertViewModelTest {
     private lateinit var recentConversionRepository: RecentConversionRepository
     private lateinit var exchangeRateRepository: ExchangeRateRepository
     private lateinit var preferencesManager: PreferencesManager
+    private lateinit var currencyInitializer: CurrencyInitializer
     private lateinit var viewModel: ConvertViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -44,6 +46,7 @@ class ConvertViewModelTest {
         recentConversionRepository = mockk(relaxed = true)
         exchangeRateRepository = mockk(relaxed = true)
         preferencesManager = mockk(relaxed = true)
+        currencyInitializer = mockk(relaxed = true)
 
         every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currencies)
         every { recentConversionRepository.getRecentConversions(any()) } returns flowOf(emptyList())
@@ -61,7 +64,8 @@ class ConvertViewModelTest {
             currencyRepository,
             recentConversionRepository,
             exchangeRateRepository,
-            preferencesManager
+            preferencesManager,
+            currencyInitializer
         )
         testDispatcher.scheduler.advanceUntilIdle()
     }

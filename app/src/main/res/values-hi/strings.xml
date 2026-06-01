@@ -38,7 +38,6 @@
     <string name="enter_amount">परिवर्तित करने के लिए राशि दर्ज करें</string>
     <string name="swap_currencies">मुद्राएं बदलें</string>
     <string name="recent_conversions">हाल के परिवर्तन</string>
-    <string name="rate_format">1 %1$s = %2$s %3$s</string>
 
     <!-- Currency Picker -->
     <string name="select_currency">मुद्रा चुनें</string>
@@ -50,9 +49,6 @@
     <string name="search_results">खोज परिणाम</string>
 
     <!-- Error Messages -->
-    <string name="error">त्रुटि</string>
 
     <!-- Currency Formatting -->
-    <string name="currency_format">%1$s%2$s</string>
-    <string name="conversion_result_format">%1$s %2$s</string>
 </resources>

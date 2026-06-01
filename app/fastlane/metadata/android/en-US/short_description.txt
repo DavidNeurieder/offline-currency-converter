@@ -1,1 +1,0 @@
-Convert currencies offline with support for 160+ currencies

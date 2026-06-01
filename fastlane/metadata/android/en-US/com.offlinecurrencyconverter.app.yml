@@ -33,5 +33,12 @@ Builds:
     gradle:
       - release
 
+  - versionName: 0.2.0
+    versionCode: 2
+    subdir: app
+    commit: v0.2.0
+    gradle:
+      - release
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags

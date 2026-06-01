@@ -1,0 +1,7 @@
+Version 0.2.0:
+- Better offline support: loading indicator and retry when no network
+- Removed unnecessary permissions for F-Droid
+- Removed portrait lock for better tablet/multi-window support
+- Improved settings: shows version from build config, author info, website link
+- Added Done button on keyboard for easier conversion
+- Cleaned up unused resources and dependencies

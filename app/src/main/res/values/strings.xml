@@ -41,7 +41,6 @@
     <string name="enter_amount">Enter an amount to convert</string>
     <string name="swap_currencies">Swap currencies</string>
     <string name="recent_conversions">Recent Conversions</string>
-    <string name="rate_format">1 %1$s = %2$s %3$s</string>
 
     <!-- Currency Picker -->
     <string name="select_currency">Select Currency</string>
@@ -52,10 +51,5 @@
     <string name="all_currencies">All Currencies</string>
     <string name="search_results">Search Results</string>
 
-    <!-- Error Messages -->
-    <string name="error">Error</string>
 
-    <!-- Currency Formatting -->
-    <string name="currency_format">%1$s%2$s</string>
-    <string name="conversion_result_format">%1$s %2$s</string>
 </resources>

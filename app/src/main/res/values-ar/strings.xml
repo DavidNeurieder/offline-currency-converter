@@ -38,7 +38,6 @@
     <string name="enter_amount">أدخل مبلغًا للتحويل</string>
     <string name="swap_currencies">تبديل العملات</string>
     <string name="recent_conversions">التحويلات الأخيرة</string>
-    <string name="rate_format">1 %1$s = %2$s %3$s</string>
 
     <!-- Currency Picker -->
     <string name="select_currency">اختر العملة</string>
@@ -50,9 +49,6 @@
     <string name="search_results">نتائج البحث</string>
 
     <!-- Error Messages -->
-    <string name="error">خطأ</string>
 
     <!-- Currency Formatting -->
-    <string name="currency_format">%1$s%2$s</string>
-    <string name="conversion_result_format">%1$s %2$s</string>
 </resources>

@@ -16,7 +16,14 @@
 -keep class * implements com.google.gson.JsonSerializer
 -keep class * implements com.google.gson.JsonDeserializer
 
-# Keep data classes
--keep class com.currencylens.app.data.remote.dto.** { *; }
--keep class com.currencylens.app.data.local.entity.** { *; }
--keep class com.currencylens.app.domain.model.** { *; }
+# Keep Room entities for serialization
+-keep class com.offlinecurrencyconverter.app.data.local.entity.** { *; }
+# Keep API DTOs for Gson
+-keep class com.offlinecurrencyconverter.app.data.remote.dto.** { *; }
+# Keep domain models
+-keep class com.offlinecurrencyconverter.app.domain.model.** { *; }
+
+# Keep Hilt generated classes
+-keep class dagger.hilt.** { *; }
+-keep class javax.inject.** { *; }
+-keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }

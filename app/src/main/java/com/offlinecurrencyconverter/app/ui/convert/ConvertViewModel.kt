@@ -2,6 +2,7 @@ package com.offlinecurrencyconverter.app.ui.convert
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
 import com.offlinecurrencyconverter.app.domain.model.Currency
@@ -26,6 +27,8 @@ data class ConvertUiState(
     val conversionResult: ConversionResult? = null,
     val error: String? = null,
     val isLoading: Boolean = false,
+    val isCurrenciesLoading: Boolean = true,
+    val currenciesError: String? = null,
     val lastSyncTime: Long? = null,
     val recentCurrencies: List<Currency> = emptyList()
 )
@@ -36,7 +39,8 @@ class ConvertViewModel @Inject constructor(
     private val currencyRepository: CurrencyRepository,
     private val recentConversionRepository: RecentConversionRepository,
     private val exchangeRateRepository: ExchangeRateRepository,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    private val currencyInitializer: CurrencyInitializer
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConvertUiState())
@@ -55,6 +59,7 @@ class ConvertViewModel @Inject constructor(
         loadSavedCurrencies()
         loadLastSyncTime()
         loadRecentCurrencies()
+        checkCurrenciesLoaded()
     }
 
     private fun loadSavedCurrencies() {
@@ -79,6 +84,40 @@ class ConvertViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun checkCurrenciesLoaded() {
+        viewModelScope.launch {
+            currencies.collect { list ->
+                if (list.isNotEmpty()) {
+                    _uiState.value = _uiState.value.copy(
+                        isCurrenciesLoading = false,
+                        currenciesError = null
+                    )
+                }
+            }
+        }
+    }
+
+    fun retryLoadingCurrencies() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isCurrenciesLoading = true,
+                currenciesError = null
+            )
+            val result = currencyInitializer.initializeIfNeeded()
+            result.fold(
+                onSuccess = {
+                    _uiState.value = _uiState.value.copy(isCurrenciesLoading = false)
+                },
+                onFailure = { error ->
+                    _uiState.value = _uiState.value.copy(
+                        isCurrenciesLoading = false,
+                        currenciesError = error.message ?: "Failed to load currencies"
+                    )
+                }
+            )
         }
     }
 

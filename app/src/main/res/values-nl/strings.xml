@@ -38,7 +38,6 @@
     <string name="enter_amount">Voer een bedrag in om te converteren</string>
     <string name="swap_currencies">Valuta omwisselen</string>
     <string name="recent_conversions">Recente conversies</string>
-    <string name="rate_format">1 %1$s = %2$s %3$s</string>
 
     <!-- Currency Picker -->
     <string name="select_currency">Valuta selecteren</string>
@@ -50,9 +49,6 @@
     <string name="search_results">Zoekresultaten</string>
 
     <!-- Error Messages -->
-    <string name="error">Fout</string>
 
     <!-- Currency Formatting -->
-    <string name="currency_format">%1$s%2$s</string>
-    <string name="conversion_result_format">%1$s %2$s</string>
 </resources>

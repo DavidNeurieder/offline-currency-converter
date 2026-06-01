@@ -38,7 +38,6 @@
     <string name="enter_amount">変換する金額を入力</string>
     <string name="swap_currencies">通貨を入れ替え</string>
     <string name="recent_conversions">最近の変換</string>
-    <string name="rate_format">1 %1$s = %2$s %3$s</string>
 
     <!-- Currency Picker -->
     <string name="select_currency">通貨を選択</string>
@@ -50,9 +49,6 @@
     <string name="search_results">検索結果</string>
 
     <!-- Error Messages -->
-    <string name="error">エラー</string>
 
     <!-- Currency Formatting -->
-    <string name="currency_format">%1$s%2$s</string>
-    <string name="conversion_result_format">%1$s %2$s</string>
 </resources>
