@@ -6,28 +6,28 @@
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/com.offlinecurrencyconverter.app/)
 
-A privacy-focused currency converter Android app that works completely offline. Sync exchange rates from the free Frankfurter API and convert currencies even when you're not connected to the internet.
+A privacy-focused currency converter for Android that works completely offline. No account, no tracking, no analytics — just exchange rates in your pocket.
+
+## How It Works
+
+The app fetches exchange rates from the free [Frankfurter API](https://frankfurter.app) (powered by the European Central Bank) and stores them locally using Room. Once synced, all conversions happen entirely offline. You can configure the sync interval in settings (6h, 12h, 24h, 48h, or weekly), and a background WorkManager job keeps rates up to date.
 
 ## Features
 
-- Works completely offline
-- Supports 160+ currencies
-- Automatic exchange rate sync
-- Recent conversion history
-- Material Design 3 interface
-- No account required
-- No tracking or analytics
+- **100% offline** — no internet required after initial sync
+- **160+ currencies** — all ECB reference rates
+- **Copy result** — tap to copy any conversion to clipboard
+- **Pull-to-refresh** — manually trigger a rate sync from the convert screen
+- **Bundled flags** — country flags are built into the app, no network loading
+- **Recent conversions** — your last 5 conversions are saved
+- **Material Design 3** — modern UI with dynamic theming
+- **Privacy first** — no accounts, no tracking, no network permissions at runtime
 
-## Tech Stack
+## Screenshots
 
-- **Language:** Kotlin
-- **UI:** Jetpack Compose with Material 3
-- **Architecture:** MVVM + Clean Architecture
-- **DI:** Hilt
-- **Database:** Room
-- **Networking:** Retrofit + OkHttp
-- **Background:** WorkManager
-- **Build:** Gradle (Kotlin DSL)
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="200" alt="Conversion screen">
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20260517-104736.png" width="200" alt="Currency picker">
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/Screenshot_20260517-104810.png" width="200" alt="Settings">
 
 ## Building
 
@@ -41,6 +41,27 @@ A privacy-focused currency converter Android app that works completely offline. 
 
 The release APK will be at `app/build/outputs/apk/release/app-release.apk`
 
+> **Note for F-Droid:** This project follows the [F-Droid Reproducible Builds](https://f-droid.org/en/docs/Reproducible_Builds/) guidelines. Minification (R8/ProGuard) is disabled to ensure deterministic output.
+
+## Permissions
+
+The app declares the following permissions:
+- `INTERNET` and `ACCESS_NETWORK_STATE` — used only by WorkManager for background exchange rate sync
+- `RECEIVE_BOOT_COMPLETED`, `WAKE_LOCK`, `FOREGROUND_SERVICE` — used by WorkManager to schedule syncs after reboot
+
+No data leaves your device during conversion; only rate syncs contact the Frankfurter API.
+
+## Tech Stack
+
+- **Language:** Kotlin
+- **UI:** Jetpack Compose with Material 3
+- **Architecture:** MVVM + Clean Architecture
+- **DI:** Hilt
+- **Database:** Room
+- **Networking:** Retrofit + OkHttp
+- **Background:** WorkManager
+- **Build:** Gradle (Kotlin DSL)
+
 ## License
 
-AGPLv3 - See [LICENSE](./LICENSE)
+AGPLv3 — See [LICENSE](./LICENSE)
