@@ -1,6 +1,10 @@
 # Offline Currency Converter
 
-**Version:** 0.1.0
+**Version:** 0.2.0
+
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+     alt="Get it on F-Droid"
+     height="80">](https://f-droid.org/packages/com.offlinecurrencyconverter.app/)
 
 A privacy-focused currency converter Android app that works completely offline. Sync exchange rates from the free Frankfurter API and convert currencies even when you're not connected to the internet.
 
