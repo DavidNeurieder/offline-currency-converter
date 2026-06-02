@@ -1,6 +1,6 @@
 # Offline Currency Converter
 
-**Version:** 0.2.0
+**Version:** 0.2.1
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
