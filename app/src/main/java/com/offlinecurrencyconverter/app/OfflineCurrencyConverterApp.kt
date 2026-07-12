@@ -5,11 +5,13 @@ import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
+import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +31,9 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
     @Inject
     lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
 
+    @Inject
+    lateinit var preferencesManager: PreferencesManager
+
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     override fun onCreate() {
@@ -43,7 +48,10 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
         applicationScope.launch {
             try {
                 currencyInitializer.initializeIfNeeded()
-                syncExchangeRatesUseCase.forceSync()
+                val syncIntervalHours = preferencesManager.syncInterval.first()
+                if (syncIntervalHours > 0L) {
+                    syncExchangeRatesUseCase.forceSync()
+                }
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to initialize currencies", e)
             }

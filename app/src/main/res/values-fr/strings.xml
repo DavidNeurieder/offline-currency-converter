@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 heures</string>
     <string name="sync_interval_48_hours">48 heures</string>
     <string name="sync_interval_weekly">Hebdomadaire</string>
+    <string name="sync_interval_manual_only">Manuel uniquement</string>
     <string name="about">À propos</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Convertisseur de devises propulsé par Frankfurter API. Supporte plus de 160 devises.</string>

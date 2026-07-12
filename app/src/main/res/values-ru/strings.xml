@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 часа</string>
     <string name="sync_interval_48_hours">48 часов</string>
     <string name="sync_interval_weekly">Еженедельно</string>
+    <string name="sync_interval_manual_only">Только вручную</string>
     <string name="about">О приложении</string>
     <string name="version_format">Версия %1$s</string>
     <string name="about_description">Конвертер валют на базе Frankfurter API. Поддерживает более 160 валют.</string>

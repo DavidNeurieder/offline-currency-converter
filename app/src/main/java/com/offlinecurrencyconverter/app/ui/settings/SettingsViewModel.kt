@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
+import com.offlinecurrencyconverter.app.worker.SyncScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,9 +20,11 @@ enum class SyncInterval(val hours: Long) {
     TWELVE_HOURS(12),
     TWENTY_FOUR_HOURS(24),
     FORTY_EIGHT_HOURS(48),
-    WEEKLY(168);
+    WEEKLY(168),
+    MANUAL_ONLY(0);
 
     val millis: Long get() = hours * 60 * 60 * 1000
+    val isManualOnly: Boolean get() = this == MANUAL_ONLY
 }
 
 data class SettingsUiState(
@@ -36,7 +39,8 @@ data class SettingsUiState(
 class SettingsViewModel @Inject constructor(
     private val exchangeRateRepository: ExchangeRateRepository,
     private val syncExchangeRatesUseCase: SyncExchangeRatesUseCase,
-    private val preferencesManager: PreferencesManager
+    private val preferencesManager: PreferencesManager,
+    private val syncScheduler: SyncScheduler
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
@@ -57,7 +61,8 @@ class SettingsViewModel @Inject constructor(
     private fun loadSyncInterval() {
         viewModelScope.launch {
             preferencesManager.syncInterval.collect { hours ->
-                val interval = SyncInterval.entries.find { it.hours == hours } ?: SyncInterval.TWENTY_FOUR_HOURS
+                val interval = SyncInterval.entries.find { it.hours == hours }
+                    ?: SyncInterval.TWENTY_FOUR_HOURS
                 _uiState.value = _uiState.value.copy(syncInterval = interval)
             }
         }
@@ -67,6 +72,11 @@ class SettingsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(syncInterval = interval)
         viewModelScope.launch {
             preferencesManager.saveSyncInterval(interval.hours)
+            if (interval.isManualOnly) {
+                syncScheduler.cancelSync()
+            } else {
+                syncScheduler.schedulePeriodicSync(interval.hours)
+            }
         }
     }
 

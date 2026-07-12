@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 uur</string>
     <string name="sync_interval_48_hours">48 uur</string>
     <string name="sync_interval_weekly">Wekelijks</string>
+    <string name="sync_interval_manual_only">Handmatig alleen</string>
     <string name="about">Over</string>
     <string name="version_format">Versie %1$s</string>
     <string name="about_description">Valutaconverter aangedreven door Frankfurter API. Ondersteunt 160+ valuta.</string>

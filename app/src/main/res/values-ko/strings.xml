@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24시간</string>
     <string name="sync_interval_48_hours">48시간</string>
     <string name="sync_interval_weekly">매주</string>
+    <string name="sync_interval_manual_only">수동만</string>
     <string name="about">정보</string>
     <string name="version_format">버전 %1$s</string>
     <string name="about_description">Frankfurter API로 구동되는 환율 변환기. 160개 이상의 통화를 지원합니다.</string>

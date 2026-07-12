@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 horas</string>
     <string name="sync_interval_48_hours">48 horas</string>
     <string name="sync_interval_weekly">Semanal</string>
+    <string name="sync_interval_manual_only">Solo manual</string>
     <string name="about">Acerca de</string>
     <string name="version_format">Versión %1$s</string>
     <string name="about_description">Conversor de moneda impulsado por Frankfurter API. Soporta más de 160 monedas.</string>

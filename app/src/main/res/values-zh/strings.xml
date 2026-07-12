@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24小时</string>
     <string name="sync_interval_48_hours">48小时</string>
     <string name="sync_interval_weekly">每周</string>
+    <string name="sync_interval_manual_only">仅手动</string>
     <string name="about">关于</string>
     <string name="version_format">版本 %1$s</string>
     <string name="about_description">由Frankfurter API驱动的货币转换器。支持160多种货币。</string>

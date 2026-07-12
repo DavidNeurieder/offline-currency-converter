@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24時間</string>
     <string name="sync_interval_48_hours">48時間</string>
     <string name="sync_interval_weekly">毎週</string>
+    <string name="sync_interval_manual_only">手動のみ</string>
     <string name="about">概要</string>
     <string name="version_format">バージョン %1$s</string>
     <string name="about_description">Frankfurter API搭載の通貨換算。160以上の通貨をサポート。</string>

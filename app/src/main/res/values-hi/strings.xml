@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 घंटे</string>
     <string name="sync_interval_48_hours">48 घंटे</string>
     <string name="sync_interval_weekly">साप्ताहिक</string>
+    <string name="sync_interval_manual_only">केवल मैनुअल</string>
     <string name="about">के बारे में</string>
     <string name="version_format">संस्करण %1$s</string>
     <string name="about_description">Frankfurter API द्वारा संचालित मुद्रा कनवर्टर। 160+ मुद्राओं का समर्थन करता है।</string>

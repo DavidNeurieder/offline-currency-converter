@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 hours</string>
     <string name="sync_interval_48_hours">48 hours</string>
     <string name="sync_interval_weekly">Weekly</string>
+    <string name="sync_interval_manual_only">Manual Only</string>
     <string name="about">About</string>
     <string name="version_format">Version %1$s</string>
     <string name="author_label" translatable="false">Author</string>

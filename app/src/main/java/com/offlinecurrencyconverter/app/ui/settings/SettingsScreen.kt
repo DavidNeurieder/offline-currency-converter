@@ -249,6 +249,7 @@ private fun getSyncIntervalDisplayName(interval: SyncInterval): String {
         SyncInterval.TWENTY_FOUR_HOURS -> stringResource(R.string.sync_interval_24_hours)
         SyncInterval.FORTY_EIGHT_HOURS -> stringResource(R.string.sync_interval_48_hours)
         SyncInterval.WEEKLY -> stringResource(R.string.sync_interval_weekly)
+        SyncInterval.MANUAL_ONLY -> stringResource(R.string.sync_interval_manual_only)
     }
 }
 

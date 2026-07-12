@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 ساعة</string>
     <string name="sync_interval_48_hours">48 ساعة</string>
     <string name="sync_interval_weekly">أسبوعي</string>
+    <string name="sync_interval_manual_only">يدوي فقط</string>
     <string name="about">حول</string>
     <string name="version_format">الإصدار %1$s</string>
     <string name="about_description">محول العملات مدعوم من Frankfurter API. يدعم أكثر من 160 عملة.</string>

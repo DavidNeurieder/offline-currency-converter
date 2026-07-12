@@ -3,9 +3,12 @@ package com.offlinecurrencyconverter.app.ui.settings
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
+import com.offlinecurrencyconverter.app.worker.SyncScheduler
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -28,6 +31,7 @@ class SettingsViewModelTest {
     private lateinit var exchangeRateRepository: ExchangeRateRepository
     private lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
     private lateinit var preferencesManager: PreferencesManager
+    private lateinit var syncScheduler: SyncScheduler
     private lateinit var viewModel: SettingsViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -38,6 +42,7 @@ class SettingsViewModelTest {
         exchangeRateRepository = mockk(relaxed = true)
         syncExchangeRatesUseCase = mockk(relaxed = true)
         preferencesManager = mockk(relaxed = true)
+        syncScheduler = mockk(relaxed = true)
 
         coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
         every { preferencesManager.syncInterval } returns flowOf(24L)
@@ -46,7 +51,8 @@ class SettingsViewModelTest {
         viewModel = SettingsViewModel(
             exchangeRateRepository,
             syncExchangeRatesUseCase,
-            preferencesManager
+            preferencesManager,
+            syncScheduler
         )
         testDispatcher.scheduler.advanceUntilIdle()
     }
@@ -114,11 +120,36 @@ class SettingsViewModelTest {
     fun `all sync intervals are available`() = runTest {
         val intervals = SyncInterval.entries
 
-        assertEquals(5, intervals.size)
+        assertEquals(6, intervals.size)
         assertTrue(intervals.contains(SyncInterval.SIX_HOURS))
         assertTrue(intervals.contains(SyncInterval.TWELVE_HOURS))
         assertTrue(intervals.contains(SyncInterval.TWENTY_FOUR_HOURS))
         assertTrue(intervals.contains(SyncInterval.FORTY_EIGHT_HOURS))
         assertTrue(intervals.contains(SyncInterval.WEEKLY))
+        assertTrue(intervals.contains(SyncInterval.MANUAL_ONLY))
+    }
+
+    @Test
+    fun `onSyncIntervalChange to MANUAL_ONLY cancels periodic sync`() = runTest {
+        viewModel.onSyncIntervalChange(SyncInterval.MANUAL_ONLY)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(SyncInterval.MANUAL_ONLY, viewModel.uiState.value.syncInterval)
+        verify { syncScheduler.cancelSync() }
+    }
+
+    @Test
+    fun `onSyncIntervalChange to non-MANUAL_ONLY schedules periodic sync`() = runTest {
+        viewModel.onSyncIntervalChange(SyncInterval.TWELVE_HOURS)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(SyncInterval.TWELVE_HOURS, viewModel.uiState.value.syncInterval)
+        verify { syncScheduler.schedulePeriodicSync(12L) }
+    }
+
+    @Test
+    fun `MANUAL_ONLY interval has isManualOnly true`() = runTest {
+        assertTrue(SyncInterval.MANUAL_ONLY.isManualOnly)
+        assertFalse(SyncInterval.TWENTY_FOUR_HOURS.isManualOnly)
     }
 }

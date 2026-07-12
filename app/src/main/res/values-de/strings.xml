@@ -24,6 +24,7 @@
     <string name="sync_interval_24_hours">24 Stunden</string>
     <string name="sync_interval_48_hours">48 Stunden</string>
     <string name="sync_interval_weekly">Wöchentlich</string>
+    <string name="sync_interval_manual_only">Nur manuell</string>
     <string name="about">Über</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Währungsumrechner powered by Frankfurter API. Unterstützt 160+ Währungen.</string>
