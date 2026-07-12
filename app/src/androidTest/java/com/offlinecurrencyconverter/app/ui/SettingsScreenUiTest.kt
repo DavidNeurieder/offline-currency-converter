@@ -47,6 +47,8 @@ class SettingsScreenUiTest {
             .assertExists()
         composeTestRule.onNodeWithTag("dropdown_item_twenty_four_hours")
             .assertExists()
+        composeTestRule.onNodeWithTag("dropdown_item_manual_only")
+            .assertExists()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

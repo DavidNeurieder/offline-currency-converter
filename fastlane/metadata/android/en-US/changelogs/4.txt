@@ -1,0 +1,4 @@
+Version 0.3.0:
+- Added "Manual Only" sync option to disable automatic background sync
+- App launch no longer syncs when set to manual only
+- Pull-to-refresh and Sync Now button always work regardless of sync setting

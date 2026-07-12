@@ -1,6 +1,6 @@
 # Offline Currency Converter
 
-**Version:** 0.2.1
+**Version:** 0.3.0
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -10,7 +10,7 @@ A privacy-focused currency converter for Android that works completely offline. 
 
 ## How It Works
 
-The app fetches exchange rates from the free [Frankfurter API](https://frankfurter.app) (powered by the European Central Bank) and stores them locally using Room. Once synced, all conversions happen entirely offline. You can configure the sync interval in settings (6h, 12h, 24h, 48h, or weekly), and a background WorkManager job keeps rates up to date.
+The app fetches exchange rates from the free [Frankfurter API](https://frankfurter.app) (powered by the European Central Bank) and stores them locally using Room. Once synced, all conversions happen entirely offline. You can configure the sync interval in settings (6h, 12h, 24h, 48h, weekly, or manual only), and a background WorkManager job keeps rates up to date.
 
 ## Features
 
