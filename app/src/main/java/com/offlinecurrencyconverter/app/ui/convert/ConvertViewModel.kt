@@ -78,6 +78,7 @@ class ConvertViewModel @Inject constructor(
         loadInitialHistoricalRates()
         loadMultiCurrencyViewPreference()
         loadHistoricalRatesChartPreference()
+        loadSavedAmount()
     }
 
     private fun loadSavedCurrencies() {
@@ -100,6 +101,8 @@ class ConvertViewModel @Inject constructor(
                         sourceCurrency = sourceCurrency,
                         targetCurrency = targetCurrency
                     )
+
+                    performConversion()
 
                     if (_uiState.value.multiCurrencyView) {
                         recomputeMultiCurrency()
@@ -141,6 +144,18 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             val lastSync = exchangeRateRepository.getLastUpdateTime()
             _uiState.value = _uiState.value.copy(lastSyncTime = lastSync)
+        }
+    }
+
+    private fun loadSavedAmount() {
+        viewModelScope.launch {
+            val saved = preferencesManager.amount.first()
+            if (saved.isNotEmpty()) {
+                _uiState.value = _uiState.value.copy(amount = saved)
+                if (saved.toDoubleOrNull() != null) {
+                    performConversion()
+                }
+            }
         }
     }
 
@@ -230,6 +245,9 @@ class ConvertViewModel @Inject constructor(
     fun onAmountChange(newAmount: String) {
         val filtered = newAmount.filter { it.isDigit() || it == '.' }
         _uiState.value = _uiState.value.copy(amount = filtered, error = null)
+        viewModelScope.launch {
+            preferencesManager.saveAmount(filtered)
+        }
         if (filtered.isNotEmpty() && filtered.toDoubleOrNull() != null) {
             performConversion()
         } else {
