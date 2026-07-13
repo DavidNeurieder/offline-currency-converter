@@ -34,8 +34,7 @@ data class ConvertUiState(
     val isRefreshing: Boolean = false,
     val lastSyncTime: Long? = null,
     val recentCurrencies: List<Currency> = emptyList(),
-    val historicalRates: List<HistoricalRateEntity> = emptyList(),
-    val isHistoricalLoading: Boolean = false
+    val historicalRates: List<HistoricalRateEntity> = emptyList()
 )
 
 @HiltViewModel
@@ -66,7 +65,6 @@ class ConvertViewModel @Inject constructor(
         loadLastSyncTime()
         loadRecentCurrencies()
         retryLoadingCurrencies()
-        loadInitialHistoricalRates()
     }
 
     private fun loadSavedCurrencies() {
@@ -91,13 +89,6 @@ class ConvertViewModel @Inject constructor(
                     )
                 }
             }
-        }
-    }
-
-    private fun loadInitialHistoricalRates() {
-        viewModelScope.launch {
-            uiState.first { it.sourceCurrency != null && it.targetCurrency != null }
-            loadHistoricalRates()
         }
     }
 
@@ -153,6 +144,9 @@ class ConvertViewModel @Inject constructor(
                 baseCurrency = "EUR",
                 targetCurrencies = emptyList()
             )
+            if (result.isSuccess) {
+                exchangeRateRepository.fetchAndStoreHistoricalRates()
+            }
             result.fold(
                 onSuccess = {
                     val lastSync = exchangeRateRepository.getLastUpdateTime()
@@ -229,21 +223,11 @@ class ConvertViewModel @Inject constructor(
         val target = _uiState.value.targetCurrency ?: return
 
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isHistoricalLoading = true)
-            val result = historicalRateRepository.fetchAndStoreHistoricalRates(source.code, target.code, 30)
-            result.fold(
-                onSuccess = {
-                    historicalRateRepository.getHistoricalRates(source.code, target.code).collect { rates ->
-                        _uiState.value = _uiState.value.copy(
-                            historicalRates = rates,
-                            isHistoricalLoading = false
-                        )
-                    }
-                },
-                onFailure = {
-                    _uiState.value = _uiState.value.copy(isHistoricalLoading = false)
-                }
-            )
+            historicalRateRepository.getHistoricalRates(source.code, target.code).collect { rates ->
+                _uiState.value = _uiState.value.copy(
+                    historicalRates = rates
+                )
+            }
         }
     }
 

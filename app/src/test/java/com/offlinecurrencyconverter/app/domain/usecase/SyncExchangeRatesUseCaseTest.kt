@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.domain.usecase
 
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
+import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -31,18 +32,18 @@ class SyncExchangeRatesUseCaseTest {
         val result = syncExchangeRatesUseCase(syncIntervalMillis)
 
         assertTrue(result.isSuccess)
-        coEvery { exchangeRateRepository.fetchLatestRates(any(), any()) } returns Result.success(Unit)
     }
 
     @Test
     fun `invoke syncs rates when interval elapsed`() = runTest {
         coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
-        coEvery { 
+        coEvery {
             exchangeRateRepository.fetchLatestRates(
                 baseCurrency = "EUR",
                 targetCurrencies = emptyList()
             )
         } returns Result.success(Unit)
+        coEvery { exchangeRateRepository.fetchAndStoreHistoricalRates() } returns Result.success(Unit)
 
         val result = syncExchangeRatesUseCase(syncIntervalMillis)
 
@@ -53,12 +54,38 @@ class SyncExchangeRatesUseCaseTest {
                 targetCurrencies = emptyList()
             )
         }
+        coVerify { exchangeRateRepository.fetchAndStoreHistoricalRates() }
+    }
+
+    @Test
+    fun `invoke fetches historical rates after successful latest rates`() = runTest {
+        coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
+        coEvery { exchangeRateRepository.fetchLatestRates(any(), any()) } returns Result.success(Unit)
+        coEvery { exchangeRateRepository.fetchAndStoreHistoricalRates() } returns Result.success(Unit)
+
+        syncExchangeRatesUseCase(syncIntervalMillis)
+
+        coVerify(ordering = Ordering.ORDERED) {
+            exchangeRateRepository.fetchLatestRates(any(), any())
+            exchangeRateRepository.fetchAndStoreHistoricalRates()
+        }
+    }
+
+    @Test
+    fun `invoke skips historical rates when latest rates fail`() = runTest {
+        coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
+        coEvery { exchangeRateRepository.fetchLatestRates(any(), any()) } returns Result.failure(Exception("Network error"))
+
+        val result = syncExchangeRatesUseCase(syncIntervalMillis)
+
+        assertTrue(result.isFailure)
+        coVerify(exactly = 0) { exchangeRateRepository.fetchAndStoreHistoricalRates() }
     }
 
     @Test
     fun `invoke returns failure when API fails`() = runTest {
         coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
-        coEvery { 
+        coEvery {
             exchangeRateRepository.fetchLatestRates(any(), any())
         } returns Result.failure(Exception("Network error"))
 
@@ -70,12 +97,13 @@ class SyncExchangeRatesUseCaseTest {
 
     @Test
     fun `forceSync always fetches rates`() = runTest {
-        coEvery { 
+        coEvery {
             exchangeRateRepository.fetchLatestRates(
                 baseCurrency = "EUR",
                 targetCurrencies = emptyList()
             )
         } returns Result.success(Unit)
+        coEvery { exchangeRateRepository.fetchAndStoreHistoricalRates() } returns Result.success(Unit)
 
         val result = syncExchangeRatesUseCase.forceSync()
 
@@ -86,5 +114,6 @@ class SyncExchangeRatesUseCaseTest {
                 targetCurrencies = emptyList()
             )
         }
+        coVerify { exchangeRateRepository.fetchAndStoreHistoricalRates() }
     }
 }

@@ -8,5 +8,6 @@ interface ExchangeRateRepository {
     fun getOfflineAvailableRates(): Flow<List<ExchangeRate>>
     suspend fun getRate(baseCurrency: String, targetCurrency: String): ExchangeRate?
     suspend fun fetchLatestRates(baseCurrency: String, targetCurrencies: List<String>): Result<Unit>
+    suspend fun fetchAndStoreHistoricalRates(): Result<Unit>
     suspend fun getLastUpdateTime(): Long?
 }

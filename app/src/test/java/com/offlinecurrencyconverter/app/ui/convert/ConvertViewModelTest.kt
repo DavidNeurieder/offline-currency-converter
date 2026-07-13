@@ -58,7 +58,6 @@ class ConvertViewModelTest {
             TestFixtures.createConversionResult()
         )
         coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
-        coEvery { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) } returns Result.success(Unit)
         every { historicalRateRepository.getHistoricalRates(any(), any()) } returns flowOf(emptyList())
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
@@ -191,28 +190,28 @@ class ConvertViewModelTest {
     }
 
     @Test
-    fun `onSourceCurrencyChange triggers historical rates fetch`() = runTest {
+    fun `onSourceCurrencyChange loads historical rates from db`() = runTest {
         viewModel.onSourceCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+        io.mockk.coVerify { historicalRateRepository.getHistoricalRates(any(), any()) }
     }
 
     @Test
-    fun `onTargetCurrencyChange triggers historical rates fetch`() = runTest {
+    fun `onTargetCurrencyChange loads historical rates from db`() = runTest {
         viewModel.onTargetCurrencyChange(TestFixtures.GBP)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+        io.mockk.coVerify { historicalRateRepository.getHistoricalRates(any(), any()) }
     }
 
     @Test
-    fun `swapCurrencies triggers historical rates fetch`() = runTest {
+    fun `swapCurrencies loads historical rates from db`() = runTest {
         viewModel.onSourceCurrencyChange(TestFixtures.USD)
         viewModel.onTargetCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify(exactly = 3) { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+        io.mockk.coVerify(atLeast = 1) { historicalRateRepository.getHistoricalRates(any(), any()) }
     }
 
     @Test
@@ -236,6 +235,5 @@ class ConvertViewModelTest {
     @Test
     fun `initial historical rates state is empty`() = runTest {
         assertTrue(viewModel.uiState.value.historicalRates.isEmpty())
-        assertFalse(viewModel.uiState.value.isHistoricalLoading)
     }
 }

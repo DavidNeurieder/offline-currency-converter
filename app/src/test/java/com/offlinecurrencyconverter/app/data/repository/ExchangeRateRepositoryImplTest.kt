@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.data.repository
 
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.data.remote.dto.ExchangeRateItem
@@ -20,14 +21,16 @@ import retrofit2.Response
 class ExchangeRateRepositoryImplTest {
 
     private lateinit var exchangeRateDao: ExchangeRateDao
+    private lateinit var historicalRateDao: HistoricalRateDao
     private lateinit var frankfurterApi: FrankfurterApi
     private lateinit var repository: ExchangeRateRepositoryImpl
 
     @Before
     fun setup() {
         exchangeRateDao = mockk(relaxed = true)
+        historicalRateDao = mockk(relaxed = true)
         frankfurterApi = mockk(relaxed = true)
-        repository = ExchangeRateRepositoryImpl(exchangeRateDao, frankfurterApi)
+        repository = ExchangeRateRepositoryImpl(exchangeRateDao, historicalRateDao, frankfurterApi)
     }
 
     private fun createEntity(
@@ -196,5 +199,43 @@ class ExchangeRateRepositoryImplTest {
         val result = repository.getRatesForCurrency("EUR")
 
         assertNotNull(result)
+    }
+
+    @Test
+    fun `fetchAndStoreHistoricalRates fetches from API and stores in dao`() = runTest {
+        val rateItems = listOf(
+            ExchangeRateItem("2024-01-01", "EUR", "USD", 1.09),
+            ExchangeRateItem("2024-01-02", "EUR", "USD", 1.08)
+        )
+        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
+
+        val result = repository.fetchAndStoreHistoricalRates()
+
+        assertTrue(result.isSuccess)
+        coVerify { historicalRateDao.deleteAll() }
+        coVerify { historicalRateDao.insertRates(match { entities ->
+            entities.size == 2 &&
+            entities[0].baseCurrency == "EUR" &&
+            entities[0].targetCurrency == "USD" &&
+            entities[0].rate == 1.09
+        }) }
+    }
+
+    @Test
+    fun `fetchAndStoreHistoricalRates handles API failure`() = runTest {
+        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.error(500, mockk(relaxed = true))
+
+        val result = repository.fetchAndStoreHistoricalRates()
+
+        assertTrue(result.isFailure)
+    }
+
+    @Test
+    fun `fetchAndStoreHistoricalRates handles network exception`() = runTest {
+        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } throws java.io.IOException("No connection")
+
+        val result = repository.fetchAndStoreHistoricalRates()
+
+        assertTrue(result.isFailure)
     }
 }

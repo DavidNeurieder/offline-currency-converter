@@ -1,16 +1,22 @@
 package com.offlinecurrencyconverter.app.data.repository
 
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
+import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.domain.model.ExchangeRate
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 class ExchangeRateRepositoryImpl @Inject constructor(
     private val exchangeRateDao: ExchangeRateDao,
+    private val historicalRateDao: HistoricalRateDao,
     private val frankfurterApi: FrankfurterApi
 ) : ExchangeRateRepository {
 
@@ -125,6 +131,42 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 Result.success(Unit)
             } else {
                 Result.failure(Exception("Failed to fetch rates: ${response.code()}"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun fetchAndStoreHistoricalRates(): Result<Unit> {
+        return try {
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            val calendar = Calendar.getInstance()
+            val endDate = dateFormat.format(calendar.time)
+            calendar.add(Calendar.DAY_OF_YEAR, -30)
+            val startDate = dateFormat.format(calendar.time)
+
+            val response = frankfurterApi.getHistoricalRates(
+                baseCurrency = BASE_CURRENCY,
+                targetCurrencies = null,
+                startDate = startDate,
+                endDate = endDate
+            )
+
+            if (response.isSuccessful) {
+                val rateItems = response.body() ?: emptyList()
+                val entities = rateItems.map { item ->
+                    HistoricalRateEntity(
+                        baseCurrency = item.base,
+                        targetCurrency = item.quote,
+                        rate = item.rate,
+                        date = item.date
+                    )
+                }
+                historicalRateDao.deleteAll()
+                historicalRateDao.insertRates(entities)
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("Failed to fetch historical rates: ${response.code()}"))
             }
         } catch (e: Exception) {
             Result.failure(e)

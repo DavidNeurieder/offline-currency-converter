@@ -16,16 +16,24 @@ class SyncExchangeRatesUseCase @Inject constructor(
             }
         }
 
-        return exchangeRateRepository.fetchLatestRates(
+        val latestResult = exchangeRateRepository.fetchLatestRates(
             baseCurrency = "EUR",
             targetCurrencies = emptyList()
         )
+        if (latestResult.isSuccess) {
+            exchangeRateRepository.fetchAndStoreHistoricalRates()
+        }
+        return latestResult
     }
 
     suspend fun forceSync(): Result<Unit> {
-        return exchangeRateRepository.fetchLatestRates(
+        val latestResult = exchangeRateRepository.fetchLatestRates(
             baseCurrency = "EUR",
             targetCurrencies = emptyList()
         )
+        if (latestResult.isSuccess) {
+            exchangeRateRepository.fetchAndStoreHistoricalRates()
+        }
+        return latestResult
     }
 }

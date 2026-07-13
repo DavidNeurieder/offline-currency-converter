@@ -18,6 +18,9 @@ interface HistoricalRateDao {
     @Query("DELETE FROM historical_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency")
     suspend fun deleteRates(baseCurrency: String, targetCurrency: String)
 
+    @Query("DELETE FROM historical_rates")
+    suspend fun deleteAll()
+
     @Query("SELECT COUNT(*) FROM historical_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency")
     suspend fun getCount(baseCurrency: String, targetCurrency: String): Int
 }

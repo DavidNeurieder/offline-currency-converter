@@ -158,11 +158,6 @@ fun ConvertScreen(
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             when {
-                                uiState.isHistoricalLoading -> {
-                                    CircularProgressIndicator(
-                                        modifier = Modifier.padding(24.dp)
-                                    )
-                                }
                                 uiState.historicalRates.size >= 2 -> {
                                     RateChart(
                                         dataPoints = uiState.historicalRates.map { it.date to it.rate }
