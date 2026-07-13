@@ -31,6 +31,10 @@
     <string name="rate_trend">%1$s naar %2$s trend (30 dagen)</string>
     <string name="historical_rates_unavailable">Historische koersen niet beschikbaar</string>
     <string name="widget_description">Toont je geselecteerde valutapaar voor snelle toegang</string>
+    <string name="close">Sluiten</string>
+    <string name="chart_high">Hoog</string>
+    <string name="chart_low">Laag</string>
+    <string name="chart_change">Verandering</string>
     <string name="about">Over</string>
     <string name="version_format">Versie %1$s</string>
     <string name="about_description">Valutaconverter aangedreven door Frankfurter API. Ondersteunt 160+ valuta.</string>

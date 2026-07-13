@@ -31,6 +31,10 @@
     <string name="rate_trend">%1$s → %2$s の推移（30日間）</string>
     <string name="historical_rates_unavailable">過去の為替レートは利用できません</string>
     <string name="widget_description">選択した通貨ペアを素早く確認できるウィジェット</string>
+    <string name="close">閉じる</string>
+    <string name="chart_high">高値</string>
+    <string name="chart_low">安値</string>
+    <string name="chart_change">変動</string>
     <string name="about">概要</string>
     <string name="version_format">バージョン %1$s</string>
     <string name="about_description">Frankfurter API搭載の通貨換算。160以上の通貨をサポート。</string>

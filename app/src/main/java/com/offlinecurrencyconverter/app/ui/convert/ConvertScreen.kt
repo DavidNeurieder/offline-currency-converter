@@ -1,8 +1,10 @@
 package com.offlinecurrencyconverter.app.ui.convert
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +16,14 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,6 +43,7 @@ import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.ui.components.ConversionCard
 import com.offlinecurrencyconverter.app.ui.components.CurrencyPickerBottomSheet
 import com.offlinecurrencyconverter.app.ui.components.RateChart
+import com.offlinecurrencyconverter.app.ui.components.RateChartDetail
 import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
@@ -52,6 +57,7 @@ fun ConvertScreen(
 
     var showSourceCurrencyPicker by remember { mutableStateOf(false) }
     var showTargetCurrencyPicker by remember { mutableStateOf(false) }
+    var showChartDetail by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.refreshLastSyncTime()
@@ -137,6 +143,7 @@ fun ConvertScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable { showChartDetail = true }
                             .testTag("rate_chart"),
                         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                     ) {
@@ -225,4 +232,41 @@ fun ConvertScreen(
         onDismiss = { showTargetCurrencyPicker = false },
         onFavoriteToggle = viewModel::onFavoriteToggle
     )
+
+    if (showChartDetail && uiState.historicalRates.size >= 2) {
+        val rates = uiState.historicalRates
+        val ratesList = rates.map { it.date to it.rate }
+        val rateValues = rates.map { it.rate }
+        val minRate = rateValues.min()
+        val maxRate = rateValues.max()
+        val changePercent = if (rateValues.size >= 2 && rateValues.first() > 0.0) {
+            ((rateValues.last() - rateValues.first()) / rateValues.first()) * 100.0
+        } else 0.0
+
+        AlertDialog(
+            onDismissRequest = { showChartDetail = false },
+            title = {
+                Text(
+                    text = stringResource(
+                        R.string.rate_trend,
+                        uiState.sourceCurrency?.code ?: "",
+                        uiState.targetCurrency?.code ?: ""
+                    )
+                )
+            },
+            text = {
+                RateChartDetail(
+                    dataPoints = ratesList,
+                    minRate = minRate,
+                    maxRate = maxRate,
+                    changePercent = changePercent
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showChartDetail = false }) {
+                    Text(stringResource(R.string.close))
+                }
+            }
+        )
+    }
 }

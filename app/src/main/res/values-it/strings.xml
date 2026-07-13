@@ -31,6 +31,10 @@
     <string name="rate_trend">Andamento %1$s verso %2$s (30 giorni)</string>
     <string name="historical_rates_unavailable">Tassi storici non disponibili</string>
     <string name="widget_description">Mostra la coppia di valute selezionata per accesso rapido</string>
+    <string name="close">Chiudi</string>
+    <string name="chart_high">Massimo</string>
+    <string name="chart_low">Minimo</string>
+    <string name="chart_change">Variazione</string>
     <string name="about">Info</string>
     <string name="version_format">Versione %1$s</string>
     <string name="about_description">Convertitore di valuta alimentato da Frankfurter API. Supporta oltre 160 valute.</string>

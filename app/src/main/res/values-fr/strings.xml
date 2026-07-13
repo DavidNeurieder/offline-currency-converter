@@ -31,6 +31,10 @@
     <string name="rate_trend">Tendance %1$s vers %2$s (30 jours)</string>
     <string name="historical_rates_unavailable">Taux historiques indisponibles</string>
     <string name="widget_description">Affiche votre paire de devises sélectionnée pour un accès rapide</string>
+    <string name="close">Fermer</string>
+    <string name="chart_high">Haut</string>
+    <string name="chart_low">Bas</string>
+    <string name="chart_change">Variation</string>
     <string name="about">À propos</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Convertisseur de devises propulsé par Frankfurter API. Supporte plus de 160 devises.</string>
