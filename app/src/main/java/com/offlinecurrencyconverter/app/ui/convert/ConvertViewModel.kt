@@ -145,13 +145,24 @@ class ConvertViewModel @Inject constructor(
                 if (!enabled) {
                     _uiState.value = _uiState.value.copy(multiCurrencyConversions = emptyList())
                 } else {
-                    val amount = _uiState.value.amount.toDoubleOrNull()
-                    val source = _uiState.value.sourceCurrency
-                    if (amount != null && source != null) {
-                        performMultiCurrencyConversion(amount, source)
-                    }
+                    recomputeMultiCurrency()
                 }
             }
+        }
+        viewModelScope.launch {
+            currencies.collect {
+                if (_uiState.value.multiCurrencyView) {
+                    recomputeMultiCurrency()
+                }
+            }
+        }
+    }
+
+    private fun recomputeMultiCurrency() {
+        val amount = _uiState.value.amount.toDoubleOrNull()
+        val source = _uiState.value.sourceCurrency
+        if (amount != null && source != null) {
+            performMultiCurrencyConversion(amount, source)
         }
     }
 
