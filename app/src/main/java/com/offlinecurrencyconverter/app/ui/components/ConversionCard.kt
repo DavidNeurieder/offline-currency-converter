@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.Canvas
 import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.SwapVert
 import androidx.compose.material3.Card
@@ -30,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
@@ -87,12 +90,26 @@ fun ConversionCard(
                 )
             }
 
-            Text(
-                text = formatLastSyncTimeComposable(lastSyncTime),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.testTag("last_sync_info")
-            )
+            ) {
+                val syncColor = when {
+                    lastSyncTime == null -> Color(0xFFD32F2F)
+                    System.currentTimeMillis() - lastSyncTime < 24 * 60 * 60 * 1000 -> Color(0xFF2E7D32)
+                    System.currentTimeMillis() - lastSyncTime < 48 * 60 * 60 * 1000 -> Color(0xFFF9A825)
+                    else -> Color(0xFFD32F2F)
+                }
+                Canvas(modifier = Modifier.size(8.dp)) {
+                    drawCircle(color = syncColor)
+                }
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    text = formatLastSyncTimeComposable(lastSyncTime),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -104,6 +121,16 @@ fun ConversionCard(
                     keyboardType = KeyboardType.Decimal,
                     imeAction = ImeAction.Done
                 ),
+                trailingIcon = {
+                    if (amount.isNotEmpty()) {
+                        IconButton(onClick = { onAmountChange("") }) {
+                            Icon(
+                                imageVector = Icons.Default.Clear,
+                                contentDescription = stringResource(R.string.clear_search)
+                            )
+                        }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth().testTag("amount_input"),
                 singleLine = true
             )
