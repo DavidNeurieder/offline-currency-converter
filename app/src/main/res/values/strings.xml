@@ -53,18 +53,19 @@
     <string name="favorite_currencies">Favorites</string>
     <string name="add_favorite">Add to favorites</string>
     <string name="remove_favorite">Remove from favorites</string>
-    <string name="rate_trend">%1$s to %2$s trend (30 days)</string>
+    <string name="rate_trend">%1$s to %2$s trend</string>
     <string name="historical_rates_unavailable">Historical rates unavailable</string>
     <string name="widget_description">Shows your selected currency pair for quick access</string>
     <string name="close">Close</string>
     <string name="chart_high">High</string>
     <string name="chart_low">Low</string>
     <string name="chart_change">Change</string>
+    <string name="chart_range_days">%1$dD</string>
     <string name="quick_convert">Quick Convert</string>
     <string name="multi_currency_view">Multi-Currency View</string>
     <string name="multi_currency_view_description">Show conversions to all favorite currencies below the result</string>
     <string name="historical_rates_chart">Historical Rate Chart</string>
-    <string name="historical_rates_chart_description">Show 30-day trend chart on the convert screen</string>
+    <string name="historical_rates_chart_description">Show trend chart on the convert screen</string>
 
 
     <string name="copy_result">Copy</string>

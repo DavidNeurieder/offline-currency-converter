@@ -42,6 +42,8 @@ data class ConvertUiState(
     val lastSyncTime: Long? = null,
     val recentCurrencies: List<Currency> = emptyList(),
     val historicalRates: List<HistoricalRateEntity> = emptyList(),
+    val filteredHistoricalRates: List<HistoricalRateEntity> = emptyList(),
+    val selectedDateRange: Int = 30,
     val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
     val multiCurrencyView: Boolean = false,
     val historicalRatesChart: Boolean = false
@@ -312,7 +314,24 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             val rates = historicalRateRepository.getHistoricalRates(source.code, target.code)
             _uiState.value = _uiState.value.copy(historicalRates = rates)
+            applyDateRangeFilter()
         }
+    }
+
+    fun onDateRangeChange(days: Int) {
+        _uiState.value = _uiState.value.copy(selectedDateRange = days)
+        applyDateRangeFilter()
+    }
+
+    private fun applyDateRangeFilter() {
+        val allRates = _uiState.value.historicalRates
+        val days = _uiState.value.selectedDateRange
+        val filtered = if (allRates.size <= days) {
+            allRates
+        } else {
+            allRates.takeLast(days)
+        }
+        _uiState.value = _uiState.value.copy(filteredHistoricalRates = filtered)
     }
 
     private fun performConversion() {

@@ -162,7 +162,7 @@ class ExchangeRateRepositoryImpl @Inject constructor(
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val calendar = Calendar.getInstance()
             val endDate = dateFormat.format(calendar.time)
-            calendar.add(Calendar.DAY_OF_YEAR, -30)
+            calendar.add(Calendar.DAY_OF_YEAR, -90)
             val startDate = dateFormat.format(calendar.time)
 
             val response = frankfurterApi.getHistoricalRates(

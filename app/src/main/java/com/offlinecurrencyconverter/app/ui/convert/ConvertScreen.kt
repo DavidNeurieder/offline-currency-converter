@@ -25,6 +25,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -51,6 +52,7 @@ import com.offlinecurrencyconverter.app.ui.components.ConversionCard
 import com.offlinecurrencyconverter.app.ui.components.CurrencyPickerBottomSheet
 import com.offlinecurrencyconverter.app.ui.components.RateChart
 import com.offlinecurrencyconverter.app.ui.components.RateChartDetail
+import com.offlinecurrencyconverter.app.ui.components.RateChartSummary
 import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
@@ -195,10 +197,34 @@ fun ConvertScreen(
                                     modifier = Modifier.fillMaxWidth()
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    listOf(7, 30, 90).forEach { days ->
+                                        FilterChip(
+                                            selected = uiState.selectedDateRange == days,
+                                            onClick = { viewModel.onDateRangeChange(days) },
+                                            label = {
+                                                Text(
+                                                    text = stringResource(
+                                                        R.string.chart_range_days,
+                                                        days
+                                                    )
+                                                )
+                                            }
+                                        )
+                                    }
+                                }
+                                Spacer(modifier = Modifier.height(8.dp))
                                 when {
-                                    uiState.historicalRates.size >= 2 -> {
+                                    uiState.filteredHistoricalRates.size >= 2 -> {
                                         RateChart(
-                                            dataPoints = uiState.historicalRates.map { it.date to it.rate }
+                                            dataPoints = uiState.filteredHistoricalRates.map { it.date to it.rate }
+                                        )
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        RateChartSummary(
+                                            dataPoints = uiState.filteredHistoricalRates.map { it.date to it.rate }
                                         )
                                     }
                                     else -> {
@@ -278,8 +304,8 @@ fun ConvertScreen(
         onFavoriteToggle = viewModel::onFavoriteToggle
     )
 
-    if (showChartDetail && uiState.historicalRates.size >= 2) {
-        val rates = uiState.historicalRates
+    if (showChartDetail && uiState.filteredHistoricalRates.size >= 2) {
+        val rates = uiState.filteredHistoricalRates
         val ratesList = rates.map { it.date to it.rate }
         val rateValues = rates.map { it.rate }
         val minRate = rateValues.min()
