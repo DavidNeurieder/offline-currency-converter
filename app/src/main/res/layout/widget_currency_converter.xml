@@ -13,7 +13,7 @@
         android:text="--"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="#00695C"
+        android:textColor="@color/widget_text_color"
         android:padding="16dp" />
 
 </FrameLayout>

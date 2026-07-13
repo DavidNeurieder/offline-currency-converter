@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_text_color">@android:color/system_accent1_700</color>
+    <color name="widget_card_fill">@android:color/system_accent1_50</color>
+    <color name="widget_card_stroke">@android:color/system_accent1_200</color>
+</resources>

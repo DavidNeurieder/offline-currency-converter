@@ -8,6 +8,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import android.content.Intent
+import com.offlinecurrencyconverter.app.widget.CurrencyWidgetProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -73,12 +75,14 @@ class PreferencesManager @Inject constructor(
         dataStore.edit { prefs ->
             prefs[Keys.SOURCE_CURRENCY] = code
         }
+        updateWidget()
     }
 
     suspend fun saveTargetCurrency(code: String) {
         dataStore.edit { prefs ->
             prefs[Keys.TARGET_CURRENCY] = code
         }
+        updateWidget()
     }
 
     suspend fun saveSyncInterval(hours: Long) {
@@ -119,5 +123,12 @@ class PreferencesManager @Inject constructor(
         dataStore.edit { prefs ->
             prefs[Keys.FAVORITES_INITIALIZED] = initialized
         }
+    }
+
+    private fun updateWidget() {
+        val intent = Intent(context, CurrencyWidgetProvider::class.java).apply {
+            action = CurrencyWidgetProvider.ACTION_UPDATE_WIDGET
+        }
+        context.sendBroadcast(intent)
     }
 }

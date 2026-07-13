@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="widget_text_color">#00695C</color>
+    <color name="widget_card_fill">#FFFBFE</color>
+    <color name="widget_card_stroke">#E0E0E0</color>
+</resources>
