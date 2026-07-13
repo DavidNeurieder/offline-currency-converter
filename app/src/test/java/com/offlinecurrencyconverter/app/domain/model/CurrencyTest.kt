@@ -66,20 +66,32 @@ class CurrencyTest {
     }
 
     @Test
-    fun `currency equality based on code`() {
+    fun `currency equality based on all fields`() {
         val currency1 = Currency("USD", "US Dollar", "$")
-        val currency2 = Currency("USD", "US Dollar", "$", isSelectedForOffline = true, isFavorite = true)
-        val currency3 = Currency("EUR", "Euro", "€")
+        val currency2 = Currency("USD", "US Dollar", "$")
+        val currency3 = Currency("USD", "US Dollar", "$", isSelectedForOffline = true, isFavorite = true)
+        val currency4 = Currency("EUR", "Euro", "€")
 
-        assertTrue(currency1 == currency2)
+        assertEquals(currency1, currency2)
         assertFalse(currency1 == currency3)
+        assertFalse(currency1 == currency4)
     }
 
     @Test
-    fun `currency hashCode based on code`() {
+    fun `currency equality considers isFavorite`() {
+        val notFavorite = Currency("USD", "US Dollar", "$", isFavorite = false)
+        val isFavorite = Currency("USD", "US Dollar", "$", isFavorite = true)
+
+        assertFalse(notFavorite == isFavorite)
+    }
+
+    @Test
+    fun `currency hashCode based on all fields`() {
         val currency1 = Currency("USD", "US Dollar", "$")
         val currency2 = Currency("USD", "US Dollar", "$")
+        val currency3 = Currency("USD", "US Dollar", "$", isFavorite = true)
 
         assertEquals(currency1.hashCode(), currency2.hashCode())
+        assertFalse(currency1.hashCode() == currency3.hashCode())
     }
 }

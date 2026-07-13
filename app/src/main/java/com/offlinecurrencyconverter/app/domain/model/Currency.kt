@@ -6,7 +6,4 @@ data class Currency(
     val symbol: String,
     val isSelectedForOffline: Boolean = false,
     val isFavorite: Boolean = false
-) {
-    override fun equals(other: Any?): Boolean = other is Currency && code == other.code
-    override fun hashCode(): Int = code.hashCode()
-}
+)
