@@ -212,7 +212,7 @@ class ConvertViewModelTest {
         viewModel.onTargetCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify(exactly = 2) { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+        io.mockk.coVerify(exactly = 3) { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
     }
 
     @Test
