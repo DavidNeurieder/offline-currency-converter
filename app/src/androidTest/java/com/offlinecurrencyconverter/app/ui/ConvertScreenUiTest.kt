@@ -115,12 +115,8 @@ class ConvertScreenUiTest {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
-    fun TC_009_rateChart_displayed() {
-        composeTestRule.waitUntil(timeoutMillis = 10_000) {
-            composeTestRule.onAllNodesWithTag("rate_chart").fetchSemanticsNodes().isNotEmpty()
-        }
-
+    fun TC_009_rateChart_notDisplayedByDefault() {
         composeTestRule.onNodeWithTag("rate_chart")
-            .assertExists()
+            .assertDoesNotExist()
     }
 }

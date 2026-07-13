@@ -57,7 +57,7 @@ class PreferencesManager @Inject constructor(
     }
 
     val multiCurrencyView: Flow<Boolean> = dataStore.data.map { prefs ->
-        prefs[Keys.MULTI_CURRENCY_VIEW] ?: false
+        prefs[Keys.MULTI_CURRENCY_VIEW] ?: true
     }
 
     val historicalRatesChart: Flow<Boolean> = dataStore.data.map { prefs ->

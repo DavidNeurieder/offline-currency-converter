@@ -79,6 +79,13 @@ class CurrencyPickerUiTest {
 
         composeTestRule.waitForIdle()
 
+        composeTestRule.onNodeWithTag("currency_search_field")
+            .performTextInput("USD")
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule.onAllNodesWithTag("favorite_toggle_USD").fetchSemanticsNodes().isNotEmpty()
+        }
+
         composeTestRule.onAllNodesWithTag("favorite_toggle_USD")[0]
             .assertIsDisplayed()
     }
@@ -90,6 +97,13 @@ class CurrencyPickerUiTest {
             .performClick()
 
         composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("currency_search_field")
+            .performTextInput("USD")
+
+        composeTestRule.waitUntil(timeoutMillis = 5_000) {
+            composeTestRule.onAllNodesWithTag("favorite_toggle_USD").fetchSemanticsNodes().isNotEmpty()
+        }
 
         composeTestRule.onNodeWithTag("favorite_toggle_USD")
             .performClick()
