@@ -31,10 +31,6 @@
     <string name="rate_trend">Tendance %1$s vers %2$s (30 jours)</string>
     <string name="historical_rates_unavailable">Taux historiques indisponibles</string>
     <string name="widget_description">Affiche votre paire de devises sélectionnée pour un accès rapide</string>
-    <string name="widget_updated_just_now">Mis à jour à l\'instant</string>
-    <string name="widget_updated_minutes_ago">Mis à jour il y a %1$d min</string>
-    <string name="widget_updated_hours_ago">Mis à jour il y a %1$d h</string>
-    <string name="widget_updated_on">Mis à jour le %1$s</string>
     <string name="close">Fermer</string>
     <string name="chart_high">Haut</string>
     <string name="chart_low">Bas</string>

@@ -31,10 +31,6 @@
     <string name="rate_trend">%1$s 兑 %2$s 走势（30天）</string>
     <string name="historical_rates_unavailable">历史汇率不可用</string>
     <string name="widget_description">显示所选货币对以便快速查看</string>
-    <string name="widget_updated_just_now">刚刚更新</string>
-    <string name="widget_updated_minutes_ago">%1$d 分钟前更新</string>
-    <string name="widget_updated_hours_ago">%1$d 小时前更新</string>
-    <string name="widget_updated_on">于 %1$s 更新</string>
     <string name="close">关闭</string>
     <string name="chart_high">最高</string>
     <string name="chart_low">最低</string>

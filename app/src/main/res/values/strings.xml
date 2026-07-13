@@ -56,10 +56,6 @@
     <string name="rate_trend">%1$s to %2$s trend (30 days)</string>
     <string name="historical_rates_unavailable">Historical rates unavailable</string>
     <string name="widget_description">Shows your selected currency pair for quick access</string>
-    <string name="widget_updated_just_now">Updated just now</string>
-    <string name="widget_updated_minutes_ago">Updated %1$d min ago</string>
-    <string name="widget_updated_hours_ago">Updated %1$d h ago</string>
-    <string name="widget_updated_on">Updated on %1$s</string>
     <string name="close">Close</string>
     <string name="chart_high">High</string>
     <string name="chart_low">Low</string>

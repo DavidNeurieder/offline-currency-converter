@@ -18,10 +18,6 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.concurrent.TimeUnit
 
 class CurrencyWidgetProvider : AppWidgetProvider() {
 
@@ -80,22 +76,7 @@ class CurrencyWidgetProvider : AppWidgetProvider() {
                     val sourceCode = preferencesManager.sourceCurrency.first() ?: "USD"
                     val targetCode = preferencesManager.targetCurrency.first() ?: "EUR"
 
-                    val sourceCurrency = database.currencyDao().getCurrencyByCode(sourceCode)
-                    val targetCurrency = database.currencyDao().getCurrencyByCode(targetCode)
                     val rate = database.exchangeRateDao().getRate(sourceCode, targetCode)
-                    val lastUpdated = database.exchangeRateDao().getLastUpdateTime()
-
-                    val sourceSymbol = sourceCurrency?.symbol ?: ""
-                    val targetSymbol = targetCurrency?.symbol ?: ""
-
-                    views.setTextViewText(
-                        R.id.widget_source_currency,
-                        if (sourceSymbol.isNotEmpty()) "$sourceSymbol $sourceCode" else sourceCode
-                    )
-                    views.setTextViewText(
-                        R.id.widget_target_currency,
-                        if (targetSymbol.isNotEmpty()) "$targetSymbol $targetCode" else targetCode
-                    )
 
                     if (rate != null) {
                         views.setTextViewText(
@@ -106,37 +87,10 @@ class CurrencyWidgetProvider : AppWidgetProvider() {
                         views.setTextViewText(R.id.widget_rate, "1 $sourceCode = -- $targetCode")
                     }
 
-                    if (lastUpdated != null && lastUpdated > 0) {
-                        views.setTextViewText(
-                            R.id.widget_last_updated,
-                            formatTimeAgo(context, lastUpdated)
-                        )
-                    } else {
-                        views.setTextViewText(R.id.widget_last_updated, "")
-                    }
-
                     appWidgetManager.updateAppWidget(appWidgetId, views)
                 } catch (e: Exception) {
                     views.setTextViewText(R.id.widget_rate, "--")
                     appWidgetManager.updateAppWidget(appWidgetId, views)
-                }
-            }
-        }
-
-        private fun formatTimeAgo(context: Context, timestamp: Long): String {
-            val now = System.currentTimeMillis()
-            val diff = now - timestamp
-
-            return when {
-                diff < TimeUnit.MINUTES.toMillis(1) ->
-                    context.getString(R.string.widget_updated_just_now)
-                diff < TimeUnit.HOURS.toMillis(1) ->
-                    context.getString(R.string.widget_updated_minutes_ago, TimeUnit.MILLISECONDS.toMinutes(diff))
-                diff < TimeUnit.DAYS.toMillis(1) ->
-                    context.getString(R.string.widget_updated_hours_ago, TimeUnit.MILLISECONDS.toHours(diff))
-                else -> {
-                    val format = SimpleDateFormat("MMM d", Locale.getDefault())
-                    context.getString(R.string.widget_updated_on, format.format(Date(timestamp)))
                 }
             }
         }

@@ -31,10 +31,6 @@
     <string name="rate_trend">%1$s से %2$s रुझान (30 दिन)</string>
     <string name="historical_rates_unavailable">ऐतिहासिक दरें उपलब्ध नहीं हैं</string>
     <string name="widget_description">त्वरित पहुंच के लिए आपकी चयनित मुद्रा जोड़ी दिखाता है</string>
-    <string name="widget_updated_just_now">अभी अपडेट किया गया</string>
-    <string name="widget_updated_minutes_ago">%1$d मिनट पहले अपडेट किया गया</string>
-    <string name="widget_updated_hours_ago">%1$d घंटे पहले अपडेट किया गया</string>
-    <string name="widget_updated_on">%1$s को अपडेट किया गया</string>
     <string name="close">बंद करें</string>
     <string name="chart_high">उच्च</string>
     <string name="chart_low">निम्न</string>

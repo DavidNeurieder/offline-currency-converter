@@ -31,10 +31,6 @@
     <string name="rate_trend">%1$s zu %2$s Verlauf (30 Tage)</string>
     <string name="historical_rates_unavailable">Historische Kurse nicht verfügbar</string>
     <string name="widget_description">Zeigt dein ausgewährtes Währungspaar für schnellen Zugriff</string>
-    <string name="widget_updated_just_now">Gerade aktualisiert</string>
-    <string name="widget_updated_minutes_ago">Vor %1$d Min. aktualisiert</string>
-    <string name="widget_updated_hours_ago">Vor %1$d Std. aktualisiert</string>
-    <string name="widget_updated_on">Aktualisiert am %1$s</string>
     <string name="close">Schließen</string>
     <string name="chart_high">Hoch</string>
     <string name="chart_low">Tief</string>
