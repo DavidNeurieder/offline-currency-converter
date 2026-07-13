@@ -32,6 +32,26 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getAllRatesForCurrency(baseCurrency: String): List<ExchangeRate> {
+        if (baseCurrency == BASE_CURRENCY) {
+            return exchangeRateDao.getRatesForCurrencyOnce(baseCurrency).map { it.toDomain() }
+        }
+
+        val eurToBase = exchangeRateDao.getRate(BASE_CURRENCY, baseCurrency)?.toDomain()
+            ?: return emptyList()
+        val allEurRates = exchangeRateDao.getRatesForCurrencyOnce(BASE_CURRENCY).map { it.toDomain() }
+
+        return allEurRates.filter { it.targetCurrency != baseCurrency }.map { eurToTarget ->
+            ExchangeRate(
+                baseCurrency = baseCurrency,
+                targetCurrency = eurToTarget.targetCurrency,
+                rate = eurToTarget.rate / eurToBase.rate,
+                lastUpdated = maxOf(eurToBase.lastUpdated, eurToTarget.lastUpdated),
+                isOfflineAvailable = eurToBase.isOfflineAvailable && eurToTarget.isOfflineAvailable
+            )
+        }
+    }
+
     override suspend fun getRate(baseCurrency: String, targetCurrency: String): ExchangeRate? {
         if (baseCurrency == targetCurrency) {
             return ExchangeRate(

@@ -7,6 +7,7 @@ import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
 import com.offlinecurrencyconverter.app.domain.model.Currency
+import com.offlinecurrencyconverter.app.domain.model.ExchangeRate
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.repository.HistoricalRateRepository
@@ -22,6 +23,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class MultiCurrencyResult(
+    val currency: Currency,
+    val rate: Double,
+    val convertedAmount: Double
+)
+
 data class ConvertUiState(
     val amount: String = "",
     val sourceCurrency: Currency? = null,
@@ -34,7 +41,8 @@ data class ConvertUiState(
     val isRefreshing: Boolean = false,
     val lastSyncTime: Long? = null,
     val recentCurrencies: List<Currency> = emptyList(),
-    val historicalRates: List<HistoricalRateEntity> = emptyList()
+    val historicalRates: List<HistoricalRateEntity> = emptyList(),
+    val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList()
 )
 
 @HiltViewModel
@@ -176,7 +184,10 @@ class ConvertViewModel @Inject constructor(
         if (filtered.isNotEmpty() && filtered.toDoubleOrNull() != null) {
             performConversion()
         } else {
-            _uiState.value = _uiState.value.copy(conversionResult = null)
+            _uiState.value = _uiState.value.copy(
+                conversionResult = null,
+                multiCurrencyConversions = emptyList()
+            )
         }
     }
 
@@ -265,6 +276,36 @@ class ConvertViewModel @Inject constructor(
                     )
                 }
             )
+            performMultiCurrencyConversion(amount, source)
+        }
+    }
+
+    private fun performMultiCurrencyConversion(amount: Double, source: Currency) {
+        viewModelScope.launch {
+            val allRates = exchangeRateRepository.getAllRatesForCurrency(source.code)
+            if (allRates.isEmpty()) {
+                _uiState.value = _uiState.value.copy(multiCurrencyConversions = emptyList())
+                return@launch
+            }
+
+            val favorites = currencies.value.filter { it.isFavorite && it.code != source.code }
+            val defaults = listOf("EUR", "GBP", "JPY", "CNY", "CHF")
+                .mapNotNull { code -> currencies.value.find { it.code == code } }
+                .filter { it.code != source.code }
+
+            val targetCurrencies = (favorites + defaults).distinctBy { it.code }.take(5)
+
+            val conversions = targetCurrencies.mapNotNull { currency ->
+                val rate = allRates.find { it.targetCurrency == currency.code }?.rate
+                    ?: return@mapNotNull null
+                MultiCurrencyResult(
+                    currency = currency,
+                    rate = rate,
+                    convertedAmount = amount * rate
+                )
+            }
+
+            _uiState.value = _uiState.value.copy(multiCurrencyConversions = conversions)
         }
     }
 

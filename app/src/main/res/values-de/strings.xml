@@ -35,6 +35,7 @@
     <string name="chart_high">Hoch</string>
     <string name="chart_low">Tief</string>
     <string name="chart_change">Änderung</string>
+    <string name="quick_convert">Schnell umrechnen</string>
     <string name="about">Über</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Währungsumrechner powered by Frankfurter API. Unterstützt 160+ Währungen.</string>

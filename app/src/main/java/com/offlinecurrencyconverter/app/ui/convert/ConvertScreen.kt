@@ -135,7 +135,11 @@ fun ConvertScreen(
                         conversionResult = uiState.conversionResult,
                         error = uiState.error,
                         isLoading = uiState.isLoading,
-                        lastSyncTime = uiState.lastSyncTime
+                        lastSyncTime = uiState.lastSyncTime,
+                        multiCurrencyConversions = uiState.multiCurrencyConversions,
+                        onMultiCurrencyTargetClick = { currency ->
+                            viewModel.onTargetCurrencyChange(currency)
+                        }
                     )
                 }
 

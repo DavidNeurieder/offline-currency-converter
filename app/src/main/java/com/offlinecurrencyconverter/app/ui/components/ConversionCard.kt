@@ -44,6 +44,7 @@ import android.widget.Toast
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
 import com.offlinecurrencyconverter.app.domain.model.Currency
+import com.offlinecurrencyconverter.app.ui.convert.MultiCurrencyResult
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,6 +63,8 @@ fun ConversionCard(
     error: String?,
     isLoading: Boolean,
     lastSyncTime: Long?,
+    multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
+    onMultiCurrencyTargetClick: (Currency) -> Unit = {},
     modifier: Modifier = Modifier,
     detectionInfo: String? = null
 ) {
@@ -207,6 +210,63 @@ fun ConversionCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.testTag("placeholder_text")
                 )
+            }
+
+            if (multiCurrencyConversions.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(R.string.quick_convert),
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                multiCurrencyConversions.forEach { result ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 4.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(end = 8.dp)
+                        ) {
+                            FlagDrawables.getFlagResource(result.currency.code)?.let { resId ->
+                                Image(
+                                    painter = painterResource(id = resId),
+                                    contentDescription = "${result.currency.name} flag",
+                                    modifier = Modifier
+                                        .size(20.dp)
+                                        .clip(RoundedCornerShape(2.dp))
+                                )
+                                Spacer(modifier = Modifier.width(6.dp))
+                            }
+                            Text(
+                                text = result.currency.code,
+                                style = MaterialTheme.typography.bodyMedium,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = result.currency.name,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Text(
+                            text = "${result.currency.symbol}${
+                                DecimalFormat("#,##0.00").format(result.convertedAmount)
+                            }",
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier.testTag("multi_result_${result.currency.code}")
+                        )
+                    }
+                }
             }
         }
     }

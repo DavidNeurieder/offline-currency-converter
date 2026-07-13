@@ -35,6 +35,7 @@
     <string name="chart_high">Wysoki</string>
     <string name="chart_low">Niski</string>
     <string name="chart_change">Zmiana</string>
+    <string name="quick_convert">Szybkie przeliczanie</string>
     <string name="about">O aplikacji</string>
     <string name="version_format">Wersja %1$s</string>
     <string name="about_description">Konwerter walut oparty na Frankfurter API. Obsługuje ponad 160 walut.</string>

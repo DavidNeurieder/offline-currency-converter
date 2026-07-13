@@ -61,6 +61,7 @@
     <string name="chart_high">High</string>
     <string name="chart_low">Low</string>
     <string name="chart_change">Change</string>
+    <string name="quick_convert">Quick Convert</string>
 
 
     <string name="copy_result">Copy</string>

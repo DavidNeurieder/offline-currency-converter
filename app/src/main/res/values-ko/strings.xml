@@ -35,6 +35,7 @@
     <string name="chart_high">최고</string>
     <string name="chart_low">최저</string>
     <string name="chart_change">변동</string>
+    <string name="quick_convert">빠른 변환</string>
     <string name="about">정보</string>
     <string name="version_format">버전 %1$s</string>
     <string name="about_description">Frankfurter API로 구동되는 환율 변환기. 160개 이상의 통화를 지원합니다.</string>

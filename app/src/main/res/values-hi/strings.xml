@@ -35,6 +35,7 @@
     <string name="chart_high">उच्च</string>
     <string name="chart_low">निम्न</string>
     <string name="chart_change">परिवर्तन</string>
+    <string name="quick_convert">त्वरित रूपांतरण</string>
     <string name="about">के बारे में</string>
     <string name="version_format">संस्करण %1$s</string>
     <string name="about_description">Frankfurter API द्वारा संचालित मुद्रा कनवर्टर। 160+ मुद्राओं का समर्थन करता है।</string>

@@ -15,6 +15,9 @@ interface ExchangeRateDao {
     @Query("SELECT * FROM exchange_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency")
     suspend fun getRate(baseCurrency: String, targetCurrency: String): ExchangeRateEntity?
 
+    @Query("SELECT * FROM exchange_rates WHERE baseCurrency = :baseCurrency")
+    suspend fun getRatesForCurrencyOnce(baseCurrency: String): List<ExchangeRateEntity>
+
     @Query("SELECT * FROM exchange_rates WHERE isOfflineAvailable = 1")
     fun getOfflineAvailableRates(): Flow<List<ExchangeRateEntity>>
 
