@@ -29,6 +29,7 @@
     <string name="add_favorite">Добавить в избранное</string>
     <string name="remove_favorite">Удалить из избранного</string>
     <string name="rate_trend">Тренд %1$s к %2$s (30 дней)</string>
+    <string name="historical_rates_unavailable">Исторические курсы недоступны</string>
     <string name="widget_description">Показывает выбранную валютную пару для быстрого доступа</string>
     <string name="about">О приложении</string>
     <string name="version_format">Версия %1$s</string>

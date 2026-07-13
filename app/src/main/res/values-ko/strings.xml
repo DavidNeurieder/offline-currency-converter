@@ -29,6 +29,7 @@
     <string name="add_favorite">즐겨찾기에 추가</string>
     <string name="remove_favorite">즐겨찾기에서 제거</string>
     <string name="rate_trend">%1$s → %2$s 추이 (30일)</string>
+    <string name="historical_rates_unavailable">과거 환율을 사용할 수 없습니다</string>
     <string name="widget_description">선택한 통화 쌍을 빠르게 확인할 수 있는 위젯</string>
     <string name="about">정보</string>
     <string name="version_format">버전 %1$s</string>

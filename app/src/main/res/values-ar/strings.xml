@@ -29,6 +29,7 @@
     <string name="add_favorite">إضافة إلى المفضلة</string>
     <string name="remove_favorite">إزالة من المفضلة</string>
     <string name="rate_trend">اتجاه %1$s إلى %2$s (30 يوماً)</string>
+    <string name="historical_rates_unavailable">البيانات التاريخية غير متاحة</string>
     <string name="widget_description">يعرض زوج العملات المحدد للوصول السريع</string>
     <string name="about">حول</string>
     <string name="version_format">الإصدار %1$s</string>

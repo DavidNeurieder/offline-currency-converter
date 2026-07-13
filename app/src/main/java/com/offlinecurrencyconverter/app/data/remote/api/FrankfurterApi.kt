@@ -17,8 +17,8 @@ interface FrankfurterApi {
     suspend fun getHistoricalRates(
         @Query("base") baseCurrency: String,
         @Query("quotes") targetCurrencies: String? = null,
-        @Query("start_date") startDate: String,
-        @Query("end_date") endDate: String
+        @Query("from") startDate: String,
+        @Query("to") endDate: String
     ): Response<List<ExchangeRateItem>>
 
     @GET("v2/currencies")

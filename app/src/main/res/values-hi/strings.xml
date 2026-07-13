@@ -29,6 +29,7 @@
     <string name="add_favorite">पसंदीदा में जोड़ें</string>
     <string name="remove_favorite">पसंदीदा से हटाएं</string>
     <string name="rate_trend">%1$s से %2$s रुझान (30 दिन)</string>
+    <string name="historical_rates_unavailable">ऐतिहासिक दरें उपलब्ध नहीं हैं</string>
     <string name="widget_description">त्वरित पहुंच के लिए आपकी चयनित मुद्रा जोड़ी दिखाता है</string>
     <string name="about">के बारे में</string>
     <string name="version_format">संस्करण %1$s</string>

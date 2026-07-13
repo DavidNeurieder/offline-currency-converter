@@ -29,6 +29,7 @@
     <string name="add_favorite">Toevoegen aan favorieten</string>
     <string name="remove_favorite">Verwijderen uit favorieten</string>
     <string name="rate_trend">%1$s naar %2$s trend (30 dagen)</string>
+    <string name="historical_rates_unavailable">Historische koersen niet beschikbaar</string>
     <string name="widget_description">Toont je geselecteerde valutapaar voor snelle toegang</string>
     <string name="about">Over</string>
     <string name="version_format">Versie %1$s</string>

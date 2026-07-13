@@ -55,6 +55,7 @@
     <string name="add_favorite">Add to favorites</string>
     <string name="remove_favorite">Remove from favorites</string>
     <string name="rate_trend">%1$s to %2$s trend (30 days)</string>
+    <string name="historical_rates_unavailable">Historical rates unavailable</string>
     <string name="widget_description">Shows your selected currency pair for quick access</string>
 
 

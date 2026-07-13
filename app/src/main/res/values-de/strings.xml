@@ -29,6 +29,7 @@
     <string name="add_favorite">Zu Favoriten hinzufügen</string>
     <string name="remove_favorite">Aus Favoriten entfernen</string>
     <string name="rate_trend">%1$s zu %2$s Verlauf (30 Tage)</string>
+    <string name="historical_rates_unavailable">Historische Kurse nicht verfügbar</string>
     <string name="widget_description">Zeigt dein ausgewährtes Währungspaar für schnellen Zugriff</string>
     <string name="about">Über</string>
     <string name="version_format">Version %1$s</string>

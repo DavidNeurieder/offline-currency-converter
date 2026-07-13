@@ -133,28 +133,48 @@ fun ConvertScreen(
                     )
                 }
 
-                if (uiState.historicalRates.size >= 2) {
-                    item {
-                        Card(
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("rate_chart"),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                    ) {
+                        Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .testTag("rate_chart"),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                                .padding(16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    text = stringResource(
-                                        R.string.rate_trend,
-                                        uiState.sourceCurrency?.code ?: "",
-                                        uiState.targetCurrency?.code ?: ""
-                                    ),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.SemiBold
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                                RateChart(
-                                    dataPoints = uiState.historicalRates.map { it.date to it.rate }
-                                )
+                            Text(
+                                text = stringResource(
+                                    R.string.rate_trend,
+                                    uiState.sourceCurrency?.code ?: "",
+                                    uiState.targetCurrency?.code ?: ""
+                                ),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            when {
+                                uiState.isHistoricalLoading -> {
+                                    CircularProgressIndicator(
+                                        modifier = Modifier.padding(24.dp)
+                                    )
+                                }
+                                uiState.historicalRates.size >= 2 -> {
+                                    RateChart(
+                                        dataPoints = uiState.historicalRates.map { it.date to it.rate }
+                                    )
+                                }
+                                else -> {
+                                    Text(
+                                        text = stringResource(R.string.historical_rates_unavailable),
+                                        style = MaterialTheme.typography.bodyMedium,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
                     }

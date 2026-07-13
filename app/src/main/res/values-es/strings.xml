@@ -29,6 +29,7 @@
     <string name="add_favorite">Añadir a favoritos</string>
     <string name="remove_favorite">Eliminar de favoritos</string>
     <string name="rate_trend">Tendencia de %1$s a %2$s (30 días)</string>
+    <string name="historical_rates_unavailable">Tipos de cambio históricos no disponibles</string>
     <string name="widget_description">Muestra tu par de divisas seleccionado para acceso rápido</string>
     <string name="about">Acerca de</string>
     <string name="version_format">Versión %1$s</string>
