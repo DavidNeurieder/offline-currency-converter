@@ -36,6 +36,8 @@
     <string name="chart_low">Mínimo</string>
     <string name="chart_change">Variação</string>
     <string name="quick_convert">Conversão rápida</string>
+    <string name="multi_currency_view">Vista multi-moeda</string>
+    <string name="multi_currency_view_description">Mostrar conversões para várias moedas ao mesmo tempo</string>
     <string name="about">Sobre</string>
     <string name="version_format">Versão %1$s</string>
     <string name="about_description">Conversor de moeda alimentado por Frankfurter API. Suporta mais de 160 moedas.</string>

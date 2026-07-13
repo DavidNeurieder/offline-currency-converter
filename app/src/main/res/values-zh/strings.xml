@@ -36,6 +36,8 @@
     <string name="chart_low">最低</string>
     <string name="chart_change">变动</string>
     <string name="quick_convert">快速换算</string>
+    <string name="multi_currency_view">多币种视图</string>
+    <string name="multi_currency_view_description">同时显示多种货币的换算结果</string>
     <string name="about">关于</string>
     <string name="version_format">版本 %1$s</string>
     <string name="about_description">由Frankfurter API驱动的货币转换器。支持160多种货币。</string>

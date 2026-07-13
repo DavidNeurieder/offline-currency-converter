@@ -36,6 +36,8 @@
     <string name="chart_low">Bas</string>
     <string name="chart_change">Variation</string>
     <string name="quick_convert">Conversion rapide</string>
+    <string name="multi_currency_view">Vue multi-devises</string>
+    <string name="multi_currency_view_description">Afficher les conversions vers plusieurs devises en même temps</string>
     <string name="about">À propos</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Convertisseur de devises propulsé par Frankfurter API. Supporte plus de 160 devises.</string>

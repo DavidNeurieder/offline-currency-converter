@@ -42,7 +42,8 @@ data class ConvertUiState(
     val lastSyncTime: Long? = null,
     val recentCurrencies: List<Currency> = emptyList(),
     val historicalRates: List<HistoricalRateEntity> = emptyList(),
-    val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList()
+    val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
+    val multiCurrencyView: Boolean = false
 )
 
 @HiltViewModel
@@ -74,6 +75,7 @@ class ConvertViewModel @Inject constructor(
         loadRecentCurrencies()
         retryLoadingCurrencies()
         loadInitialHistoricalRates()
+        loadMultiCurrencyViewPreference()
     }
 
     private fun loadSavedCurrencies() {
@@ -133,6 +135,23 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             val lastSync = exchangeRateRepository.getLastUpdateTime()
             _uiState.value = _uiState.value.copy(lastSyncTime = lastSync)
+        }
+    }
+
+    private fun loadMultiCurrencyViewPreference() {
+        viewModelScope.launch {
+            preferencesManager.multiCurrencyView.collect { enabled ->
+                _uiState.value = _uiState.value.copy(multiCurrencyView = enabled)
+                if (!enabled) {
+                    _uiState.value = _uiState.value.copy(multiCurrencyConversions = emptyList())
+                } else {
+                    val amount = _uiState.value.amount.toDoubleOrNull()
+                    val source = _uiState.value.sourceCurrency
+                    if (amount != null && source != null) {
+                        performMultiCurrencyConversion(amount, source)
+                    }
+                }
+            }
         }
     }
 
@@ -276,7 +295,9 @@ class ConvertViewModel @Inject constructor(
                     )
                 }
             )
-            performMultiCurrencyConversion(amount, source)
+            if (_uiState.value.multiCurrencyView) {
+                performMultiCurrencyConversion(amount, source)
+            }
         }
     }
 

@@ -62,6 +62,8 @@
     <string name="chart_low">Low</string>
     <string name="chart_change">Change</string>
     <string name="quick_convert">Quick Convert</string>
+    <string name="multi_currency_view">Multi-Currency View</string>
+    <string name="multi_currency_view_description">Show conversions to multiple currencies at once</string>
 
 
     <string name="copy_result">Copy</string>

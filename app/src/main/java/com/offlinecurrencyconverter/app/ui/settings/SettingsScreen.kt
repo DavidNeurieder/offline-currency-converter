@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -99,6 +100,13 @@ fun SettingsScreen(
                     lastSyncTime = uiState.lastSyncTime,
                     isSyncing = uiState.isSyncing,
                     onSyncNow = viewModel::syncNow
+                )
+            }
+
+            item {
+                MultiCurrencySection(
+                    multiCurrencyView = uiState.multiCurrencyView,
+                    onMultiCurrencyViewToggle = viewModel::onMultiCurrencyViewToggle
                 )
             }
 
@@ -219,6 +227,44 @@ private fun SyncSection(
                 }
                 Text(if (isSyncing) stringResource(R.string.syncing) else stringResource(R.string.sync_now))
             }
+        }
+    }
+}
+
+@Composable
+private fun MultiCurrencySection(
+    multiCurrencyView: Boolean,
+    onMultiCurrencyViewToggle: (Boolean) -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.multi_currency_view),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.testTag("multi_currency_view_toggle")
+                )
+                Text(
+                    text = stringResource(R.string.multi_currency_view_description),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Switch(
+                checked = multiCurrencyView,
+                onCheckedChange = onMultiCurrencyViewToggle,
+                modifier = Modifier.testTag("multi_currency_switch")
+            )
         }
     }
 }

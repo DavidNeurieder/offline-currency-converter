@@ -28,6 +28,7 @@ class PreferencesManager @Inject constructor(
         val SYNC_INTERVAL = longPreferencesKey("sync_interval")
         val CURRENCIES_INITIALIZED = booleanPreferencesKey("currencies_initialized")
         val RECENT_CURRENCIES = stringPreferencesKey("recent_currencies")
+        val MULTI_CURRENCY_VIEW = booleanPreferencesKey("multi_currency_view")
     }
 
     companion object {
@@ -52,6 +53,10 @@ class PreferencesManager @Inject constructor(
 
     val recentCurrencies: Flow<List<String>> = dataStore.data.map { prefs ->
         prefs[Keys.RECENT_CURRENCIES]?.split(",")?.filter { it.isNotBlank() } ?: emptyList()
+    }
+
+    val multiCurrencyView: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.MULTI_CURRENCY_VIEW] ?: false
     }
 
     suspend fun saveSourceCurrency(code: String) {
@@ -85,6 +90,12 @@ class PreferencesManager @Inject constructor(
             current.add(0, code)
             val trimmed = current.take(MAX_RECENT_CURRENCIES)
             prefs[Keys.RECENT_CURRENCIES] = trimmed.joinToString(",")
+        }
+    }
+
+    suspend fun saveMultiCurrencyView(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[Keys.MULTI_CURRENCY_VIEW] = enabled
         }
     }
 }

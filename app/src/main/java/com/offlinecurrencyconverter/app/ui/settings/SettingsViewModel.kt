@@ -32,7 +32,8 @@ data class SettingsUiState(
     val lastSyncTime: Long? = null,
     val isSyncing: Boolean = false,
     val syncError: String? = null,
-    val syncSuccess: Boolean = false
+    val syncSuccess: Boolean = false,
+    val multiCurrencyView: Boolean = false
 )
 
 @HiltViewModel
@@ -49,6 +50,7 @@ class SettingsViewModel @Inject constructor(
     init {
         loadLastSyncTime()
         loadSyncInterval()
+        loadMultiCurrencyView()
     }
 
     private fun loadLastSyncTime() {
@@ -65,6 +67,21 @@ class SettingsViewModel @Inject constructor(
                     ?: SyncInterval.TWENTY_FOUR_HOURS
                 _uiState.value = _uiState.value.copy(syncInterval = interval)
             }
+        }
+    }
+
+    private fun loadMultiCurrencyView() {
+        viewModelScope.launch {
+            preferencesManager.multiCurrencyView.collect { enabled ->
+                _uiState.value = _uiState.value.copy(multiCurrencyView = enabled)
+            }
+        }
+    }
+
+    fun onMultiCurrencyViewToggle(enabled: Boolean) {
+        _uiState.value = _uiState.value.copy(multiCurrencyView = enabled)
+        viewModelScope.launch {
+            preferencesManager.saveMultiCurrencyView(enabled)
         }
     }
 
