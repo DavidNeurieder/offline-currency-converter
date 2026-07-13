@@ -52,7 +52,6 @@ import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.ui.components.ConversionCard
 import com.offlinecurrencyconverter.app.ui.components.CurrencyPickerBottomSheet
 import com.offlinecurrencyconverter.app.ui.components.RateChart
-import com.offlinecurrencyconverter.app.ui.components.RateChartDetail
 import com.offlinecurrencyconverter.app.ui.components.RateChartSummary
 import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 
@@ -69,7 +68,6 @@ fun ConvertScreen(
     var showSourceCurrencyPicker by remember { mutableStateOf(false) }
     var showTargetCurrencyPicker by remember { mutableStateOf(false) }
     var showFavoritesPicker by remember { mutableStateOf(false) }
-    var showChartDetail by remember { mutableStateOf(false) }
 
     val hasFavorites = remember(currencies) { currencies.any { it.isFavorite } }
 
@@ -187,7 +185,6 @@ fun ConvertScreen(
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clickable { showChartDetail = true }
                                 .testTag("rate_chart"),
                             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                         ) {
@@ -314,41 +311,4 @@ fun ConvertScreen(
         onDismiss = { showFavoritesPicker = false },
         onFavoriteToggle = viewModel::onFavoriteToggle
     )
-
-    if (showChartDetail && uiState.filteredHistoricalRates.size >= 2) {
-        val rates = uiState.filteredHistoricalRates
-        val ratesList = rates.map { it.date to it.rate }
-        val rateValues = rates.map { it.rate }
-        val minRate = rateValues.min()
-        val maxRate = rateValues.max()
-        val changePercent = if (rateValues.size >= 2 && rateValues.first() > 0.0) {
-            ((rateValues.last() - rateValues.first()) / rateValues.first()) * 100.0
-        } else 0.0
-
-        AlertDialog(
-            onDismissRequest = { showChartDetail = false },
-            title = {
-                Text(
-                    text = stringResource(
-                        R.string.rate_trend,
-                        uiState.sourceCurrency?.code ?: "",
-                        uiState.targetCurrency?.code ?: ""
-                    )
-                )
-            },
-            text = {
-                RateChartDetail(
-                    dataPoints = ratesList,
-                    minRate = minRate,
-                    maxRate = maxRate,
-                    changePercent = changePercent
-                )
-            },
-            confirmButton = {
-                TextButton(onClick = { showChartDetail = false }) {
-                    Text(stringResource(R.string.close))
-                }
-            }
-        )
-    }
 }
