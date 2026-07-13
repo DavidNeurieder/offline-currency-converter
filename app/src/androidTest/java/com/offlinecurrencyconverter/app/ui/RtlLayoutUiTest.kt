@@ -3,10 +3,11 @@ package com.offlinecurrencyconverter.app.ui
 import android.content.Context
 import android.os.LocaleList
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextReplacement
 import com.offlinecurrencyconverter.app.MainActivity
 import org.junit.Rule
 import org.junit.Test
@@ -56,6 +57,9 @@ class RtlLayoutUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_RTL005_placeholderTextDisplayed() {
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextReplacement("")
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("placeholder_text")
             .assertIsDisplayed()
     }

@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
+import androidx.compose.ui.test.performTextReplacement
 import com.offlinecurrencyconverter.app.MainActivity
 import org.junit.Rule
 import org.junit.Test
@@ -71,6 +72,9 @@ class ConversionCardUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_C006_resultArea_showsPlaceholder() {
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextReplacement("")
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithTag("placeholder_text")
             .assertIsDisplayed()
     }

@@ -65,6 +65,8 @@ class ConvertViewModelTest {
         coEvery { preferencesManager.saveTargetCurrency(any()) } returns Unit
         every { preferencesManager.historicalRatesChart } returns flowOf(true)
         every { preferencesManager.multiCurrencyView } returns flowOf(false)
+        every { preferencesManager.amount } returns flowOf("")
+        coEvery { preferencesManager.saveAmount(any()) } returns Unit
 
         viewModel = ConvertViewModel(
             convertCurrencyUseCase,
