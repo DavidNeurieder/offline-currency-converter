@@ -1,10 +1,16 @@
-<b>Offline Currency Converter</b> is a privacy-focused currency converter app that works offline. Sync exchange rates from the free Frankfurter API and convert currencies even when you're not connected to the internet.<br><br>
+<b>Offline Currency Converter</b> is a privacy-focused currency converter that works completely offline. No account, no tracking, no analytics — just exchange rates in your pocket.<br><br>
+Sync rates from the free Frankfurter API (European Central Bank) and convert 160+ currencies entirely offline. Configure sync intervals (6h, 12h, 24h, 48h, weekly, or manual only) and let WorkManager handle background updates.<br><br>
 <b>Features:</b><br>
 <ul>
-  <li>Works completely offline</li>
-  <li>Supports 160+ currencies</li>
-  <li>Automatic exchange rate sync</li>
-  <li>Recent conversion history</li>
-  <li>Material Design 3 interface</li>
+  <li><b>Favorites</b> — star your most-used currencies for quick access</li>
+  <li><b>Multi-currency view</b> — see conversions to all your favorites at once</li>
+  <li><b>Rate trend charts</b> — 30-day historical charts with tap-to-expand detail view</li>
+  <li><b>Home screen widget</b> — see your currency pair at a glance</li>
+  <li><b>Sync status</b> — colored badge shows how fresh your rates are</li>
+  <li><b>160+ currencies</b> — all ECB reference rates</li>
+  <li><b>Offline-first</b> — all conversions happen on device</li>
+  <li><b>Privacy first</b> — no accounts, no tracking, no network permissions at runtime</li>
+  <li><b>Material Design 3</b> — modern UI with dynamic theming</li>
+  <li><b>13 languages</b> — ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
 </ul>
-This app is free and open source (AGPLv3).
+Free and open source (AGPLv3).
