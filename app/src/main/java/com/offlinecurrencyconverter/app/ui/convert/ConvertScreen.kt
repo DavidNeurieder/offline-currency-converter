@@ -10,9 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -22,6 +26,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -58,7 +64,10 @@ fun ConvertScreen(
 
     var showSourceCurrencyPicker by remember { mutableStateOf(false) }
     var showTargetCurrencyPicker by remember { mutableStateOf(false) }
+    var showFavoritesPicker by remember { mutableStateOf(false) }
     var showChartDetail by remember { mutableStateOf(false) }
+
+    val hasFavorites = remember(currencies) { currencies.any { it.isFavorite } }
 
     LaunchedEffect(Unit) {
         viewModel.refreshLastSyncTime()
@@ -114,12 +123,28 @@ fun ConvertScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 item {
-                    Text(
-                        text = stringResource(R.string.currency_converter),
-                        style = MaterialTheme.typography.headlineMedium,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.testTag("currency_converter_header")
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = stringResource(R.string.currency_converter),
+                            style = MaterialTheme.typography.headlineMedium,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.testTag("currency_converter_header")
+                        )
+                        IconButton(
+                            onClick = { showFavoritesPicker = true },
+                            modifier = Modifier.testTag("open_favorites_picker")
+                        ) {
+                            Icon(
+                                imageVector = if (hasFavorites) Icons.Filled.Star else Icons.Outlined.StarOutline,
+                                contentDescription = stringResource(R.string.favorite_currencies),
+                                tint = if (hasFavorites) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
 
                 item {
@@ -237,6 +262,19 @@ fun ConvertScreen(
             showTargetCurrencyPicker = false
         },
         onDismiss = { showTargetCurrencyPicker = false },
+        onFavoriteToggle = viewModel::onFavoriteToggle
+    )
+
+    CurrencyPickerBottomSheet(
+        isVisible = showFavoritesPicker,
+        currencies = currencies.filter { it.isFavorite },
+        selectedCurrency = uiState.sourceCurrency,
+        recentCurrencies = emptyList(),
+        onCurrencySelected = { currency ->
+            viewModel.onSourceCurrencyChange(currency)
+            showFavoritesPicker = false
+        },
+        onDismiss = { showFavoritesPicker = false },
         onFavoriteToggle = viewModel::onFavoriteToggle
     )
 

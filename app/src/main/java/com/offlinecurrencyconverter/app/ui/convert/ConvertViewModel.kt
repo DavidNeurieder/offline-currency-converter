@@ -100,6 +100,10 @@ class ConvertViewModel @Inject constructor(
                         sourceCurrency = sourceCurrency,
                         targetCurrency = targetCurrency
                     )
+
+                    if (_uiState.value.multiCurrencyView) {
+                        recomputeMultiCurrency()
+                    }
                 }
             }
         }

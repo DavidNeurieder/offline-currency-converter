@@ -238,4 +238,90 @@ class ConvertViewModelTest {
     fun `initial historical rates state is empty`() = runTest {
         assertTrue(viewModel.uiState.value.historicalRates.isEmpty())
     }
+
+    @Test
+    fun `multiCurrency conversions populated when enabled with favorites and rates`() = runTest {
+        every { preferencesManager.multiCurrencyView } returns flowOf(true)
+        every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currenciesWithFavorites)
+        coEvery { exchangeRateRepository.getAllRatesForCurrency("USD") } returns listOf(
+            TestFixtures.createExchangeRate("USD", "EUR", 0.92),
+            TestFixtures.createExchangeRate("USD", "GBP", 0.79),
+            TestFixtures.createExchangeRate("USD", "JPY", 149.50)
+        )
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        vm.onAmountChange("100")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val conversions = vm.uiState.value.multiCurrencyConversions
+        assertTrue(conversions.isNotEmpty())
+        assertTrue(conversions.any { it.currency.code == "EUR" })
+        assertTrue(conversions.any { it.currency.code == "GBP" })
+        assertTrue(conversions.any { it.currency.code == "JPY" })
+
+        val eurResult = conversions.find { it.currency.code == "EUR" }!!
+        assertEquals(92.0, eurResult.convertedAmount, 0.01)
+    }
+
+    @Test
+    fun `multiCurrency conversions empty when no favorites`() = runTest {
+        every { preferencesManager.multiCurrencyView } returns flowOf(true)
+        every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currencies)
+        coEvery { exchangeRateRepository.getAllRatesForCurrency("USD") } returns listOf(
+            TestFixtures.createExchangeRate("USD", "EUR", 0.92),
+            TestFixtures.createExchangeRate("USD", "GBP", 0.79)
+        )
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        vm.onAmountChange("100")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(vm.uiState.value.multiCurrencyConversions.isEmpty())
+    }
+
+    @Test
+    fun `multiCurrency conversions empty when disabled`() = runTest {
+        every { preferencesManager.multiCurrencyView } returns flowOf(false)
+        every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currenciesWithFavorites)
+        coEvery { exchangeRateRepository.getAllRatesForCurrency("USD") } returns listOf(
+            TestFixtures.createExchangeRate("USD", "EUR", 0.92),
+            TestFixtures.createExchangeRate("USD", "GBP", 0.79)
+        )
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        vm.onAmountChange("100")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(vm.uiState.value.multiCurrencyConversions.isEmpty())
+    }
 }

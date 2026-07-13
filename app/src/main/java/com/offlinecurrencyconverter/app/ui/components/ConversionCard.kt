@@ -245,7 +245,9 @@ fun ConversionCard(
                     text = stringResource(R.string.quick_convert),
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("multi_currency_section")
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 multiCurrencyConversions.forEach { result ->

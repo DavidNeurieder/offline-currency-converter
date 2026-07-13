@@ -11,6 +11,12 @@ object TestFixtures {
     val JPY = Currency("JPY", "Japanese Yen", "¥", false)
     val AUD = Currency("AUD", "Australian Dollar", "A$", false)
 
+    val EUR_FAVORITE = Currency("EUR", "Euro", "€", true, true)
+    val GBP_FAVORITE = Currency("GBP", "British Pound", "£", true, true)
+    val JPY_FAVORITE = Currency("JPY", "Japanese Yen", "¥", false, true)
+
+    val currenciesWithFavorites = listOf(USD, EUR_FAVORITE, GBP_FAVORITE, JPY_FAVORITE, AUD)
+
     val currencies = listOf(USD, EUR, GBP, JPY, AUD)
 
     val exchangeRates = mapOf(
