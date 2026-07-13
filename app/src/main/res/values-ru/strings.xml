@@ -31,6 +31,10 @@
     <string name="rate_trend">Тренд %1$s к %2$s (30 дней)</string>
     <string name="historical_rates_unavailable">Исторические курсы недоступны</string>
     <string name="widget_description">Показывает выбранную валютную пару для быстрого доступа</string>
+    <string name="widget_updated_just_now">Обновлено только что</string>
+    <string name="widget_updated_minutes_ago">Обновлено %1$d мин. назад</string>
+    <string name="widget_updated_hours_ago">Обновлено %1$d ч. назад</string>
+    <string name="widget_updated_on">Обновлено %1$s</string>
     <string name="close">Закрыть</string>
     <string name="chart_high">Максимум</string>
     <string name="chart_low">Минимум</string>

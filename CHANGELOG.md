@@ -10,7 +10,8 @@
 - 30-day rate trend charts for any currency pair
 - Tap-to-expand charts with detailed view (high/low/change stats)
 - Historical chart toggle: enable/disable rate charts in settings
-- Home screen widget for quick currency pair glance
+- Home screen widget: live exchange rate, currency symbols, last updated time, tap to open
+- Widget auto-updates after background sync
 - Sync status badge: colored indicator shows how fresh your rates are
 - Amount clear button
 - Manual sync option: disable automatic background sync in settings

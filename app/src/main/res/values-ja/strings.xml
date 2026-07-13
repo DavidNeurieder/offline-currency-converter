@@ -31,6 +31,10 @@
     <string name="rate_trend">%1$s → %2$s の推移（30日間）</string>
     <string name="historical_rates_unavailable">過去の為替レートは利用できません</string>
     <string name="widget_description">選択した通貨ペアを素早く確認できるウィジェット</string>
+    <string name="widget_updated_just_now">たった今更新</string>
+    <string name="widget_updated_minutes_ago">%1$d分前に更新</string>
+    <string name="widget_updated_hours_ago">%1$d時間前に更新</string>
+    <string name="widget_updated_on">%1$sに更新</string>
     <string name="close">閉じる</string>
     <string name="chart_high">高値</string>
     <string name="chart_low">安値</string>

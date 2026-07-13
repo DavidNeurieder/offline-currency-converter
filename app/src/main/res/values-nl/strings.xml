@@ -31,6 +31,10 @@
     <string name="rate_trend">%1$s naar %2$s trend (30 dagen)</string>
     <string name="historical_rates_unavailable">Historische koersen niet beschikbaar</string>
     <string name="widget_description">Toont je geselecteerde valutapaar voor snelle toegang</string>
+    <string name="widget_updated_just_now">Zojuist bijgewerkt</string>
+    <string name="widget_updated_minutes_ago">%1$d min geleden bijgewerkt</string>
+    <string name="widget_updated_hours_ago">%1$d uur geleden bijgewerkt</string>
+    <string name="widget_updated_on">Bijgewerkt op %1$s</string>
     <string name="close">Sluiten</string>
     <string name="chart_high">Hoog</string>
     <string name="chart_low">Laag</string>

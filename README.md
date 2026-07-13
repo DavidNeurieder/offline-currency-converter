@@ -21,7 +21,7 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **Rate trend charts** — 30-day historical charts for any currency pair
 - **Historical chart toggle** — enable/disable rate charts in settings
 - **Tap-to-expand charts** — tap the chart for a detailed view with stats
-- **Home screen widget** — see your currency pair at a glance
+- **Home screen widget** — live exchange rate with currency symbols, tap to open app
 - **Sync status** — colored badge shows how fresh your rates are
 - **Copy result** — tap to copy any conversion to clipboard
 - **Pull-to-refresh** — manually trigger a rate sync from the convert screen

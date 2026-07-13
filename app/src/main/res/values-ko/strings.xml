@@ -31,6 +31,10 @@
     <string name="rate_trend">%1$s → %2$s 추이 (30일)</string>
     <string name="historical_rates_unavailable">과거 환율을 사용할 수 없습니다</string>
     <string name="widget_description">선택한 통화 쌍을 빠르게 확인할 수 있는 위젯</string>
+    <string name="widget_updated_just_now">방금 업데이트됨</string>
+    <string name="widget_updated_minutes_ago">%1$d분 전 업데이트됨</string>
+    <string name="widget_updated_hours_ago">%1$d시간 전 업데이트됨</string>
+    <string name="widget_updated_on">%1$s에 업데이트됨</string>
     <string name="close">닫기</string>
     <string name="chart_high">최고</string>
     <string name="chart_low">최저</string>

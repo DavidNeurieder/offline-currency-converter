@@ -5,7 +5,7 @@ Sync rates from the free Frankfurter API (European Central Bank) and convert 160
   <li><b>Favorites</b> — star your most-used currencies for quick access</li>
   <li><b>Multi-currency view</b> — see conversions to all your favorites at once</li>
   <li><b>Rate trend charts</b> — 30-day historical charts with tap-to-expand detail view</li>
-  <li><b>Home screen widget</b> — see your currency pair at a glance</li>
+  <li><b>Home screen widget</b> — live exchange rate with last updated time; tap to open app</li>
   <li><b>Sync status</b> — colored badge shows how fresh your rates are</li>
   <li><b>160+ currencies</b> — all ECB reference rates</li>
   <li><b>Offline-first</b> — all conversions happen on device</li>
