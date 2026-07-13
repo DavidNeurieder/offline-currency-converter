@@ -12,6 +12,9 @@ interface HistoricalRateDao {
     @Query("SELECT * FROM historical_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency ORDER BY date ASC")
     fun getHistoricalRates(baseCurrency: String, targetCurrency: String): Flow<List<HistoricalRateEntity>>
 
+    @Query("SELECT * FROM historical_rates WHERE baseCurrency = :baseCurrency ORDER BY date ASC")
+    fun getRatesByBaseCurrency(baseCurrency: String): Flow<List<HistoricalRateEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRates(rates: List<HistoricalRateEntity>)
 

@@ -58,7 +58,7 @@ class ConvertViewModelTest {
             TestFixtures.createConversionResult()
         )
         coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
-        every { historicalRateRepository.getHistoricalRates(any(), any()) } returns flowOf(emptyList())
+        coEvery { historicalRateRepository.getHistoricalRates(any(), any()) } returns emptyList()
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
         every { preferencesManager.targetCurrency } returns flowOf("EUR")
@@ -224,7 +224,7 @@ class ConvertViewModelTest {
                 baseCurrency = "USD", targetCurrency = "EUR", rate = 0.93, date = "2024-01-02"
             )
         )
-        every { historicalRateRepository.getHistoricalRates(any(), any()) } returns flowOf(historicalRates)
+        coEvery { historicalRateRepository.getHistoricalRates(any(), any()) } returns historicalRates
 
         viewModel.onSourceCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()

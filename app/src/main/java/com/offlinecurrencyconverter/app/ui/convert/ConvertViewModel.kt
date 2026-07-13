@@ -65,6 +65,7 @@ class ConvertViewModel @Inject constructor(
         loadLastSyncTime()
         loadRecentCurrencies()
         retryLoadingCurrencies()
+        loadInitialHistoricalRates()
     }
 
     private fun loadSavedCurrencies() {
@@ -89,6 +90,13 @@ class ConvertViewModel @Inject constructor(
                     )
                 }
             }
+        }
+    }
+
+    private fun loadInitialHistoricalRates() {
+        viewModelScope.launch {
+            uiState.first { it.sourceCurrency != null && it.targetCurrency != null }
+            loadHistoricalRates()
         }
     }
 
@@ -223,11 +231,8 @@ class ConvertViewModel @Inject constructor(
         val target = _uiState.value.targetCurrency ?: return
 
         viewModelScope.launch {
-            historicalRateRepository.getHistoricalRates(source.code, target.code).collect { rates ->
-                _uiState.value = _uiState.value.copy(
-                    historicalRates = rates
-                )
-            }
+            val rates = historicalRateRepository.getHistoricalRates(source.code, target.code)
+            _uiState.value = _uiState.value.copy(historicalRates = rates)
         }
     }
 
