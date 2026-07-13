@@ -22,21 +22,25 @@ class CurrencyInitializer @Inject constructor(
             val result = currencyRepository.fetchAndSaveCurrenciesFromApi()
             if (result.isSuccess) {
                 preferencesManager.setCurrenciesInitialized(true)
-                seedDefaultFavoritesIfNeeded()
             }
+            seedDefaultFavoritesIfNeeded()
             return result
         }
         
+        seedDefaultFavoritesIfNeeded()
         return Result.success(Unit)
     }
 
     private suspend fun seedDefaultFavoritesIfNeeded() {
         val favoritesInitialized = preferencesManager.favoritesInitialized.first()
-        if (!favoritesInitialized) {
-            for (code in DEFAULT_FAVORITES) {
-                currencyRepository.updateFavorite(code, true)
-            }
-            preferencesManager.saveFavoritesInitialized(true)
+        if (favoritesInitialized) return
+
+        val hasCurrencies = currencyRepository.hasCurrencies()
+        if (!hasCurrencies) return
+
+        for (code in DEFAULT_FAVORITES) {
+            currencyRepository.updateFavorite(code, true)
         }
+        preferencesManager.saveFavoritesInitialized(true)
     }
 }

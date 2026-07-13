@@ -39,6 +39,7 @@ class CurrencyInitializerTest {
     fun `initializeIfNeeded already initialized returns success`() = runBlocking {
         preferencesManager.currenciesInitializedValue = true
         currencyRepository.hasCurrenciesValue = true
+        preferencesManager.favoritesInitializedValue = true
 
         val result = initializer.initializeIfNeeded()
 
@@ -109,6 +110,34 @@ class CurrencyInitializerTest {
         assertEquals(0, currencyRepository.favoriteUpdates.size)
     }
 
+    @Test
+    fun `initializeIfNeeded seeds favorites for existing user who updated app`() = runBlocking {
+        preferencesManager.currenciesInitializedValue = true
+        currencyRepository.hasCurrenciesValue = true
+        preferencesManager.favoritesInitializedValue = false
+
+        val result = initializer.initializeIfNeeded()
+
+        assertTrue(result.isSuccess)
+        assertEquals(0, currencyRepository.fetchCallCount)
+        val expectedFavorites = listOf("USD", "EUR", "GBP", "JPY", "CNY")
+        assertEquals(expectedFavorites, currencyRepository.favoriteUpdates.map { it.first })
+        assertTrue(currencyRepository.favoriteUpdates.all { it.second })
+        assertTrue(preferencesManager.saveFavoritesInitializedCalled)
+    }
+
+    @Test
+    fun `initializeIfNeeded does not seed when no currencies and fetch fails`() = runBlocking {
+        preferencesManager.currenciesInitializedValue = false
+        currencyRepository.hasCurrenciesValue = false
+        currencyRepository.fetchResult = Result.failure(Exception("Network error"))
+        preferencesManager.favoritesInitializedValue = false
+
+        initializer.initializeIfNeeded()
+
+        assertEquals(0, currencyRepository.favoriteUpdates.size)
+    }
+
     private class MockPreferencesManager {
         var currenciesInitializedValue: Boolean = false
         var favoritesInitializedValue: Boolean = false
@@ -150,6 +179,9 @@ class CurrencyInitializerTest {
 
         suspend fun fetchAndSaveCurrenciesFromApi(): Result<Unit> {
             fetchCallCount++
+            if (fetchResult.isSuccess) {
+                hasCurrenciesValue = true
+            }
             return fetchResult
         }
 
@@ -172,22 +204,26 @@ class CurrencyInitializerTest {
                 val result = currencyRepository.fetchAndSaveCurrenciesFromApi()
                 if (result.isSuccess) {
                     preferencesManager.setCurrenciesInitialized(true)
-                    seedDefaultFavoritesIfNeeded()
                 }
+                seedDefaultFavoritesIfNeeded()
                 return result
             }
 
+            seedDefaultFavoritesIfNeeded()
             return Result.success(Unit)
         }
 
         private suspend fun seedDefaultFavoritesIfNeeded() {
             val favoritesInitialized = preferencesManager.isFavoritesInitialized()
-            if (!favoritesInitialized) {
-                for (code in CurrencyInitializer.DEFAULT_FAVORITES) {
-                    currencyRepository.updateFavorite(code, true)
-                }
-                preferencesManager.saveFavoritesInitialized(true)
+            if (favoritesInitialized) return
+
+            val hasCurrencies = currencyRepository.hasCurrencies()
+            if (!hasCurrencies) return
+
+            for (code in CurrencyInitializer.DEFAULT_FAVORITES) {
+                currencyRepository.updateFavorite(code, true)
             }
+            preferencesManager.saveFavoritesInitialized(true)
         }
     }
 }
