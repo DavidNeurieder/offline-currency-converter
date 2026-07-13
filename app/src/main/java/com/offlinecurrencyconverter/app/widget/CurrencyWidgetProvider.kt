@@ -44,7 +44,7 @@ class CurrencyWidgetProvider : AppWidgetProvider() {
     companion object {
         const val ACTION_UPDATE_WIDGET = "com.offlinecurrencyconverter.app.ACTION_UPDATE_WIDGET"
 
-        private val rateFormat = DecimalFormat("#,##0.00####")
+        private val rateFormat = DecimalFormat("#,##0.00")
 
         fun updateWidget(
             context: Context,
@@ -76,12 +76,33 @@ class CurrencyWidgetProvider : AppWidgetProvider() {
                     val sourceCode = preferencesManager.sourceCurrency.first() ?: "USD"
                     val targetCode = preferencesManager.targetCurrency.first() ?: "EUR"
 
-                    val rate = database.exchangeRateDao().getRate(sourceCode, targetCode)
+                    val dao = database.exchangeRateDao()
+                    val rateValue = when {
+                        sourceCode == targetCode -> 1.0
+                        else -> {
+                            val direct = dao.getRate(sourceCode, targetCode)
+                            if (direct != null) {
+                                direct.rate
+                            } else {
+                                val eurToSource = dao.getRate("EUR", sourceCode)
+                                val eurToTarget = dao.getRate("EUR", targetCode)
+                                when {
+                                    eurToSource != null && eurToTarget != null ->
+                                        eurToTarget.rate / eurToSource.rate
+                                    sourceCode == "EUR" && eurToTarget != null ->
+                                        eurToTarget.rate
+                                    targetCode == "EUR" && eurToSource != null ->
+                                        1.0 / eurToSource.rate
+                                    else -> null
+                                }
+                            }
+                        }
+                    }
 
-                    if (rate != null) {
+                    if (rateValue != null) {
                         views.setTextViewText(
                             R.id.widget_rate,
-                            "1 $sourceCode = ${rateFormat.format(rate.rate)} $targetCode"
+                            "1 $sourceCode = ${rateFormat.format(rateValue)} $targetCode"
                         )
                     } else {
                         views.setTextViewText(R.id.widget_rate, "1 $sourceCode = -- $targetCode")
