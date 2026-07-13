@@ -2,7 +2,7 @@ package com.offlinecurrencyconverter.app.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -110,6 +110,17 @@ class ConvertScreenUiTest {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("swap_button")
+            .assertExists()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_009_rateChart_displayed() {
+        composeTestRule.waitUntil(timeoutMillis = 10_000) {
+            composeTestRule.onAllNodesWithTag("rate_chart").fetchSemanticsNodes().isNotEmpty()
+        }
+
+        composeTestRule.onNodeWithTag("rate_chart")
             .assertExists()
     }
 }

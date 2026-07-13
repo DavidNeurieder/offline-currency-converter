@@ -1,6 +1,6 @@
 # Offline Currency Converter
 
-**Version:** 0.3.0
+**Version:** 0.4.0
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -16,6 +16,9 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 
 - **100% offline** — no internet required after initial sync
 - **160+ currencies** — all ECB reference rates
+- **Favorites** — star your most-used currencies for quick access
+- **Rate trend charts** — 30-day historical charts for any currency pair
+- **Home screen widget** — see your currency pair at a glance
 - **Copy result** — tap to copy any conversion to clipboard
 - **Pull-to-refresh** — manually trigger a rate sync from the convert screen
 - **Bundled flags** — country flags are built into the app, no network loading

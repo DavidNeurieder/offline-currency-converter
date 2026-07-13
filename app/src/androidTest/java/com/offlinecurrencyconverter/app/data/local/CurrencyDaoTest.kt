@@ -138,4 +138,51 @@ class CurrencyDaoTest {
 
         assertEquals(2, count)
     }
+
+    @Test
+    fun insertCurrency_withIsFavorite_persistsFlag() = runBlocking {
+        val currency = CurrencyEntity("USD", "US Dollar", "$", isFavorite = true)
+
+        currencyDao.insertCurrency(currency)
+        val result = currencyDao.getCurrencyByCode("USD")
+
+        assertNotNull(result)
+        assertEquals(true, result?.isFavorite)
+    }
+
+    @Test
+    fun updateFavorite_setsFavoriteTrue() = runBlocking {
+        currencyDao.insertCurrency(CurrencyEntity("USD", "US Dollar", "$", isFavorite = false))
+
+        currencyDao.updateFavorite("USD", true)
+
+        val result = currencyDao.getCurrencyByCode("USD")
+        assertEquals(true, result?.isFavorite)
+    }
+
+    @Test
+    fun updateFavorite_setsFavoriteFalse() = runBlocking {
+        currencyDao.insertCurrency(CurrencyEntity("EUR", "Euro", "€", isFavorite = true))
+
+        currencyDao.updateFavorite("EUR", false)
+
+        val result = currencyDao.getCurrencyByCode("EUR")
+        assertEquals(false, result?.isFavorite)
+    }
+
+    @Test
+    fun getFavoriteCurrencies_returnsOnlyFavorites() = runBlocking {
+        currencyDao.insertCurrencies(listOf(
+            CurrencyEntity("CHF", "Swiss Franc", "CHF", isFavorite = true),
+            CurrencyEntity("EUR", "Euro", "€", isFavorite = false),
+            CurrencyEntity("USD", "US Dollar", "$", isFavorite = true)
+        ))
+
+        val result = currencyDao.getFavoriteCurrencies().first()
+
+        assertEquals(2, result.size)
+        assertTrue(result.all { it.isFavorite })
+        assertEquals("CHF", result[0].code)
+        assertEquals("USD", result[1].code)
+    }
 }

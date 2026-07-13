@@ -25,6 +25,11 @@
     <string name="sync_interval_48_hours">48 घंटे</string>
     <string name="sync_interval_weekly">साप्ताहिक</string>
     <string name="sync_interval_manual_only">केवल मैनुअल</string>
+    <string name="favorite_currencies">पसंदीदा</string>
+    <string name="add_favorite">पसंदीदा में जोड़ें</string>
+    <string name="remove_favorite">पसंदीदा से हटाएं</string>
+    <string name="rate_trend">%1$s से %2$s रुझान (30 दिन)</string>
+    <string name="widget_description">त्वरित पहुंच के लिए आपकी चयनित मुद्रा जोड़ी दिखाता है</string>
     <string name="about">के बारे में</string>
     <string name="version_format">संस्करण %1$s</string>
     <string name="about_description">Frankfurter API द्वारा संचालित मुद्रा कनवर्टर। 160+ मुद्राओं का समर्थन करता है।</string>

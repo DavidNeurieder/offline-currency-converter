@@ -25,6 +25,11 @@
     <string name="sync_interval_48_hours">48 uur</string>
     <string name="sync_interval_weekly">Wekelijks</string>
     <string name="sync_interval_manual_only">Handmatig alleen</string>
+    <string name="favorite_currencies">Favorieten</string>
+    <string name="add_favorite">Toevoegen aan favorieten</string>
+    <string name="remove_favorite">Verwijderen uit favorieten</string>
+    <string name="rate_trend">%1$s naar %2$s trend (30 dagen)</string>
+    <string name="widget_description">Toont je geselecteerde valutapaar voor snelle toegang</string>
     <string name="about">Over</string>
     <string name="version_format">Versie %1$s</string>
     <string name="about_description">Valutaconverter aangedreven door Frankfurter API. Ondersteunt 160+ valuta.</string>

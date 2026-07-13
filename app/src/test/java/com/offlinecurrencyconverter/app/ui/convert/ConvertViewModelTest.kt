@@ -5,6 +5,7 @@ import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
+import com.offlinecurrencyconverter.app.domain.repository.HistoricalRateRepository
 import com.offlinecurrencyconverter.app.domain.repository.RecentConversionRepository
 import com.offlinecurrencyconverter.app.domain.usecase.ConvertCurrencyUseCase
 import io.mockk.coEvery
@@ -32,6 +33,7 @@ class ConvertViewModelTest {
     private lateinit var currencyRepository: CurrencyRepository
     private lateinit var recentConversionRepository: RecentConversionRepository
     private lateinit var exchangeRateRepository: ExchangeRateRepository
+    private lateinit var historicalRateRepository: HistoricalRateRepository
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var currencyInitializer: CurrencyInitializer
     private lateinit var viewModel: ConvertViewModel
@@ -45,6 +47,7 @@ class ConvertViewModelTest {
         currencyRepository = mockk(relaxed = true)
         recentConversionRepository = mockk(relaxed = true)
         exchangeRateRepository = mockk(relaxed = true)
+        historicalRateRepository = mockk(relaxed = true)
         preferencesManager = mockk(relaxed = true)
         currencyInitializer = mockk(relaxed = true)
 
@@ -55,6 +58,8 @@ class ConvertViewModelTest {
             TestFixtures.createConversionResult()
         )
         coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
+        coEvery { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) } returns Result.success(Unit)
+        every { historicalRateRepository.getHistoricalRates(any(), any()) } returns flowOf(emptyList())
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
         every { preferencesManager.targetCurrency } returns flowOf("EUR")
@@ -65,6 +70,7 @@ class ConvertViewModelTest {
             currencyRepository,
             recentConversionRepository,
             exchangeRateRepository,
+            historicalRateRepository,
             preferencesManager,
             currencyInitializer
         )
@@ -166,5 +172,70 @@ class ConvertViewModelTest {
     fun `recent conversions state flow is created`() = runTest {
         val flow = viewModel.recentConversions
         assertTrue(flow is kotlinx.coroutines.flow.StateFlow<*>)
+    }
+
+    @Test
+    fun `onFavoriteToggle calls repository updateFavorite`() = runTest {
+        viewModel.onFavoriteToggle("USD", true)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        io.mockk.coVerify { currencyRepository.updateFavorite("USD", true) }
+    }
+
+    @Test
+    fun `onFavoriteToggle can remove favorite`() = runTest {
+        viewModel.onFavoriteToggle("EUR", false)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        io.mockk.coVerify { currencyRepository.updateFavorite("EUR", false) }
+    }
+
+    @Test
+    fun `onSourceCurrencyChange triggers historical rates fetch`() = runTest {
+        viewModel.onSourceCurrencyChange(TestFixtures.EUR)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        io.mockk.coVerify { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+    }
+
+    @Test
+    fun `onTargetCurrencyChange triggers historical rates fetch`() = runTest {
+        viewModel.onTargetCurrencyChange(TestFixtures.GBP)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        io.mockk.coVerify { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+    }
+
+    @Test
+    fun `swapCurrencies triggers historical rates fetch`() = runTest {
+        viewModel.onSourceCurrencyChange(TestFixtures.USD)
+        viewModel.onTargetCurrencyChange(TestFixtures.EUR)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        io.mockk.coVerify(exactly = 2) { historicalRateRepository.fetchAndStoreHistoricalRates(any(), any(), any()) }
+    }
+
+    @Test
+    fun `historical rates are exposed in ui state`() = runTest {
+        val historicalRates = listOf(
+            com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity(
+                baseCurrency = "USD", targetCurrency = "EUR", rate = 0.92, date = "2024-01-01"
+            ),
+            com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity(
+                baseCurrency = "USD", targetCurrency = "EUR", rate = 0.93, date = "2024-01-02"
+            )
+        )
+        every { historicalRateRepository.getHistoricalRates(any(), any()) } returns flowOf(historicalRates)
+
+        viewModel.onSourceCurrencyChange(TestFixtures.EUR)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(historicalRates, viewModel.uiState.value.historicalRates)
+    }
+
+    @Test
+    fun `initial historical rates state is empty`() = runTest {
+        assertTrue(viewModel.uiState.value.historicalRates.isEmpty())
+        assertFalse(viewModel.uiState.value.isHistoricalLoading)
     }
 }

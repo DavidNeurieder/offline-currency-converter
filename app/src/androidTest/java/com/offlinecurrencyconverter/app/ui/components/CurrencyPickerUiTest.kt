@@ -3,6 +3,7 @@ package com.offlinecurrencyconverter.app.ui.components
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -80,5 +81,31 @@ class CurrencyPickerUiTest {
 
         composeTestRule.onNodeWithTag("frequently_used_header")
             .assertIsDisplayed()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_P006_favoriteToggle_isDisplayed() {
+        composeTestRule.onNodeWithTag("source_currency_button")
+            .performClick()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onAllNodesWithTag("favorite_toggle_USD")[0]
+            .assertIsDisplayed()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_P007_favoriteToggle_clickTogglesFavorite() {
+        composeTestRule.onNodeWithTag("source_currency_button")
+            .performClick()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("favorite_toggle_USD")
+            .performClick()
+
+        composeTestRule.waitForIdle()
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +15,8 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.ui.components.ConversionCard
 import com.offlinecurrencyconverter.app.ui.components.CurrencyPickerBottomSheet
+import com.offlinecurrencyconverter.app.ui.components.RateChart
 import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
@@ -129,6 +133,33 @@ fun ConvertScreen(
                     )
                 }
 
+                if (uiState.historicalRates.size >= 2) {
+                    item {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag("rate_chart"),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = stringResource(
+                                        R.string.rate_trend,
+                                        uiState.sourceCurrency?.code ?: "",
+                                        uiState.targetCurrency?.code ?: ""
+                                    ),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                RateChart(
+                                    dataPoints = uiState.historicalRates.map { it.date to it.rate }
+                                )
+                            }
+                        }
+                    }
+                }
+
                 if (recentConversions.isNotEmpty()) {
                     item {
                         Spacer(modifier = Modifier.height(8.dp))
@@ -163,7 +194,8 @@ fun ConvertScreen(
             viewModel.onSourceCurrencyChange(currency)
             showSourceCurrencyPicker = false
         },
-        onDismiss = { showSourceCurrencyPicker = false }
+        onDismiss = { showSourceCurrencyPicker = false },
+        onFavoriteToggle = viewModel::onFavoriteToggle
     )
 
     CurrencyPickerBottomSheet(
@@ -175,6 +207,7 @@ fun ConvertScreen(
             viewModel.onTargetCurrencyChange(currency)
             showTargetCurrencyPicker = false
         },
-        onDismiss = { showTargetCurrencyPicker = false }
+        onDismiss = { showTargetCurrencyPicker = false },
+        onFavoriteToggle = viewModel::onFavoriteToggle
     )
 }

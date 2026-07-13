@@ -16,6 +16,9 @@ interface CurrencyDao {
     @Query("SELECT * FROM currencies WHERE isSelectedForOffline = 1 ORDER BY code ASC")
     fun getSelectedCurrencies(): Flow<List<CurrencyEntity>>
 
+    @Query("SELECT * FROM currencies WHERE isFavorite = 1 ORDER BY code ASC")
+    fun getFavoriteCurrencies(): Flow<List<CurrencyEntity>>
+
     @Query("SELECT * FROM currencies WHERE code = :code")
     suspend fun getCurrencyByCode(code: String): CurrencyEntity?
 
@@ -30,6 +33,9 @@ interface CurrencyDao {
 
     @Query("UPDATE currencies SET isSelectedForOffline = :selected WHERE code = :code")
     suspend fun updateSelection(code: String, selected: Boolean)
+
+    @Query("UPDATE currencies SET isFavorite = :favorite WHERE code = :code")
+    suspend fun updateFavorite(code: String, favorite: Boolean)
 
     @Query("DELETE FROM currencies")
     suspend fun deleteAll()

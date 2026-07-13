@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.offlinecurrencyconverter.app.data.local.CurrencyDatabase
 import com.offlinecurrencyconverter.app.data.local.dao.CurrencyDao
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.dao.RecentConversionDao
 import dagger.Module
 import dagger.Provides
@@ -25,6 +26,8 @@ object DatabaseModule {
             CurrencyDatabase::class.java,
             "offline_currency_converter_db"
         )
+            .addMigrations(CurrencyDatabase.MIGRATION_4_5)
+            .addMigrations(CurrencyDatabase.MIGRATION_5_6)
             .fallbackToDestructiveMigration()
             .build()
     }
@@ -42,5 +45,10 @@ object DatabaseModule {
     @Provides
     fun provideRecentConversionDao(database: CurrencyDatabase): RecentConversionDao {
         return database.recentConversionDao()
+    }
+
+    @Provides
+    fun provideHistoricalRateDao(database: CurrencyDatabase): HistoricalRateDao {
+        return database.historicalRateDao()
     }
 }

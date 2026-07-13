@@ -1,0 +1,5 @@
+Version 0.4.0:
+- Favorite currencies: star your most-used currencies for quick access in the picker
+- 30-day rate trend charts: see historical exchange rate trends for any currency pair
+- Home screen widget: quick glance at your selected currency pair
+- Manual sync option added in previous version

@@ -137,4 +137,53 @@ class CurrencyRepositoryTest {
 
         assertTrue(result.isFailure)
     }
+
+    @Test
+    fun `getFavoriteCurrencies returns only favorite currencies`() = runTest {
+        val entities = listOf(
+            CurrencyEntity("USD", "US Dollar", "$", isSelectedForOffline = true, isFavorite = true),
+            CurrencyEntity("EUR", "Euro", "€", isSelectedForOffline = true, isFavorite = false),
+            CurrencyEntity("GBP", "British Pound", "£", isSelectedForOffline = false, isFavorite = true)
+        )
+        coEvery { currencyDao.getFavoriteCurrencies() } returns flowOf(listOf(entities[0], entities[2]))
+
+        val result = currencyRepository.getFavoriteCurrencies().first()
+
+        assertEquals(2, result.size)
+        assertTrue(result[0].isFavorite)
+        assertTrue(result[1].isFavorite)
+    }
+
+    @Test
+    fun `getFavoriteCurrencies returns empty list when no favorites`() = runTest {
+        coEvery { currencyDao.getFavoriteCurrencies() } returns flowOf(emptyList())
+
+        val result = currencyRepository.getFavoriteCurrencies().first()
+
+        assertTrue(result.isEmpty())
+    }
+
+    @Test
+    fun `updateFavorite updates favorite status`() = runTest {
+        currencyRepository.updateFavorite("USD", true)
+
+        coVerify { currencyDao.updateFavorite("USD", true) }
+    }
+
+    @Test
+    fun `updateFavorite can remove favorite`() = runTest {
+        currencyRepository.updateFavorite("USD", false)
+
+        coVerify { currencyDao.updateFavorite("USD", false) }
+    }
+
+    @Test
+    fun `getAllCurrencies maps isFavorite correctly`() = runTest {
+        val entity = CurrencyEntity("USD", "US Dollar", "$", isSelectedForOffline = true, isFavorite = true)
+        coEvery { currencyDao.getAllCurrencies() } returns flowOf(listOf(entity))
+
+        val result = currencyRepository.getAllCurrencies().first()
+
+        assertTrue(result[0].isFavorite)
+    }
 }

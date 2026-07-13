@@ -25,6 +25,11 @@
     <string name="sync_interval_48_hours">48 godzin</string>
     <string name="sync_interval_weekly">Co tydzień</string>
     <string name="sync_interval_manual_only">Tylko ręcznie</string>
+    <string name="favorite_currencies">Ulubione</string>
+    <string name="add_favorite">Dodaj do ulubionych</string>
+    <string name="remove_favorite">Usuń z ulubionych</string>
+    <string name="rate_trend">Trend %1$s do %2$s (30 dni)</string>
+    <string name="widget_description">Wyświetla wybraną parę walut dla szybkiego dostępu</string>
     <string name="about">O aplikacji</string>
     <string name="version_format">Wersja %1$s</string>
     <string name="about_description">Konwerter walut oparty na Frankfurter API. Obsługuje ponad 160 walut.</string>

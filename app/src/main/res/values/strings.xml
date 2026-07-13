@@ -51,6 +51,11 @@
     <string name="frequently_used">Frequently Used</string>
     <string name="all_currencies">All Currencies</string>
     <string name="search_results">Search Results</string>
+    <string name="favorite_currencies">Favorites</string>
+    <string name="add_favorite">Add to favorites</string>
+    <string name="remove_favorite">Remove from favorites</string>
+    <string name="rate_trend">%1$s to %2$s trend (30 days)</string>
+    <string name="widget_description">Shows your selected currency pair for quick access</string>
 
 
     <string name="copy_result">Copy</string>

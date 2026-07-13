@@ -6,8 +6,10 @@ import kotlinx.coroutines.flow.Flow
 interface CurrencyRepository {
     fun getAllCurrencies(): Flow<List<Currency>>
     fun getSelectedCurrencies(): Flow<List<Currency>>
+    fun getFavoriteCurrencies(): Flow<List<Currency>>
     suspend fun getCurrencyByCode(code: String): Currency?
     suspend fun updateCurrencySelection(code: String, selected: Boolean)
+    suspend fun updateFavorite(code: String, isFavorite: Boolean)
     suspend fun initializeCurrencies(currencies: List<Currency>)
     suspend fun clearAllCurrencies()
     suspend fun fetchAndSaveCurrenciesFromApi(): Result<Unit>

@@ -2,9 +2,11 @@ package com.offlinecurrencyconverter.app.di
 
 import com.offlinecurrencyconverter.app.data.repository.CurrencyRepositoryImpl
 import com.offlinecurrencyconverter.app.data.repository.ExchangeRateRepositoryImpl
+import com.offlinecurrencyconverter.app.data.repository.HistoricalRateRepositoryImpl
 import com.offlinecurrencyconverter.app.data.repository.RecentConversionRepositoryImpl
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
+import com.offlinecurrencyconverter.app.domain.repository.HistoricalRateRepository
 import com.offlinecurrencyconverter.app.domain.repository.RecentConversionRepository
 import dagger.Binds
 import dagger.Module
@@ -33,4 +35,10 @@ abstract class RepositoryModule {
     abstract fun bindRecentConversionRepository(
         impl: RecentConversionRepositoryImpl
     ): RecentConversionRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindHistoricalRateRepository(
+        impl: HistoricalRateRepositoryImpl
+    ): HistoricalRateRepository
 }

@@ -25,6 +25,11 @@
     <string name="sync_interval_48_hours">48 Stunden</string>
     <string name="sync_interval_weekly">Wöchentlich</string>
     <string name="sync_interval_manual_only">Nur manuell</string>
+    <string name="favorite_currencies">Favoriten</string>
+    <string name="add_favorite">Zu Favoriten hinzufügen</string>
+    <string name="remove_favorite">Aus Favoriten entfernen</string>
+    <string name="rate_trend">%1$s zu %2$s Verlauf (30 Tage)</string>
+    <string name="widget_description">Zeigt dein ausgewährtes Währungspaar für schnellen Zugriff</string>
     <string name="about">Über</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Währungsumrechner powered by Frankfurter API. Unterstützt 160+ Währungen.</string>

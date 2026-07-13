@@ -25,6 +25,11 @@
     <string name="sync_interval_48_hours">48小时</string>
     <string name="sync_interval_weekly">每周</string>
     <string name="sync_interval_manual_only">仅手动</string>
+    <string name="favorite_currencies">收藏</string>
+    <string name="add_favorite">添加到收藏</string>
+    <string name="remove_favorite">从收藏中移除</string>
+    <string name="rate_trend">%1$s 兑 %2$s 走势（30天）</string>
+    <string name="widget_description">显示所选货币对以便快速查看</string>
     <string name="about">关于</string>
     <string name="version_format">版本 %1$s</string>
     <string name="about_description">由Frankfurter API驱动的货币转换器。支持160多种货币。</string>

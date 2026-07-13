@@ -4,10 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.data.PreferencesManager
+import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
 import com.offlinecurrencyconverter.app.domain.model.Currency
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
+import com.offlinecurrencyconverter.app.domain.repository.HistoricalRateRepository
 import com.offlinecurrencyconverter.app.domain.repository.RecentConversionRepository
 import com.offlinecurrencyconverter.app.domain.usecase.ConvertCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,7 +33,9 @@ data class ConvertUiState(
     val currenciesError: String? = null,
     val isRefreshing: Boolean = false,
     val lastSyncTime: Long? = null,
-    val recentCurrencies: List<Currency> = emptyList()
+    val recentCurrencies: List<Currency> = emptyList(),
+    val historicalRates: List<HistoricalRateEntity> = emptyList(),
+    val isHistoricalLoading: Boolean = false
 )
 
 @HiltViewModel
@@ -40,6 +44,7 @@ class ConvertViewModel @Inject constructor(
     private val currencyRepository: CurrencyRepository,
     private val recentConversionRepository: RecentConversionRepository,
     private val exchangeRateRepository: ExchangeRateRepository,
+    private val historicalRateRepository: HistoricalRateRepository,
     private val preferencesManager: PreferencesManager,
     private val currencyInitializer: CurrencyInitializer
 ) : ViewModel() {
@@ -172,6 +177,7 @@ class ConvertViewModel @Inject constructor(
             preferencesManager.addRecentCurrency(currency.code)
         }
         performConversion()
+        loadHistoricalRates()
     }
 
     fun onTargetCurrencyChange(currency: Currency) {
@@ -181,6 +187,13 @@ class ConvertViewModel @Inject constructor(
             preferencesManager.addRecentCurrency(currency.code)
         }
         performConversion()
+        loadHistoricalRates()
+    }
+
+    fun onFavoriteToggle(currencyCode: String, isFavorite: Boolean) {
+        viewModelScope.launch {
+            currencyRepository.updateFavorite(currencyCode, isFavorite)
+        }
     }
 
     fun swapCurrencies() {
@@ -200,6 +213,30 @@ class ConvertViewModel @Inject constructor(
         }
 
         performConversion()
+        loadHistoricalRates()
+    }
+
+    private fun loadHistoricalRates() {
+        val source = _uiState.value.sourceCurrency ?: return
+        val target = _uiState.value.targetCurrency ?: return
+
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isHistoricalLoading = true)
+            val result = historicalRateRepository.fetchAndStoreHistoricalRates(source.code, target.code, 30)
+            result.fold(
+                onSuccess = {
+                    historicalRateRepository.getHistoricalRates(source.code, target.code).collect { rates ->
+                        _uiState.value = _uiState.value.copy(
+                            historicalRates = rates,
+                            isHistoricalLoading = false
+                        )
+                    }
+                },
+                onFailure = {
+                    _uiState.value = _uiState.value.copy(isHistoricalLoading = false)
+                }
+            )
+        }
     }
 
     private fun performConversion() {

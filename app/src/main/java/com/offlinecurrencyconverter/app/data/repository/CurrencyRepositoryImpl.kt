@@ -26,12 +26,22 @@ class CurrencyRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getFavoriteCurrencies(): Flow<List<Currency>> {
+        return currencyDao.getFavoriteCurrencies().map { entities ->
+            entities.map { it.toDomain() }
+        }
+    }
+
     override suspend fun getCurrencyByCode(code: String): Currency? {
         return currencyDao.getCurrencyByCode(code)?.toDomain()
     }
 
     override suspend fun updateCurrencySelection(code: String, selected: Boolean) {
         currencyDao.updateSelection(code, selected)
+    }
+
+    override suspend fun updateFavorite(code: String, isFavorite: Boolean) {
+        currencyDao.updateFavorite(code, isFavorite)
     }
 
     override suspend fun initializeCurrencies(currencies: List<Currency>) {
@@ -77,14 +87,16 @@ class CurrencyRepositoryImpl @Inject constructor(
         code = code,
         name = name,
         symbol = symbol,
-        isSelectedForOffline = isSelectedForOffline
+        isSelectedForOffline = isSelectedForOffline,
+        isFavorite = isFavorite
     )
 
     private fun Currency.toEntity(): CurrencyEntity = CurrencyEntity(
         code = code,
         name = name,
         symbol = symbol,
-        isSelectedForOffline = isSelectedForOffline
+        isSelectedForOffline = isSelectedForOffline,
+        isFavorite = isFavorite
     )
 
     companion object {

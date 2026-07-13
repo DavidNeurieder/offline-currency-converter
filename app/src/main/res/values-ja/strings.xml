@@ -25,6 +25,11 @@
     <string name="sync_interval_48_hours">48時間</string>
     <string name="sync_interval_weekly">毎週</string>
     <string name="sync_interval_manual_only">手動のみ</string>
+    <string name="favorite_currencies">お気に入り</string>
+    <string name="add_favorite">お気に入りに追加</string>
+    <string name="remove_favorite">お気に入りから削除</string>
+    <string name="rate_trend">%1$s → %2$s の推移（30日間）</string>
+    <string name="widget_description">選択した通貨ペアを素早く確認できるウィジェット</string>
     <string name="about">概要</string>
     <string name="version_format">バージョン %1$s</string>
     <string name="about_description">Frankfurter API搭載の通貨換算。160以上の通貨をサポート。</string>

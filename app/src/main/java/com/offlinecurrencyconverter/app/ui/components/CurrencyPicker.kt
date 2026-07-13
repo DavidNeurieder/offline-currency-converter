@@ -16,6 +16,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -54,6 +56,7 @@ fun CurrencyPickerBottomSheet(
     recentCurrencies: List<Currency>,
     onCurrencySelected: (Currency) -> Unit,
     onDismiss: () -> Unit,
+    onFavoriteToggle: ((String, Boolean) -> Unit)? = null,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 ) {
     if (isVisible) {
@@ -75,6 +78,10 @@ fun CurrencyPickerBottomSheet(
 
         val recentFiltered = remember(recentCurrencies, currencies, selectedCurrency) {
             recentCurrencies.filter { it.code != selectedCurrency?.code }
+        }
+
+        val favoriteCurrencies = remember(currencies) {
+            currencies.filter { it.isFavorite }
         }
 
         ModalBottomSheet(
@@ -137,6 +144,21 @@ fun CurrencyPickerBottomSheet(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     if (searchQuery.isBlank()) {
+                        if (favoriteCurrencies.isNotEmpty()) {
+                            item {
+                                SectionHeader(stringResource(R.string.favorite_currencies))
+                            }
+                            items(favoriteCurrencies, key = { "fav_${it.code}" }) { currency ->
+                                CurrencyListItem(
+                                    currency = currency,
+                                    isSelected = currency.code == selectedCurrency?.code,
+                                    onClick = { onCurrencySelected(currency) },
+                                    isFavorite = true,
+                                    onFavoriteToggle = onFavoriteToggle
+                                )
+                            }
+                        }
+
                         if (recentFiltered.isNotEmpty()) {
                             item {
                                 SectionHeader(stringResource(R.string.recently_used))
@@ -145,7 +167,9 @@ fun CurrencyPickerBottomSheet(
                                 CurrencyListItem(
                                     currency = currency,
                                     isSelected = currency.code == selectedCurrency?.code,
-                                    onClick = { onCurrencySelected(currency) }
+                                    onClick = { onCurrencySelected(currency) },
+                                    isFavorite = currency.isFavorite,
+                                    onFavoriteToggle = onFavoriteToggle
                                 )
                             }
                         }
@@ -160,7 +184,9 @@ fun CurrencyPickerBottomSheet(
                             CurrencyListItem(
                                 currency = currency,
                                 isSelected = currency.code == selectedCurrency?.code,
-                                onClick = { onCurrencySelected(currency) }
+                                onClick = { onCurrencySelected(currency) },
+                                isFavorite = currency.isFavorite,
+                                onFavoriteToggle = onFavoriteToggle
                             )
                         }
                     }
@@ -182,7 +208,9 @@ fun CurrencyPickerBottomSheet(
                         CurrencyListItem(
                             currency = currency,
                             isSelected = currency.code == selectedCurrency?.code,
-                            onClick = { onCurrencySelected(currency) }
+                            onClick = { onCurrencySelected(currency) },
+                            isFavorite = currency.isFavorite,
+                            onFavoriteToggle = onFavoriteToggle
                         )
                     }
                 }
@@ -206,11 +234,22 @@ private fun SectionHeader(title: String, modifier: Modifier = Modifier) {
 private fun CurrencyListItem(
     currency: Currency,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    isFavorite: Boolean = false,
+    onFavoriteToggle: ((String, Boolean) -> Unit)? = null
 ) {
-    ListItem(
-        headlineContent = {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(onClick = onClick)
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 FlagDrawables.getFlagResource(currency.code)?.let { resId ->
                     Image(
                         painter = painterResource(id = resId),
@@ -221,34 +260,45 @@ private fun CurrencyListItem(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-                Text(
-                    text = currency.code,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = currency.name,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(
+                            text = currency.code,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = currency.name,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Text(
+                        text = currency.symbol,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                if (isSelected) {
+                    Text(
+                        text = "✓",
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
             }
-        },
-        supportingContent = {
-            Text(
-                text = currency.symbol,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        },
-        trailingContent = {
-            if (isSelected) {
-                Text(
-                    text = "✓",
-                    color = MaterialTheme.colorScheme.primary,
-                    fontWeight = FontWeight.Bold
-                )
+            if (onFavoriteToggle != null) {
+                IconButton(
+                    onClick = { onFavoriteToggle(currency.code, !isFavorite) },
+                    modifier = Modifier.testTag("favorite_toggle_${currency.code}")
+                ) {
+                    Icon(
+                        imageVector = if (isFavorite) Icons.Filled.Star else Icons.Outlined.StarOutline,
+                        contentDescription = if (isFavorite) stringResource(R.string.remove_favorite) else stringResource(R.string.add_favorite),
+                        tint = if (isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
-        },
-        modifier = Modifier.clickable(onClick = onClick)
-    )
-    HorizontalDivider()
+        }
+        HorizontalDivider()
+    }
 }

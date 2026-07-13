@@ -14,12 +14,43 @@ class CurrencyTest {
         assertEquals("US Dollar", currency.name)
         assertEquals("$", currency.symbol)
         assertFalse(currency.isSelectedForOffline)
+        assertFalse(currency.isFavorite)
     }
 
     @Test
     fun `currency with offline selection flag`() {
         val currency = Currency("EUR", "Euro", "€", isSelectedForOffline = true)
         assertTrue(currency.isSelectedForOffline)
+    }
+
+    @Test
+    fun `currency with favorite flag`() {
+        val currency = Currency("GBP", "British Pound", "£", isFavorite = true)
+        assertTrue(currency.isFavorite)
+    }
+
+    @Test
+    fun `currency defaults to not favorite`() {
+        val currency = Currency("USD", "US Dollar", "$")
+        assertFalse(currency.isFavorite)
+    }
+
+    @Test
+    fun `currency copy preserves favorite flag`() {
+        val original = Currency("USD", "US Dollar", "$", isFavorite = true)
+        val copy = original.copy(name = "Dollar")
+
+        assertEquals("Dollar", copy.name)
+        assertTrue(copy.isFavorite)
+    }
+
+    @Test
+    fun `currency copy can toggle favorite`() {
+        val original = Currency("USD", "US Dollar", "$", isFavorite = false)
+        val copy = original.copy(isFavorite = true)
+
+        assertFalse(original.isFavorite)
+        assertTrue(copy.isFavorite)
     }
 
     @Test
@@ -37,7 +68,7 @@ class CurrencyTest {
     @Test
     fun `currency equality based on code`() {
         val currency1 = Currency("USD", "US Dollar", "$")
-        val currency2 = Currency("USD", "US Dollar", "$", isSelectedForOffline = true)
+        val currency2 = Currency("USD", "US Dollar", "$", isSelectedForOffline = true, isFavorite = true)
         val currency3 = Currency("EUR", "Euro", "€")
 
         assertTrue(currency1 == currency2)
