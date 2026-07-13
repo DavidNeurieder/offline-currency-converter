@@ -267,7 +267,7 @@ fun ConvertScreen(
 
     CurrencyPickerBottomSheet(
         isVisible = showFavoritesPicker,
-        currencies = currencies.filter { it.isFavorite },
+        currencies = currencies,
         selectedCurrency = uiState.sourceCurrency,
         recentCurrencies = emptyList(),
         onCurrencySelected = { currency ->
