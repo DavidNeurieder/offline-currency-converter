@@ -310,13 +310,13 @@ class ConvertViewModel @Inject constructor(
             }
 
             val favorites = currencies.value.filter { it.isFavorite && it.code != source.code }
-            val defaults = listOf("EUR", "GBP", "JPY", "CNY", "CHF")
-                .mapNotNull { code -> currencies.value.find { it.code == code } }
-                .filter { it.code != source.code }
 
-            val targetCurrencies = (favorites + defaults).distinctBy { it.code }.take(5)
+            if (favorites.isEmpty()) {
+                _uiState.value = _uiState.value.copy(multiCurrencyConversions = emptyList())
+                return@launch
+            }
 
-            val conversions = targetCurrencies.mapNotNull { currency ->
+            val conversions = favorites.mapNotNull { currency ->
                 val rate = allRates.find { it.targetCurrency == currency.code }?.rate
                     ?: return@mapNotNull null
                 MultiCurrencyResult(

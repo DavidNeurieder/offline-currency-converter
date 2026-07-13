@@ -37,7 +37,7 @@
     <string name="chart_change">变动</string>
     <string name="quick_convert">快速换算</string>
     <string name="multi_currency_view">多币种视图</string>
-    <string name="multi_currency_view_description">同时显示多种货币的换算结果</string>
+    <string name="multi_currency_view_description">在结果下方显示所有收藏货币的换算</string>
     <string name="about">关于</string>
     <string name="version_format">版本 %1$s</string>
     <string name="about_description">由Frankfurter API驱动的货币转换器。支持160多种货币。</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">搜索货币…</string>
     <string name="clear_search">清除</string>
     <string name="recently_used">最近使用</string>
-    <string name="frequently_used">常用货币</string>
     <string name="all_currencies">所有货币</string>
     <string name="search_results">搜索结果</string>
 

@@ -45,8 +45,6 @@ import androidx.compose.ui.unit.dp
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.domain.model.Currency
 
-private val FREQUENTLY_USED_CODES = listOf("USD", "EUR", "GBP")
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyPickerBottomSheet(
@@ -69,11 +67,6 @@ fun CurrencyPickerBottomSheet(
                 it.name.contains(searchQuery, ignoreCase = true) ||
                 it.symbol.contains(searchQuery, ignoreCase = true)
             }
-        }
-
-        val frequentlyUsed = remember(currencies) {
-            currencies.filter { it.code in FREQUENTLY_USED_CODES }
-                .sortedBy { FREQUENTLY_USED_CODES.indexOf(it.code) }
         }
 
         val recentFiltered = remember(recentCurrencies, currencies, selectedCurrency) {
@@ -173,22 +166,6 @@ fun CurrencyPickerBottomSheet(
                                 )
                             }
                         }
-
-                        item {
-                            SectionHeader(
-                                stringResource(R.string.frequently_used),
-                                modifier = Modifier.testTag("frequently_used_header")
-                            )
-                        }
-                        items(frequentlyUsed, key = { "freq_${it.code}" }) { currency ->
-                            CurrencyListItem(
-                                currency = currency,
-                                isSelected = currency.code == selectedCurrency?.code,
-                                onClick = { onCurrencySelected(currency) },
-                                isFavorite = currency.isFavorite,
-                                onFavoriteToggle = onFavoriteToggle
-                            )
-                        }
                     }
 
                     item {
@@ -199,7 +176,7 @@ fun CurrencyPickerBottomSheet(
                     }
 
                     val displayCurrencies = if (searchQuery.isBlank()) {
-                        currencies.filter { it.code !in FREQUENTLY_USED_CODES }
+                        currencies
                     } else {
                         filteredCurrencies ?: emptyList()
                     }

@@ -73,18 +73,6 @@ class CurrencyPickerUiTest {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
-    fun TC_P005_frequentlyUsedSection_displayed() {
-        composeTestRule.onNodeWithTag("source_currency_button")
-            .performClick()
-
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag("frequently_used_header")
-            .assertIsDisplayed()
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Test
     fun TC_P006_favoriteToggle_isDisplayed() {
         composeTestRule.onNodeWithTag("source_currency_button")
             .performClick()

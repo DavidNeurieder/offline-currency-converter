@@ -37,7 +37,7 @@
     <string name="chart_change">Änderung</string>
     <string name="quick_convert">Schnell umrechnen</string>
     <string name="multi_currency_view">Multi-Währungsansicht</string>
-    <string name="multi_currency_view_description">Umcryptungen in mehrere Währungen gleichzeitig anzeigen</string>
+    <string name="multi_currency_view_description">Umcryptungen aller Favoritenwährungen unter dem Ergebnis anzeigen</string>
     <string name="about">Über</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Währungsumrechner powered by Frankfurter API. Unterstützt 160+ Währungen.</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">Währungen suchen…</string>
     <string name="clear_search">Löschen</string>
     <string name="recently_used">Kürzlich verwendet</string>
-    <string name="frequently_used">Häufig verwendet</string>
     <string name="all_currencies">Alle Währungen</string>
     <string name="search_results">Suchergebnisse</string>
 

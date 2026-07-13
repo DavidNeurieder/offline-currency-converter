@@ -37,7 +37,7 @@
     <string name="chart_change">Variação</string>
     <string name="quick_convert">Conversão rápida</string>
     <string name="multi_currency_view">Vista multi-moeda</string>
-    <string name="multi_currency_view_description">Mostrar conversões para várias moedas ao mesmo tempo</string>
+    <string name="multi_currency_view_description">Mostrar conversões para todas as moedas favoritas abaixo do resultado</string>
     <string name="about">Sobre</string>
     <string name="version_format">Versão %1$s</string>
     <string name="about_description">Conversor de moeda alimentado por Frankfurter API. Suporta mais de 160 moedas.</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">Pesquisar moedas…</string>
     <string name="clear_search">Limpar</string>
     <string name="recently_used">Usados recentemente</string>
-    <string name="frequently_used">Frequentemente usados</string>
     <string name="all_currencies">Todas as moedas</string>
     <string name="search_results">Resultados da pesquisa</string>
 

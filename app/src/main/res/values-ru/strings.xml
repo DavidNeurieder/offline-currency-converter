@@ -37,7 +37,7 @@
     <string name="chart_change">Изменение</string>
     <string name="quick_convert">Быстрый пересчёт</string>
     <string name="multi_currency_view">Мультивалютный вид</string>
-    <string name="multi_currency_view_description">Показывать конвертацию в несколько валют одновременно</string>
+    <string name="multi_currency_view_description">Показывать конвертацию для всех избранных валют под результатом</string>
     <string name="about">О приложении</string>
     <string name="version_format">Версия %1$s</string>
     <string name="about_description">Конвертер валют на базе Frankfurter API. Поддерживает более 160 валют.</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">Поиск валют…</string>
     <string name="clear_search">Очистить</string>
     <string name="recently_used">Недавно использованные</string>
-    <string name="frequently_used">Часто используемые</string>
     <string name="all_currencies">Все валюты</string>
     <string name="search_results">Результаты поиска</string>
 

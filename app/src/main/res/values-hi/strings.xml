@@ -37,7 +37,7 @@
     <string name="chart_change">परिवर्तन</string>
     <string name="quick_convert">त्वरित रूपांतरण</string>
     <string name="multi_currency_view">बहु-मुद्रा दृश्य</string>
-    <string name="multi_currency_view_description">एक साथ कई मुद्राओं में रूपांतरण दिखाएं</string>
+    <string name="multi_currency_view_description">परिणाम के नीचे सभी पसंदीदा मुद्राओं में रूपांतरण दिखाएं</string>
     <string name="about">के बारे में</string>
     <string name="version_format">संस्करण %1$s</string>
     <string name="about_description">Frankfurter API द्वारा संचालित मुद्रा कनवर्टर। 160+ मुद्राओं का समर्थन करता है।</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">मुद्राएं खोजें…</string>
     <string name="clear_search">साफ़ करें</string>
     <string name="recently_used">हाल में उपयोग किया गया</string>
-    <string name="frequently_used">अक्सर उपयोग की जाने वाली</string>
     <string name="all_currencies">सभी मुद्राएं</string>
     <string name="search_results">खोज परिणाम</string>
 

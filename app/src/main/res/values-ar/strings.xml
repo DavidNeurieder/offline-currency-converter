@@ -37,7 +37,7 @@
     <string name="chart_change">التغيير</string>
     <string name="quick_convert">تحويل سريع</string>
     <string name="multi_currency_view">عرض العملات المتعددة</string>
-    <string name="multi_currency_view_description">عرض التحويلات إلى عدة عملات في آن واحد</string>
+    <string name="multi_currency_view_description">عرض التحويلات لجميع العملات المفضلة أسفل النتيجة</string>
     <string name="about">حول</string>
     <string name="version_format">الإصدار %1$s</string>
     <string name="about_description">محول العملات مدعوم من Frankfurter API. يدعم أكثر من 160 عملة.</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">البحث عن العملات…</string>
     <string name="clear_search">مسح</string>
     <string name="recently_used">المستخدمة مؤخرًا</string>
-    <string name="frequently_used">المستخدمة بشكل متكرر</string>
     <string name="all_currencies">جميع العملات</string>
     <string name="search_results">نتائج البحث</string>
 

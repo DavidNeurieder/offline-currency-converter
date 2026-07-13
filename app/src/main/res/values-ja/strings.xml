@@ -37,7 +37,7 @@
     <string name="chart_change">変動</string>
     <string name="quick_convert">クイック変換</string>
     <string name="multi_currency_view">複数通貨ビュー</string>
-    <string name="multi_currency_view_description">複数の通貨への変換を同時に表示</string>
+    <string name="multi_currency_view_description">お気に入りの全通貨への変換を結果の下に表示</string>
     <string name="about">概要</string>
     <string name="version_format">バージョン %1$s</string>
     <string name="about_description">Frankfurter API搭載の通貨換算。160以上の通貨をサポート。</string>
@@ -58,7 +58,6 @@
     <string name="search_currencies">通貨を検索…</string>
     <string name="clear_search">消去</string>
     <string name="recently_used">最近使用</string>
-    <string name="frequently_used">よく使う通貨</string>
     <string name="all_currencies">すべての通貨</string>
     <string name="search_results">検索結果</string>
 
