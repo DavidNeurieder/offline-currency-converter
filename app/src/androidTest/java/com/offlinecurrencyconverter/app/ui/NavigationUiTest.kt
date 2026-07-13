@@ -20,36 +20,30 @@ class NavigationUiTest {
         composeTestRule.onNodeWithTag("currency_converter_header")
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithTag("convert_nav_item")
-            .assertIsDisplayed()
-
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .assertIsDisplayed()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_N002_navigateToSettings() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("exchange_rate_sync")
             .assertIsDisplayed()
-
-        composeTestRule.onNodeWithTag("settings_nav_item")
-            .assertIsDisplayed()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_N003_navigateBackToConvert() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithTag("convert_nav_item")
+        composeTestRule.onNodeWithTag("settings_back")
             .performClick()
         composeTestRule.waitForIdle()
 
@@ -62,19 +56,11 @@ class NavigationUiTest {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
-    fun TC_N004_navigationPersistsState() {
-        composeTestRule.onNodeWithTag("amount_input")
-            .performClick()
+    fun TC_N004_settingsIconDisplayedOnConvertScreen() {
+        composeTestRule.onNodeWithTag("open_settings")
+            .assertIsDisplayed()
 
-        composeTestRule.onNodeWithTag("settings_nav_item")
-            .performClick()
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag("convert_nav_item")
-            .performClick()
-        composeTestRule.waitForIdle()
-
-        composeTestRule.onNodeWithTag("amount_input")
+        composeTestRule.onNodeWithTag("open_favorites_picker")
             .assertIsDisplayed()
     }
 }

@@ -18,7 +18,7 @@ class SettingsScreenUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_020_openSettings_verifyScreenLoads() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()
@@ -30,7 +30,7 @@ class SettingsScreenUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_021_syncIntervalDropdown_opensAndShowsOptions() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()
@@ -54,7 +54,7 @@ class SettingsScreenUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_022_syncNowButton_verifyEnabled() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()
@@ -67,7 +67,7 @@ class SettingsScreenUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_024_aboutSection_verifyAppInfo() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()
@@ -79,19 +79,19 @@ class SettingsScreenUiTest {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
-    fun TC_030_bottomNav_navigateBetweenScreens() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+    fun TC_030_navigateBetweenScreens() {
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
         composeTestRule.waitForIdle()
 
-        composeTestRule.onNodeWithTag("convert_nav_item")
+        composeTestRule.onNodeWithTag("settings_back")
             .performClick()
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("currency_converter_header")
             .assertIsDisplayed()
 
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
         composeTestRule.waitForIdle()
 
@@ -102,7 +102,7 @@ class SettingsScreenUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_031_syncIntervalSelection_verifyChange() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()

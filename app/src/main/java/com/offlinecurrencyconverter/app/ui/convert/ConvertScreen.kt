@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -58,6 +59,7 @@ import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun ConvertScreen(
+    onNavigateToSettings: () -> Unit = {},
     viewModel: ConvertViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -144,6 +146,15 @@ fun ConvertScreen(
                                 imageVector = if (hasFavorites) Icons.Filled.Star else Icons.Outlined.StarOutline,
                                 contentDescription = stringResource(R.string.favorite_currencies),
                                 tint = if (hasFavorites) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        IconButton(
+                            onClick = onNavigateToSettings,
+                            modifier = Modifier.testTag("open_settings")
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Settings,
+                                contentDescription = stringResource(R.string.nav_settings)
                             )
                         }
                     }

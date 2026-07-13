@@ -88,7 +88,7 @@ class ConvertScreenUiTest {
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
     fun TC_007_navigateToSettings() {
-        composeTestRule.onNodeWithTag("settings_nav_item")
+        composeTestRule.onNodeWithTag("open_settings")
             .performClick()
 
         composeTestRule.waitForIdle()
