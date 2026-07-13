@@ -1,10 +1,13 @@
 package com.offlinecurrencyconverter.app.domain.usecase
 
+import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import io.mockk.Ordering
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -14,6 +17,7 @@ import org.junit.Test
 class SyncExchangeRatesUseCaseTest {
 
     private lateinit var exchangeRateRepository: ExchangeRateRepository
+    private lateinit var preferencesManager: PreferencesManager
     private lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
 
     private val syncIntervalMillis = 24 * 60 * 60 * 1000L
@@ -21,7 +25,9 @@ class SyncExchangeRatesUseCaseTest {
     @Before
     fun setup() {
         exchangeRateRepository = mockk()
-        syncExchangeRatesUseCase = SyncExchangeRatesUseCase(exchangeRateRepository)
+        preferencesManager = mockk()
+        every { preferencesManager.historicalRatesChart } returns flowOf(true)
+        syncExchangeRatesUseCase = SyncExchangeRatesUseCase(exchangeRateRepository, preferencesManager)
     }
 
     @Test
@@ -115,5 +121,37 @@ class SyncExchangeRatesUseCaseTest {
             )
         }
         coVerify { exchangeRateRepository.fetchAndStoreHistoricalRates() }
+    }
+
+    @Test
+    fun `invoke skips historical rates when chart disabled`() = runTest {
+        every { preferencesManager.historicalRatesChart } returns flowOf(false)
+        syncExchangeRatesUseCase = SyncExchangeRatesUseCase(exchangeRateRepository, preferencesManager)
+
+        coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
+        coEvery { exchangeRateRepository.fetchLatestRates(any(), any()) } returns Result.success(Unit)
+
+        val result = syncExchangeRatesUseCase(syncIntervalMillis)
+
+        assertTrue(result.isSuccess)
+        coVerify(exactly = 0) { exchangeRateRepository.fetchAndStoreHistoricalRates() }
+    }
+
+    @Test
+    fun `forceSync skips historical rates when chart disabled`() = runTest {
+        every { preferencesManager.historicalRatesChart } returns flowOf(false)
+        syncExchangeRatesUseCase = SyncExchangeRatesUseCase(exchangeRateRepository, preferencesManager)
+
+        coEvery {
+            exchangeRateRepository.fetchLatestRates(
+                baseCurrency = "EUR",
+                targetCurrencies = emptyList()
+            )
+        } returns Result.success(Unit)
+
+        val result = syncExchangeRatesUseCase.forceSync()
+
+        assertTrue(result.isSuccess)
+        coVerify(exactly = 0) { exchangeRateRepository.fetchAndStoreHistoricalRates() }
     }
 }

@@ -99,6 +99,9 @@ class SettingsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(historicalRatesChart = enabled)
         viewModelScope.launch {
             preferencesManager.saveHistoricalRatesChart(enabled)
+            if (enabled) {
+                exchangeRateRepository.fetchAndStoreHistoricalRates()
+            }
         }
     }
 
