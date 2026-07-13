@@ -1,5 +1,13 @@
 Version 0.4.0:
-- Favorite currencies: star your most-used currencies for quick access in the picker
+- Favorite currencies: star your most-used currencies for quick access
+- Multi-currency view: see conversions to all your favorites at once
+- Default favorites: USD, EUR, GBP, JPY, CNY pre-selected on first install
+- Favorites picker: tap the star icon to pick a favorite as source currency
 - 30-day rate trend charts: see historical exchange rate trends for any currency pair
+- Tap-to-expand charts: tap the chart for a detailed view with high/low stats
+- Historical chart toggle: enable/disable rate charts in settings
 - Home screen widget: quick glance at your selected currency pair
-- Manual sync option added in previous version
+- Sync status badge: colored indicator shows how fresh your rates are
+- Amount clear button: quickly clear the input field
+- Manual sync option: disable automatic background sync in settings
+- Pull-to-refresh and Sync Now button always work regardless of sync setting
