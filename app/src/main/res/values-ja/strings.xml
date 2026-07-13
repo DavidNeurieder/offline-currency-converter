@@ -38,6 +38,8 @@
     <string name="quick_convert">クイック変換</string>
     <string name="multi_currency_view">複数通貨ビュー</string>
     <string name="multi_currency_view_description">お気に入りの全通貨への変換を結果の下に表示</string>
+    <string name="historical_rates_chart">過去レート推移</string>
+    <string name="historical_rates_chart_description">変換画面に30日間の推移グラフを表示</string>
     <string name="about">概要</string>
     <string name="version_format">バージョン %1$s</string>
     <string name="about_description">Frankfurter API搭載の通貨換算。160以上の通貨をサポート。</string>

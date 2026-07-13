@@ -43,7 +43,8 @@ data class ConvertUiState(
     val recentCurrencies: List<Currency> = emptyList(),
     val historicalRates: List<HistoricalRateEntity> = emptyList(),
     val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
-    val multiCurrencyView: Boolean = false
+    val multiCurrencyView: Boolean = false,
+    val historicalRatesChart: Boolean = false
 )
 
 @HiltViewModel
@@ -76,6 +77,7 @@ class ConvertViewModel @Inject constructor(
         retryLoadingCurrencies()
         loadInitialHistoricalRates()
         loadMultiCurrencyViewPreference()
+        loadHistoricalRatesChartPreference()
     }
 
     private fun loadSavedCurrencies() {
@@ -163,6 +165,19 @@ class ConvertViewModel @Inject constructor(
         val source = _uiState.value.sourceCurrency
         if (amount != null && source != null) {
             performMultiCurrencyConversion(amount, source)
+        }
+    }
+
+    private fun loadHistoricalRatesChartPreference() {
+        viewModelScope.launch {
+            preferencesManager.historicalRatesChart.collect { enabled ->
+                _uiState.value = _uiState.value.copy(historicalRatesChart = enabled)
+                if (enabled) {
+                    loadHistoricalRates()
+                } else {
+                    _uiState.value = _uiState.value.copy(historicalRates = emptyList())
+                }
+            }
         }
     }
 
@@ -268,6 +283,7 @@ class ConvertViewModel @Inject constructor(
     }
 
     private fun loadHistoricalRates() {
+        if (!_uiState.value.historicalRatesChart) return
         val source = _uiState.value.sourceCurrency ?: return
         val target = _uiState.value.targetCurrency ?: return
 

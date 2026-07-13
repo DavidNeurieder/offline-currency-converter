@@ -38,6 +38,8 @@
     <string name="quick_convert">Быстрый пересчёт</string>
     <string name="multi_currency_view">Мультивалютный вид</string>
     <string name="multi_currency_view_description">Показывать конвертацию для всех избранных валют под результатом</string>
+    <string name="historical_rates_chart">График Исторического Тренда</string>
+    <string name="historical_rates_chart_description">Показывать 30-дневный график тренда на экране конвертации</string>
     <string name="about">О приложении</string>
     <string name="version_format">Версия %1$s</string>
     <string name="about_description">Конвертер валют на базе Frankfurter API. Поддерживает более 160 валют.</string>

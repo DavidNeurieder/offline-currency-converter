@@ -144,43 +144,45 @@ fun ConvertScreen(
                     )
                 }
 
-                item {
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { showChartDetail = true }
-                            .testTag("rate_chart"),
-                        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-                    ) {
-                        Column(
+                if (uiState.historicalRatesChart) {
+                    item {
+                        Card(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
+                                .clickable { showChartDetail = true }
+                                .testTag("rate_chart"),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
                         ) {
-                            Text(
-                                text = stringResource(
-                                    R.string.rate_trend,
-                                    uiState.sourceCurrency?.code ?: "",
-                                    uiState.targetCurrency?.code ?: ""
-                                ),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            when {
-                                uiState.historicalRates.size >= 2 -> {
-                                    RateChart(
-                                        dataPoints = uiState.historicalRates.map { it.date to it.rate }
-                                    )
-                                }
-                                else -> {
-                                    Text(
-                                        text = stringResource(R.string.historical_rates_unavailable),
-                                        style = MaterialTheme.typography.bodyMedium,
-                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                    )
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(
+                                        R.string.rate_trend,
+                                        uiState.sourceCurrency?.code ?: "",
+                                        uiState.targetCurrency?.code ?: ""
+                                    ),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                                Spacer(modifier = Modifier.height(8.dp))
+                                when {
+                                    uiState.historicalRates.size >= 2 -> {
+                                        RateChart(
+                                            dataPoints = uiState.historicalRates.map { it.date to it.rate }
+                                        )
+                                    }
+                                    else -> {
+                                        Text(
+                                            text = stringResource(R.string.historical_rates_unavailable),
+                                            style = MaterialTheme.typography.bodyMedium,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                 }
                             }
                         }

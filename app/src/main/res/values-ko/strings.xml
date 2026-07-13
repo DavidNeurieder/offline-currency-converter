@@ -38,6 +38,8 @@
     <string name="quick_convert">빠른 변환</string>
     <string name="multi_currency_view">다중 통화 뷰</string>
     <string name="multi_currency_view_description">즐겨찾기 통화의 변환을 결과 아래에 표시</string>
+    <string name="historical_rates_chart">과거 환율 추이</string>
+    <string name="historical_rates_chart_description">변환 화면에 30일 추이 차트 표시</string>
     <string name="about">정보</string>
     <string name="version_format">버전 %1$s</string>
     <string name="about_description">Frankfurter API로 구동되는 환율 변환기. 160개 이상의 통화를 지원합니다.</string>

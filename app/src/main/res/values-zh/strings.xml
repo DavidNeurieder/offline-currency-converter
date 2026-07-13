@@ -38,6 +38,8 @@
     <string name="quick_convert">快速换算</string>
     <string name="multi_currency_view">多币种视图</string>
     <string name="multi_currency_view_description">在结果下方显示所有收藏货币的换算</string>
+    <string name="historical_rates_chart">历史汇率趋势</string>
+    <string name="historical_rates_chart_description">在转换界面显示30天趋势图</string>
     <string name="about">关于</string>
     <string name="version_format">版本 %1$s</string>
     <string name="about_description">由Frankfurter API驱动的货币转换器。支持160多种货币。</string>

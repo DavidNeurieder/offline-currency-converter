@@ -63,6 +63,8 @@
     <string name="quick_convert">Quick Convert</string>
     <string name="multi_currency_view">Multi-Currency View</string>
     <string name="multi_currency_view_description">Show conversions to all favorite currencies below the result</string>
+    <string name="historical_rates_chart">Historical Rate Chart</string>
+    <string name="historical_rates_chart_description">Show 30-day trend chart on the convert screen</string>
 
 
     <string name="copy_result">Copy</string>

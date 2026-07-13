@@ -29,6 +29,7 @@ class PreferencesManager @Inject constructor(
         val CURRENCIES_INITIALIZED = booleanPreferencesKey("currencies_initialized")
         val RECENT_CURRENCIES = stringPreferencesKey("recent_currencies")
         val MULTI_CURRENCY_VIEW = booleanPreferencesKey("multi_currency_view")
+        val HISTORICAL_RATES_CHART = booleanPreferencesKey("historical_rates_chart")
     }
 
     companion object {
@@ -57,6 +58,10 @@ class PreferencesManager @Inject constructor(
 
     val multiCurrencyView: Flow<Boolean> = dataStore.data.map { prefs ->
         prefs[Keys.MULTI_CURRENCY_VIEW] ?: false
+    }
+
+    val historicalRatesChart: Flow<Boolean> = dataStore.data.map { prefs ->
+        prefs[Keys.HISTORICAL_RATES_CHART] ?: false
     }
 
     suspend fun saveSourceCurrency(code: String) {
@@ -96,6 +101,12 @@ class PreferencesManager @Inject constructor(
     suspend fun saveMultiCurrencyView(enabled: Boolean) {
         dataStore.edit { prefs ->
             prefs[Keys.MULTI_CURRENCY_VIEW] = enabled
+        }
+    }
+
+    suspend fun saveHistoricalRatesChart(enabled: Boolean) {
+        dataStore.edit { prefs ->
+            prefs[Keys.HISTORICAL_RATES_CHART] = enabled
         }
     }
 }

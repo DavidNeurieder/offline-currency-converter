@@ -33,7 +33,8 @@ data class SettingsUiState(
     val isSyncing: Boolean = false,
     val syncError: String? = null,
     val syncSuccess: Boolean = false,
-    val multiCurrencyView: Boolean = false
+    val multiCurrencyView: Boolean = false,
+    val historicalRatesChart: Boolean = false
 )
 
 @HiltViewModel
@@ -51,6 +52,7 @@ class SettingsViewModel @Inject constructor(
         loadLastSyncTime()
         loadSyncInterval()
         loadMultiCurrencyView()
+        loadHistoricalRatesChart()
     }
 
     private fun loadLastSyncTime() {
@@ -82,6 +84,21 @@ class SettingsViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(multiCurrencyView = enabled)
         viewModelScope.launch {
             preferencesManager.saveMultiCurrencyView(enabled)
+        }
+    }
+
+    private fun loadHistoricalRatesChart() {
+        viewModelScope.launch {
+            preferencesManager.historicalRatesChart.collect { enabled ->
+                _uiState.value = _uiState.value.copy(historicalRatesChart = enabled)
+            }
+        }
+    }
+
+    fun onHistoricalRatesChartToggle(enabled: Boolean) {
+        _uiState.value = _uiState.value.copy(historicalRatesChart = enabled)
+        viewModelScope.launch {
+            preferencesManager.saveHistoricalRatesChart(enabled)
         }
     }
 

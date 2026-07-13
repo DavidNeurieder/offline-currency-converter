@@ -111,6 +111,13 @@ fun SettingsScreen(
             }
 
             item {
+                HistoricalRatesChartSection(
+                    historicalRatesChart = uiState.historicalRatesChart,
+                    onHistoricalRatesChartToggle = viewModel::onHistoricalRatesChartToggle
+                )
+            }
+
+            item {
                 AboutSection()
             }
         }
@@ -264,6 +271,44 @@ private fun MultiCurrencySection(
                 checked = multiCurrencyView,
                 onCheckedChange = onMultiCurrencyViewToggle,
                 modifier = Modifier.testTag("multi_currency_switch")
+            )
+        }
+    }
+}
+
+@Composable
+private fun HistoricalRatesChartSection(
+    historicalRatesChart: Boolean,
+    onHistoricalRatesChartToggle: (Boolean) -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.historical_rates_chart),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.testTag("historical_rates_chart_toggle")
+                )
+                Text(
+                    text = stringResource(R.string.historical_rates_chart_description),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Switch(
+                checked = historicalRatesChart,
+                onCheckedChange = onHistoricalRatesChartToggle,
+                modifier = Modifier.testTag("historical_rates_chart_switch")
             )
         }
     }

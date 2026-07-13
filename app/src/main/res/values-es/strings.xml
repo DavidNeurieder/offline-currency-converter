@@ -38,6 +38,8 @@
     <string name="quick_convert">Conversión rápida</string>
     <string name="multi_currency_view">Vista multi-divisa</string>
     <string name="multi_currency_view_description">Mostrar conversiones a todas las divisas favoritas debajo del resultado</string>
+    <string name="historical_rates_chart">Gráfico de Tendencia Histórica</string>
+    <string name="historical_rates_chart_description">Mostrar gráfico de tendencia de 30 días en la pantalla de conversión</string>
     <string name="about">Acerca de</string>
     <string name="version_format">Versión %1$s</string>
     <string name="about_description">Conversor de moneda impulsado por Frankfurter API. Soporta más de 160 monedas.</string>
