@@ -37,7 +37,7 @@
     <string name="chart_low">निम्न</string>
     <string name="chart_change">परिवर्तन</string>
     <string name="chart_range_days">%1$dD</string>
-    <string name="quick_convert">त्वरित रूपांतरण</string>
+    <string name="quick_convert">पसंदीदा</string>
     <string name="multi_currency_view">बहु-मुद्रा दृश्य</string>
     <string name="multi_currency_view_description">परिणाम के नीचे सभी पसंदीदा मुद्राओं में रूपांतरण दिखाएं</string>
     <string name="historical_rates_chart">ऐतिहासिक दर रुझान</string>

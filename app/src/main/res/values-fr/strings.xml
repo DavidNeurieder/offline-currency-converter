@@ -37,7 +37,7 @@
     <string name="chart_low">Bas</string>
     <string name="chart_change">Variation</string>
     <string name="chart_range_days">%1$dD</string>
-    <string name="quick_convert">Conversion rapide</string>
+    <string name="quick_convert">Favoris</string>
     <string name="multi_currency_view">Vue multi-devises</string>
     <string name="multi_currency_view_description">Afficher les conversions de toutes les devises favorites sous le résultat</string>
     <string name="historical_rates_chart">Graphique de Tendance Historique</string>

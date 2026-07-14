@@ -37,7 +37,7 @@
     <string name="chart_low">최저</string>
     <string name="chart_change">변동</string>
     <string name="chart_range_days">%1$dD</string>
-    <string name="quick_convert">빠른 변환</string>
+    <string name="quick_convert">즐겨찾기</string>
     <string name="multi_currency_view">다중 통화 뷰</string>
     <string name="multi_currency_view_description">즐겨찾기 통화의 변환을 결과 아래에 표시</string>
     <string name="historical_rates_chart">과거 환율 추이</string>
