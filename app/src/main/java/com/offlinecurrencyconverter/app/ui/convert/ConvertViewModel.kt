@@ -81,6 +81,7 @@ class ConvertViewModel @Inject constructor(
         loadMultiCurrencyViewPreference()
         loadHistoricalRatesChartPreference()
         loadSavedAmount()
+        loadSavedChartDateRange()
     }
 
     private fun loadSavedCurrencies() {
@@ -158,6 +159,13 @@ class ConvertViewModel @Inject constructor(
                     performConversion()
                 }
             }
+        }
+    }
+
+    private fun loadSavedChartDateRange() {
+        viewModelScope.launch {
+            val saved = preferencesManager.chartDateRange.first()
+            _uiState.value = _uiState.value.copy(selectedDateRange = saved)
         }
     }
 
@@ -321,6 +329,9 @@ class ConvertViewModel @Inject constructor(
     fun onDateRangeChange(days: Int) {
         _uiState.value = _uiState.value.copy(selectedDateRange = days)
         applyDateRangeFilter()
+        viewModelScope.launch {
+            preferencesManager.saveChartDateRange(days)
+        }
     }
 
     private fun applyDateRangeFilter() {

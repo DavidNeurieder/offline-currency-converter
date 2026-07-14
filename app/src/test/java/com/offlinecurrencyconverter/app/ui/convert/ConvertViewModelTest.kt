@@ -67,6 +67,8 @@ class ConvertViewModelTest {
         every { preferencesManager.multiCurrencyView } returns flowOf(false)
         every { preferencesManager.amount } returns flowOf("")
         coEvery { preferencesManager.saveAmount(any()) } returns Unit
+        every { preferencesManager.chartDateRange } returns flowOf(30)
+        coEvery { preferencesManager.saveChartDateRange(any()) } returns Unit
 
         viewModel = ConvertViewModel(
             convertCurrencyUseCase,
