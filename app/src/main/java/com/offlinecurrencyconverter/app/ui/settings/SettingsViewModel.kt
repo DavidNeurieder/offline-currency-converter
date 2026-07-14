@@ -36,7 +36,7 @@ data class SettingsUiState(
     val syncError: String? = null,
     val syncSuccess: Boolean = false,
     val multiCurrencyView: Boolean = false,
-    val historicalRatesChart: Boolean = false
+    val historicalRatesChart: Boolean = true
 )
 
 @HiltViewModel

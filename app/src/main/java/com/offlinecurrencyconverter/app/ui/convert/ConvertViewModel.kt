@@ -30,7 +30,7 @@ data class MultiCurrencyResult(
 )
 
 data class ConvertUiState(
-    val amount: String = "",
+    val amount: String = "1",
     val sourceCurrency: Currency? = null,
     val targetCurrency: Currency? = null,
     val conversionResult: ConversionResult? = null,
@@ -46,7 +46,7 @@ data class ConvertUiState(
     val selectedDateRange: Int = 30,
     val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
     val multiCurrencyView: Boolean = false,
-    val historicalRatesChart: Boolean = false
+    val historicalRatesChart: Boolean = true
 )
 
 @HiltViewModel

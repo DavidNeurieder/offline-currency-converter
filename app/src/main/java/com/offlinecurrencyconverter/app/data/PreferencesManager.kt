@@ -67,7 +67,7 @@ class PreferencesManager @Inject constructor(
     }
 
     val historicalRatesChart: Flow<Boolean> = dataStore.data.map { prefs ->
-        prefs[Keys.HISTORICAL_RATES_CHART] ?: false
+        prefs[Keys.HISTORICAL_RATES_CHART] ?: true
     }
 
     val favoritesInitialized: Flow<Boolean> = dataStore.data.map { prefs ->
@@ -75,7 +75,7 @@ class PreferencesManager @Inject constructor(
     }
 
     val amount: Flow<String> = dataStore.data.map { prefs ->
-        prefs[Keys.AMOUNT] ?: ""
+        prefs[Keys.AMOUNT] ?: "1"
     }
 
     val chartDateRange: Flow<Int> = dataStore.data.map { prefs ->

@@ -65,7 +65,7 @@ class ConvertViewModelTest {
         coEvery { preferencesManager.saveTargetCurrency(any()) } returns Unit
         every { preferencesManager.historicalRatesChart } returns flowOf(true)
         every { preferencesManager.multiCurrencyView } returns flowOf(false)
-        every { preferencesManager.amount } returns flowOf("")
+        every { preferencesManager.amount } returns flowOf("1")
         coEvery { preferencesManager.saveAmount(any()) } returns Unit
         every { preferencesManager.chartDateRange } returns flowOf(30)
         coEvery { preferencesManager.saveChartDateRange(any()) } returns Unit
@@ -90,7 +90,7 @@ class ConvertViewModelTest {
     @Test
     fun `initial state has default values`() = runTest {
         val state = viewModel.uiState.value
-        assertEquals("", state.amount)
+        assertEquals("1", state.amount)
         assertNull(state.error)
         assertFalse(state.isLoading)
     }
