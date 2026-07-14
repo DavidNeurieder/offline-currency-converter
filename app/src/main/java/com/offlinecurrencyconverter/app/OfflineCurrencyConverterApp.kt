@@ -50,10 +50,19 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
         applicationScope.launch {
             try {
                 currencyInitializer.initializeIfNeeded()
-                val syncIntervalHours = preferencesManager.syncInterval.first()
-                if (syncIntervalHours > 0L) {
-                    syncExchangeRatesUseCase.forceSync()
-                    updateWidget()
+
+                val currentVersion = BuildConfig.VERSION_CODE
+                val lastVersion = preferencesManager.lastInstalledVersion.first()
+                val isFirstInstall = lastVersion == 0
+                val isUpdate = !isFirstInstall && currentVersion > lastVersion
+
+                if (isFirstInstall || isUpdate) {
+                    val syncIntervalHours = preferencesManager.syncInterval.first()
+                    if (syncIntervalHours > 0L) {
+                        syncExchangeRatesUseCase.forceSync()
+                        updateWidget()
+                    }
+                    preferencesManager.saveLastInstalledVersion(currentVersion)
                 }
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to initialize currencies", e)

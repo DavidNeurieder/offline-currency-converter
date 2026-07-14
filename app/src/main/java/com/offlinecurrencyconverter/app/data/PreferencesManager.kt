@@ -36,6 +36,7 @@ class PreferencesManager @Inject constructor(
         val FAVORITES_INITIALIZED = booleanPreferencesKey("favorites_initialized")
         val AMOUNT = stringPreferencesKey("amount")
         val CHART_DATE_RANGE = intPreferencesKey("chart_date_range")
+        val LAST_INSTALLED_VERSION = intPreferencesKey("last_installed_version")
     }
 
     companion object {
@@ -80,6 +81,10 @@ class PreferencesManager @Inject constructor(
 
     val chartDateRange: Flow<Int> = dataStore.data.map { prefs ->
         prefs[Keys.CHART_DATE_RANGE] ?: 30
+    }
+
+    val lastInstalledVersion: Flow<Int> = dataStore.data.map { prefs ->
+        prefs[Keys.LAST_INSTALLED_VERSION] ?: 0
     }
 
     suspend fun saveSourceCurrency(code: String) {
@@ -145,6 +150,12 @@ class PreferencesManager @Inject constructor(
     suspend fun saveChartDateRange(days: Int) {
         dataStore.edit { prefs ->
             prefs[Keys.CHART_DATE_RANGE] = days
+        }
+    }
+
+    suspend fun saveLastInstalledVersion(version: Int) {
+        dataStore.edit { prefs ->
+            prefs[Keys.LAST_INSTALLED_VERSION] = version
         }
     }
 
