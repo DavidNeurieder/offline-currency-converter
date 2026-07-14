@@ -18,14 +18,15 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **160+ currencies** — all ECB reference rates
 - **Favorites** — star your most-used currencies for quick access
 - **Multi-currency view** — see conversions to all your favorites at once
-- **Rate trend charts** — 30-day historical charts for any currency pair
-- **Historical chart toggle** — enable/disable rate charts in settings
-- **Tap-to-expand charts** — tap the chart for a detailed view with stats
-- **Home screen widget** — live exchange rate with currency symbols, tap to open app
+- **Rate trend charts** — 90-day historical charts with gradient fill, cubic curves, and trend colors
+- **Interactive charts** — long-press for crosshair tooltip with date and rate
+- **Date range tabs** — switch between 7D, 30D, and 90D views (persisted across restarts)
+- **Home screen widget** — Material You dynamic colors, works with any currency pair
 - **Sync status** — colored badge shows how fresh your rates are
 - **Copy result** — tap to copy any conversion to clipboard
 - **Pull-to-refresh** — manually trigger a rate sync from the convert screen
-- **Amount clear button** — quickly clear the input field
+- **Amount persistence** — your input survives app restarts
+- **Auto-sync** — rates sync on first install and app updates, not on every launch
 - **Bundled flags** — country flags are built into the app, no network loading
 - **Material Design 3** — modern UI with dynamic theming
 - **Privacy first** — no accounts, no tracking, no network permissions at runtime

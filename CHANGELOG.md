@@ -6,16 +6,29 @@
 - Favorite currencies: star your most-used currencies for quick access
 - Multi-currency view: see conversions to all your favorites at once
 - Default favorites (USD, EUR, GBP, JPY, CNY) pre-selected on first install
-- Favorites picker: tap the star icon to pick a favorite as source currency
-- 30-day rate trend charts for any currency pair
-- Tap-to-expand charts with detailed view (high/low/change stats)
-- Historical chart toggle: enable/disable rate charts in settings
-- Home screen widget: live exchange rate, currency symbols, last updated time, tap to open
-- Widget auto-updates after background sync
+- 90-day rate trend charts with gradient fill, cubic curves, dashed grid lines, and trend-based colors
+- Touch-interactive charts: long-press for crosshair tooltip with date and rate
+- Rate chart summary: current rate, change %, high, and low displayed inline below chart
+- Date range tabs (7D / 30D / 90D) with persisted selection across restarts
+- Historical chart toggle: enable/disable rate charts in settings (on by default)
+- Home screen widget with Material You dynamic colors (Android 12+)
+- Widget cross-rate computation: shows correct rate for any source/target pair
+- Widget auto-updates after background sync and currency changes in the app
 - Sync status badge: colored indicator shows how fresh your rates are
+- Amount persistence: input amount survives app restarts (defaults to 1)
 - Amount clear button
 - Manual sync option: disable automatic background sync in settings
 - Pull-to-refresh and Sync Now always work regardless of sync setting
+- Settings page with back navigation (no bottom nav bar)
+- Favorites management in Settings screen
+- Copy button inline with converted amount
+- Auto-sync on first install and app version update (no redundant syncs on every launch)
+
+### Changed
+- Charts now fetch 90 days of data (was 30) with UI-level filtering
+- Initial amount defaults to 1 instead of empty
+- Historical rates chart enabled by default for new installs
+- Widget rate display rounded to 2 decimal places
 
 ## 0.3.0
 

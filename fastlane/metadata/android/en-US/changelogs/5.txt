@@ -1,14 +1,10 @@
 Version 0.4.0:
-- Favorite currencies: star your most-used currencies for quick access
-- Multi-currency view: see conversions to all your favorites at once
-- Default favorites: USD, EUR, GBP, JPY, CNY pre-selected on first install
-- Favorites picker: tap the star icon to pick a favorite as source currency
-- 30-day rate trend charts: see historical exchange rate trends for any currency pair
-- Tap-to-expand charts: tap the chart for a detailed view with high/low stats
-- Historical chart toggle: enable/disable rate charts in settings
-- Home screen widget: shows live exchange rate, currency symbols, and last updated time; tap to open app
-- Widget updates automatically after background sync
-- Sync status badge: colored indicator shows how fresh your rates are
-- Amount clear button: quickly clear the input field
-- Manual sync option: disable automatic background sync in settings
-- Pull-to-refresh and Sync Now button always work regardless of sync setting
+- Favorite currencies with default picks on first install
+- Multi-currency view: see all favorites at once
+- 90-day rate trend charts with interactive touch tooltips
+- Date range tabs (7D/30D/90D) persisted across restarts
+- Material You widget with cross-rate support and auto-update
+- Settings page with favorites management
+- Amount persistence across app restarts
+- Auto-sync on first install and app updates
+- Sync status badge, pull-to-refresh, manual sync option
