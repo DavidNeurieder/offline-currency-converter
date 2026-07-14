@@ -116,9 +116,9 @@ class ConvertScreenUiTest {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
-    fun TC_009_rateChart_notDisplayedByDefault() {
+    fun TC_009_rateChart_displayedByDefault() {
         composeTestRule.onNodeWithTag("rate_chart")
-            .assertDoesNotExist()
+            .assertExists()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
