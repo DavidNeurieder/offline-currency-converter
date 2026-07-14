@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">每周</string>
     <string name="sync_interval_manual_only">仅手动</string>
     <string name="favorite_currencies">收藏</string>
+    <string name="favorite_currencies_description">%1$d 种货币已标记为收藏</string>
     <string name="add_favorite">添加到收藏</string>
     <string name="remove_favorite">从收藏中移除</string>
     <string name="rate_trend">%1$s 兑 %2$s 走势</string>

@@ -32,9 +32,6 @@ class RtlLayoutUiTest {
     fun TC_RTL002_navigationItemsDisplayed() {
         composeTestRule.onNodeWithTag("open_settings")
             .assertIsDisplayed()
-
-        composeTestRule.onNodeWithTag("open_favorites_picker")
-            .assertIsDisplayed()
     }
 
     @OptIn(ExperimentalMaterial3Api::class)

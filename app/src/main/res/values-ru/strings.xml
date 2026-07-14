@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">Еженедельно</string>
     <string name="sync_interval_manual_only">Только вручную</string>
     <string name="favorite_currencies">Избранное</string>
+    <string name="favorite_currencies_description">%1$d валют добавлено в избранное</string>
     <string name="add_favorite">Добавить в избранное</string>
     <string name="remove_favorite">Удалить из избранного</string>
     <string name="rate_trend">Тренд %1$s к %2$s</string>

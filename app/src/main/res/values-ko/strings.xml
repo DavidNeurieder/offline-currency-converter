@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">매주</string>
     <string name="sync_interval_manual_only">수동만</string>
     <string name="favorite_currencies">즐겨찾기</string>
+    <string name="favorite_currencies_description">%1$d개 통화를 즐겨찾기에 표시</string>
     <string name="add_favorite">즐겨찾기에 추가</string>
     <string name="remove_favorite">즐겨찾기에서 제거</string>
     <string name="rate_trend">%1$s → %2$s 추이</string>

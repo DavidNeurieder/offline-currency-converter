@@ -3,6 +3,8 @@ package com.offlinecurrencyconverter.app.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.offlinecurrencyconverter.app.data.PreferencesManager
+import com.offlinecurrencyconverter.app.domain.model.Currency
+import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
 import com.offlinecurrencyconverter.app.worker.SyncScheduler
@@ -42,11 +44,15 @@ class SettingsViewModel @Inject constructor(
     private val exchangeRateRepository: ExchangeRateRepository,
     private val syncExchangeRatesUseCase: SyncExchangeRatesUseCase,
     private val preferencesManager: PreferencesManager,
-    private val syncScheduler: SyncScheduler
+    private val syncScheduler: SyncScheduler,
+    private val currencyRepository: CurrencyRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SettingsUiState())
     val uiState: StateFlow<SettingsUiState> = _uiState.asStateFlow()
+
+    val currencies: StateFlow<List<Currency>> = currencyRepository.getAllCurrencies()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     init {
         loadLastSyncTime()
@@ -141,5 +147,11 @@ class SettingsViewModel @Inject constructor(
 
     fun clearSyncStatus() {
         _uiState.value = _uiState.value.copy(syncError = null, syncSuccess = false)
+    }
+
+    fun onFavoriteToggle(currencyCode: String, isFavorite: Boolean) {
+        viewModelScope.launch {
+            currencyRepository.updateFavorite(currencyCode, isFavorite)
+        }
     }
 }

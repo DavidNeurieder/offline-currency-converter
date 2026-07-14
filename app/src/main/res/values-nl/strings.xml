@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">Wekelijks</string>
     <string name="sync_interval_manual_only">Handmatig alleen</string>
     <string name="favorite_currencies">Favorieten</string>
+    <string name="favorite_currencies_description">%1$d valuta\'s gemarkeerd als favoriet</string>
     <string name="add_favorite">Toevoegen aan favorieten</string>
     <string name="remove_favorite">Verwijderen uit favorieten</string>
     <string name="rate_trend">%1$s naar %2$s trend</string>

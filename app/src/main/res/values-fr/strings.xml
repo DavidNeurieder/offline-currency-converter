@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">Hebdomadaire</string>
     <string name="sync_interval_manual_only">Manuel uniquement</string>
     <string name="favorite_currencies">Favoris</string>
+    <string name="favorite_currencies_description">%1$d devises marquées comme favorites</string>
     <string name="add_favorite">Ajouter aux favoris</string>
     <string name="remove_favorite">Retirer des favoris</string>
     <string name="rate_trend">Tendance %1$s vers %2$s</string>

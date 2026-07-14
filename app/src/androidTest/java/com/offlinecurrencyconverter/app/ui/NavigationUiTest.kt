@@ -59,8 +59,5 @@ class NavigationUiTest {
     fun TC_N004_settingsIconDisplayedOnConvertScreen() {
         composeTestRule.onNodeWithTag("open_settings")
             .assertIsDisplayed()
-
-        composeTestRule.onNodeWithTag("open_favorites_picker")
-            .assertIsDisplayed()
     }
 }

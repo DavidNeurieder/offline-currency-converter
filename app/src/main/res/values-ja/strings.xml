@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">毎週</string>
     <string name="sync_interval_manual_only">手動のみ</string>
     <string name="favorite_currencies">お気に入り</string>
+    <string name="favorite_currencies_description">%1$d 通貨をお気に入りに設定</string>
     <string name="add_favorite">お気に入りに追加</string>
     <string name="remove_favorite">お気に入りから削除</string>
     <string name="rate_trend">%1$s → %2$s の推移</string>

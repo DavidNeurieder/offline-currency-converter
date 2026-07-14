@@ -26,6 +26,7 @@
     <string name="sync_interval_weekly">أسبوعي</string>
     <string name="sync_interval_manual_only">يدوي فقط</string>
     <string name="favorite_currencies">المفضلة</string>
+    <string name="favorite_currencies_description">%1$d عملات مفضلة</string>
     <string name="add_favorite">إضافة إلى المفضلة</string>
     <string name="remove_favorite">إزالة من المفضلة</string>
     <string name="rate_trend">اتجاه %1$s إلى %2$s</string>

@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.ui.settings
 
 import com.offlinecurrencyconverter.app.data.PreferencesManager
+import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
 import com.offlinecurrencyconverter.app.worker.SyncScheduler
@@ -32,6 +33,7 @@ class SettingsViewModelTest {
     private lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var syncScheduler: SyncScheduler
+    private lateinit var currencyRepository: CurrencyRepository
     private lateinit var viewModel: SettingsViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -43,6 +45,7 @@ class SettingsViewModelTest {
         syncExchangeRatesUseCase = mockk(relaxed = true)
         preferencesManager = mockk(relaxed = true)
         syncScheduler = mockk(relaxed = true)
+        currencyRepository = mockk(relaxed = true)
 
         coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
         every { preferencesManager.syncInterval } returns flowOf(24L)
@@ -52,7 +55,8 @@ class SettingsViewModelTest {
             exchangeRateRepository,
             syncExchangeRatesUseCase,
             preferencesManager,
-            syncScheduler
+            syncScheduler,
+            currencyRepository
         )
         testDispatcher.scheduler.advanceUntilIdle()
     }

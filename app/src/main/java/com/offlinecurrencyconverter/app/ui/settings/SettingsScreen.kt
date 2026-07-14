@@ -12,8 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Sync
@@ -54,11 +56,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.offlinecurrencyconverter.app.BuildConfig
 import com.offlinecurrencyconverter.app.R
+import com.offlinecurrencyconverter.app.ui.components.CurrencyPickerBottomSheet
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit = {},
@@ -66,7 +69,9 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsState()
+    val currencies by viewModel.currencies.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
+    var showFavoritesPicker by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.syncSuccess) {
         if (uiState.syncSuccess) {
@@ -130,10 +135,27 @@ fun SettingsScreen(
             }
 
             item {
+                FavoritesSection(
+                    favoritesCount = currencies.count { it.isFavorite },
+                    onClick = { showFavoritesPicker = true }
+                )
+            }
+
+            item {
                 AboutSection()
             }
         }
     }
+
+    CurrencyPickerBottomSheet(
+        isVisible = showFavoritesPicker,
+        currencies = currencies,
+        selectedCurrency = null,
+        recentCurrencies = emptyList(),
+        onCurrencySelected = { showFavoritesPicker = false },
+        onDismiss = { showFavoritesPicker = false },
+        onFavoriteToggle = viewModel::onFavoriteToggle
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -321,6 +343,46 @@ private fun HistoricalRatesChartSection(
                 checked = historicalRatesChart,
                 onCheckedChange = onHistoricalRatesChartToggle,
                 modifier = Modifier.testTag("historical_rates_chart_switch")
+            )
+        }
+    }
+}
+
+@Composable
+private fun FavoritesSection(
+    favoritesCount: Int,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = stringResource(R.string.favorite_currencies),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.testTag("favorites_section")
+                )
+                Text(
+                    text = stringResource(R.string.favorite_currencies_description, favoritesCount),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }

@@ -16,8 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -67,9 +65,6 @@ fun ConvertScreen(
 
     var showSourceCurrencyPicker by remember { mutableStateOf(false) }
     var showTargetCurrencyPicker by remember { mutableStateOf(false) }
-    var showFavoritesPicker by remember { mutableStateOf(false) }
-
-    val hasFavorites = remember(currencies) { currencies.any { it.isFavorite } }
 
     LaunchedEffect(Unit) {
         viewModel.refreshLastSyncTime()
@@ -136,16 +131,6 @@ fun ConvertScreen(
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.testTag("currency_converter_header")
                         )
-                        IconButton(
-                            onClick = { showFavoritesPicker = true },
-                            modifier = Modifier.testTag("open_favorites_picker")
-                        ) {
-                            Icon(
-                                imageVector = if (hasFavorites) Icons.Filled.Star else Icons.Outlined.StarOutline,
-                                contentDescription = stringResource(R.string.favorite_currencies),
-                                tint = if (hasFavorites) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
                         IconButton(
                             onClick = onNavigateToSettings,
                             modifier = Modifier.testTag("open_settings")
@@ -296,19 +281,6 @@ fun ConvertScreen(
             showTargetCurrencyPicker = false
         },
         onDismiss = { showTargetCurrencyPicker = false },
-        onFavoriteToggle = viewModel::onFavoriteToggle
-    )
-
-    CurrencyPickerBottomSheet(
-        isVisible = showFavoritesPicker,
-        currencies = currencies,
-        selectedCurrency = uiState.sourceCurrency,
-        recentCurrencies = emptyList(),
-        onCurrencySelected = { currency ->
-            viewModel.onSourceCurrencyChange(currency)
-            showFavoritesPicker = false
-        },
-        onDismiss = { showFavoritesPicker = false },
         onFavoriteToggle = viewModel::onFavoriteToggle
     )
 }
