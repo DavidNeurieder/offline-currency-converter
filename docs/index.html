@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offline Currency Converter — Private, offline currency conversion for Android</title>
+  <meta name="description" content="A privacy-focused currency converter for Android that works completely offline. 160+ currencies, trend charts, a home screen widget, and zero tracking. No account, no analytics.">
+  <link rel="canonical" href="https://davidneurieder.github.io/offline-currency-converter/">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Offline Currency Converter">
+  <meta property="og:title" content="Offline Currency Converter — Private, offline currency conversion">
+  <meta property="og:description" content="Privacy-focused currency converter for Android. 160+ currencies, trend charts, home screen widget, zero tracking. Works fully offline after one sync.">
+  <meta property="og:url" content="https://davidneurieder.github.io/offline-currency-converter/">
+  <meta property="og:image" content="https://davidneurieder.github.io/offline-currency-converter/og-banner.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Offline Currency Converter — Private, offline currency conversion">
+  <meta name="twitter:description" content="Privacy-focused currency converter for Android. 160+ currencies, trend charts, home screen widget, zero tracking.">
+  <meta name="twitter:image" content="https://davidneurieder.github.io/offline-currency-converter/og-banner.png">
+  <link rel="stylesheet" href="styles.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Offline Currency Converter",
+    "operatingSystem": "Android",
+    "applicationCategory": "FinanceApplication",
+    "description": "A privacy-focused currency converter for Android that works completely offline. 160+ currencies, trend charts, a home screen widget, and zero tracking.",
+    "url": "https://davidneurieder.github.io/offline-currency-converter/",
+    "softwareVersion": "0.4.0",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "David Neurieder" }
+  }
+  </script>
+</head>
+<body>
+  <header class="hero">
+    <div class="container">
+      <span class="eyebrow">Android · Privacy-first</span>
+      <h1>Offline Currency Converter</h1>
+      <p class="lead">Convert 160+ currencies with rates in your pocket — and nothing leaves your device. Sync once, then it works completely offline.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://f-droid.org/packages/com.offlinecurrencyconverter.app/">
+          <img class="fdroid-mark" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'&gt;&lt;path d='M12 2 3 7v10l9 5 9-5V7z' opacity='.9'/&gt;&lt;/svg&gt;" alt=""> Get it on F-Droid
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/DavidNeurieder/offline-currency-converter">View source</a>
+      </div>
+      <p class="trust">No account · No tracking · No analytics</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="section" id="features">
+      <div class="container">
+        <h2>Built for privacy and speed</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="icon">⚡</div>
+            <h3>100% offline</h3>
+            <p>Once rates are synced, every conversion happens entirely offline. No internet required.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🌍</div>
+            <h3>160+ currencies</h3>
+            <p>All European Central Bank reference rates, with country flags bundled into the app.</p>
+          </div>
+          <div class="card">
+            <div class="icon">⭐</div>
+            <h3>Favorites &amp; multi-view</h3>
+            <p>Star your most-used currencies and see conversions to all of them at once.</p>
+          </div>
+          <div class="card">
+            <div class="icon">📈</div>
+            <h3>Trend charts</h3>
+            <p>90-day historical charts with gradient fill, crosshair tooltips, and 7D / 30D / 90D tabs.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🧩</div>
+            <h3>Home screen widget</h3>
+            <p>Material You dynamic colors that work with any currency pair, on Android 12+.</p>
+          </div>
+          <div class="card">
+            <div class="icon">🎨</div>
+            <h3>Material Design 3</h3>
+            <p>Modern UI with dynamic theming that adapts to your device.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tint" id="how">
+      <div class="container">
+        <h2>How it works</h2>
+        <div class="steps">
+          <div class="step">
+            <span class="num">1</span>
+            <div>
+              <h3>Sync once</h3>
+              <p>Exchange rates are fetched from the free Frankfurter API (powered by the European Central Bank) and stored locally with Room.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="num">2</span>
+            <div>
+              <h3>Go offline</h3>
+              <p>After the first sync, all conversions are fully offline. Configure auto-sync from 6h to weekly, or manual only.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="num">3</span>
+            <div>
+              <h3>Stay fresh</h3>
+              <p>A background WorkManager job keeps rates current; a colored badge shows how fresh your rates are.</p>
+            </div>
+          </div>
+        </div>
+        <p class="privacy-note">No data leaves your device during conversion — only optional rate syncs contact the Frankfurter API. No tracking, no analytics, no account.</p>
+      </div>
+    </section>
+
+    <section class="section" id="screenshots">
+      <div class="container">
+        <h2>Screenshots</h2>
+        <div class="shots">
+          <img src="../fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Offline Currency Converter screenshot 1" loading="lazy">
+          <img src="../fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" alt="Offline Currency Converter screenshot 2" loading="lazy">
+          <img src="../fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" alt="Offline Currency Converter screenshot 3" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-tint" id="get">
+      <div class="container">
+        <h2>Get it on F-Droid</h2>
+        <p class="center">Free and open source. Install from F-Droid — no Google Play account needed.</p>
+        <div class="cta center">
+          <a class="btn btn-primary" href="https://f-droid.org/packages/com.offlinecurrencyconverter.app/">
+            <img class="fdroid-mark" src="data:image/svg+xml;utf8,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'&gt;&lt;path d='M12 2 3 7v10l9 5 9-5V7z' opacity='.9'/&gt;&lt;/svg&gt;" alt=""> Get it on F-Droid
+          </a>
+        </div>
+        <h3>Build from source</h3>
+        <pre><code># Debug build
+./gradlew assembleDebug
+
+# Release build
+./gradlew assembleRelease</code></pre>
+        <p>Release APK at <code>app/build/outputs/apk/release/app-release.apk</code>. The project follows F-Droid reproducible-build guidelines (R8 minification disabled).</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Offline Currency Converter — version 0.4.0. AGPLv3 — <a href="https://github.com/DavidNeurieder/offline-currency-converter/blob/main/LICENSE">License</a> · <a href="https://github.com/DavidNeurieder/offline-currency-converter">Source</a></p>
+    </div>
+  </footer>
+</body>
+</html>

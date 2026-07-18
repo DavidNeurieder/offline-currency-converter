@@ -9,7 +9,7 @@ local.properties
 .idea/
 
 # Planning docs
-/docs
+/old_docs
 
 # python
 /__pycache__
