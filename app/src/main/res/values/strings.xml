@@ -37,7 +37,6 @@
     <string name="from">From</string>
     <string name="to">To</string>
     <string name="result">Result</string>
-    <string name="converting">Converting…</string>
     <string name="enter_amount">Enter an amount to convert</string>
     <string name="swap_currencies">Swap currencies</string>
     <string name="recent_conversions">Recent Conversions</string>

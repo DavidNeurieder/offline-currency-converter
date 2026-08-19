@@ -60,6 +60,7 @@ fun ConvertScreen(
     viewModel: ConvertViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val amount by viewModel.amount.collectAsState()
     val currencies by viewModel.currencies.collectAsState()
     val recentConversions by viewModel.recentConversions.collectAsState()
 
@@ -145,7 +146,7 @@ fun ConvertScreen(
 
                 item {
                     ConversionCard(
-                        amount = uiState.amount,
+                        amount = amount,
                         onAmountChange = viewModel::onAmountChange,
                         sourceCurrency = uiState.sourceCurrency,
                         targetCurrency = uiState.targetCurrency,
@@ -154,7 +155,6 @@ fun ConvertScreen(
                         onSwap = viewModel::swapCurrencies,
                         conversionResult = uiState.conversionResult,
                         error = uiState.error,
-                        isLoading = uiState.isLoading,
                         lastSyncTime = uiState.lastSyncTime,
                         multiCurrencyConversions = uiState.multiCurrencyConversions
                     )

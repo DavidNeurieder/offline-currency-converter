@@ -50,7 +50,6 @@
     <string name="from">من</string>
     <string name="to">إلى</string>
     <string name="result">النتيجة</string>
-    <string name="converting">جارٍ التحويل…</string>
     <string name="enter_amount">أدخل مبلغًا للتحويل</string>
     <string name="swap_currencies">تبديل العملات</string>
     <string name="recent_conversions">التحويلات الأخيرة</string>

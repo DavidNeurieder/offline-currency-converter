@@ -50,7 +50,6 @@
     <string name="from">から</string>
     <string name="to">へ</string>
     <string name="result">結果</string>
-    <string name="converting">変換中…</string>
     <string name="enter_amount">変換する金額を入力</string>
     <string name="swap_currencies">通貨を入れ替え</string>
     <string name="recent_conversions">最近の変換</string>

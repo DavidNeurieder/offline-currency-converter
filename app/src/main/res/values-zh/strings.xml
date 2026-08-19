@@ -50,7 +50,6 @@
     <string name="from">从</string>
     <string name="to">到</string>
     <string name="result">结果</string>
-    <string name="converting">转换中…</string>
     <string name="enter_amount">输入要转换的金额</string>
     <string name="swap_currencies">交换货币</string>
     <string name="recent_conversions">最近的转换</string>

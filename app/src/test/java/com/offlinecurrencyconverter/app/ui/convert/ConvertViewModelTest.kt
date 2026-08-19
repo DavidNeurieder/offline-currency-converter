@@ -20,7 +20,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -90,9 +89,8 @@ class ConvertViewModelTest {
     @Test
     fun `initial state has default values`() = runTest {
         val state = viewModel.uiState.value
-        assertEquals("1", state.amount)
+        assertEquals("1", viewModel.amount.value)
         assertNull(state.error)
-        assertFalse(state.isLoading)
     }
 
     @Test
@@ -100,7 +98,7 @@ class ConvertViewModelTest {
         viewModel.onAmountChange("100")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("100", viewModel.uiState.value.amount)
+        assertEquals("100", viewModel.amount.value)
     }
 
     @Test
@@ -108,7 +106,7 @@ class ConvertViewModelTest {
         viewModel.onAmountChange("100.50abc")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("100.50", viewModel.uiState.value.amount)
+        assertEquals("100.50", viewModel.amount.value)
     }
 
     @Test
@@ -157,7 +155,7 @@ class ConvertViewModelTest {
         viewModel.onAmountChange("100")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertTrue(viewModel.uiState.value.conversionResult != null || viewModel.uiState.value.amount.isNotEmpty())
+        assertTrue(viewModel.uiState.value.conversionResult != null || viewModel.amount.value.isNotEmpty())
 
         viewModel.onAmountChange("")
         testDispatcher.scheduler.advanceUntilIdle()
@@ -170,7 +168,7 @@ class ConvertViewModelTest {
         viewModel.onAmountChange("abc")
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals("", viewModel.uiState.value.amount)
+        assertEquals("", viewModel.amount.value)
     }
 
     @Test

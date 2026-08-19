@@ -14,10 +14,12 @@ import com.offlinecurrencyconverter.app.domain.repository.HistoricalRateReposito
 import com.offlinecurrencyconverter.app.domain.repository.RecentConversionRepository
 import com.offlinecurrencyconverter.app.domain.usecase.ConvertCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -30,12 +32,10 @@ data class MultiCurrencyResult(
 )
 
 data class ConvertUiState(
-    val amount: String = "1",
     val sourceCurrency: Currency? = null,
     val targetCurrency: Currency? = null,
     val conversionResult: ConversionResult? = null,
     val error: String? = null,
-    val isLoading: Boolean = false,
     val isCurrenciesLoading: Boolean = true,
     val currenciesError: String? = null,
     val isRefreshing: Boolean = false,
@@ -49,6 +49,7 @@ data class ConvertUiState(
     val historicalRatesChart: Boolean = true
 )
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class ConvertViewModel @Inject constructor(
     private val convertCurrencyUseCase: ConvertCurrencyUseCase,
@@ -62,6 +63,9 @@ class ConvertViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(ConvertUiState())
     val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
+
+    private val _amount = MutableStateFlow("1")
+    val amount: StateFlow<String> = _amount.asStateFlow()
 
     val currencies: StateFlow<List<Currency>> = currencyRepository.getAllCurrencies()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
@@ -82,6 +86,24 @@ class ConvertViewModel @Inject constructor(
         loadHistoricalRatesChartPreference()
         loadSavedAmount()
         loadSavedChartDateRange()
+        observeAmountForConversion()
+    }
+
+    private fun observeAmountForConversion() {
+        viewModelScope.launch {
+            _amount.debounce(300).collect { amount ->
+                val source = _uiState.value.sourceCurrency ?: return@collect
+                val target = _uiState.value.targetCurrency ?: return@collect
+                if (amount.isNotEmpty() && amount.toDoubleOrNull() != null) {
+                    performConversion(amount.toDouble(), source, target)
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        conversionResult = null,
+                        multiCurrencyConversions = emptyList()
+                    )
+                }
+            }
+        }
     }
 
     private fun loadSavedCurrencies() {
@@ -105,7 +127,10 @@ class ConvertViewModel @Inject constructor(
                         targetCurrency = targetCurrency
                     )
 
-                    performConversion()
+                    val amount = _amount.value.toDoubleOrNull()
+                    if (amount != null) {
+                        performConversion(amount, sourceCurrency, targetCurrency)
+                    }
 
                     if (_uiState.value.multiCurrencyView) {
                         recomputeMultiCurrency()
@@ -154,10 +179,7 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             val saved = preferencesManager.amount.first()
             if (saved.isNotEmpty()) {
-                _uiState.value = _uiState.value.copy(amount = saved)
-                if (saved.toDoubleOrNull() != null) {
-                    performConversion()
-                }
+                _amount.value = saved
             }
         }
     }
@@ -190,7 +212,7 @@ class ConvertViewModel @Inject constructor(
     }
 
     private fun recomputeMultiCurrency() {
-        val amount = _uiState.value.amount.toDoubleOrNull()
+        val amount = _amount.value.toDoubleOrNull()
         val source = _uiState.value.sourceCurrency
         if (amount != null && source != null) {
             performMultiCurrencyConversion(amount, source)
@@ -254,13 +276,8 @@ class ConvertViewModel @Inject constructor(
 
     fun onAmountChange(newAmount: String) {
         val filtered = newAmount.filter { it.isDigit() || it == '.' }
-        _uiState.value = _uiState.value.copy(amount = filtered, error = null)
-        viewModelScope.launch {
-            preferencesManager.saveAmount(filtered)
-        }
-        if (filtered.isNotEmpty() && filtered.toDoubleOrNull() != null) {
-            performConversion()
-        } else {
+        _amount.value = filtered
+        if (filtered.isEmpty() || filtered.toDoubleOrNull() == null) {
             _uiState.value = _uiState.value.copy(
                 conversionResult = null,
                 multiCurrencyConversions = emptyList()
@@ -274,7 +291,10 @@ class ConvertViewModel @Inject constructor(
             preferencesManager.saveSourceCurrency(currency.code)
             preferencesManager.addRecentCurrency(currency.code)
         }
-        performConversion()
+        val amount = _amount.value.toDoubleOrNull()
+        if (amount != null) {
+            performConversion(amount, currency, _uiState.value.targetCurrency ?: return)
+        }
         loadHistoricalRates()
     }
 
@@ -284,7 +304,10 @@ class ConvertViewModel @Inject constructor(
             preferencesManager.saveTargetCurrency(currency.code)
             preferencesManager.addRecentCurrency(currency.code)
         }
-        performConversion()
+        val amount = _amount.value.toDoubleOrNull()
+        if (amount != null) {
+            performConversion(amount, _uiState.value.sourceCurrency ?: return, currency)
+        }
         loadHistoricalRates()
     }
 
@@ -310,7 +333,10 @@ class ConvertViewModel @Inject constructor(
             newTarget?.let { preferencesManager.saveTargetCurrency(it.code) }
         }
 
-        performConversion()
+        val amount = _amount.value.toDoubleOrNull()
+        if (amount != null && newSource != null && newTarget != null) {
+            performConversion(amount, newSource, newTarget)
+        }
         loadHistoricalRates()
     }
 
@@ -345,32 +371,20 @@ class ConvertViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(filteredHistoricalRates = filtered)
     }
 
-    private fun performConversion() {
-        val state = _uiState.value
-        val amount = state.amount.toDoubleOrNull()
-        val source = state.sourceCurrency
-        val target = state.targetCurrency
-
-        if (amount == null || source == null || target == null) {
-            return
-        }
-
+    private fun performConversion(amount: Double, source: Currency, target: Currency) {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true)
             val result = convertCurrencyUseCase(amount, source, target)
             result.fold(
                 onSuccess = { conversion ->
                     _uiState.value = _uiState.value.copy(
                         conversionResult = conversion,
-                        error = null,
-                        isLoading = false
+                        error = null
                     )
                 },
                 onFailure = { error ->
                     _uiState.value = _uiState.value.copy(
                         conversionResult = null,
-                        error = error.message,
-                        isLoading = false
+                        error = error.message
                     )
                 }
             )
@@ -413,6 +427,13 @@ class ConvertViewModel @Inject constructor(
         val result = _uiState.value.conversionResult ?: return
         viewModelScope.launch {
             recentConversionRepository.saveConversion(result)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelScope.launch {
+            preferencesManager.saveAmount(_amount.value)
         }
     }
 }

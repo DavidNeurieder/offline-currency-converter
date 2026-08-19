@@ -50,7 +50,6 @@
     <string name="from">Von</string>
     <string name="to">Nach</string>
     <string name="result">Ergebnis</string>
-    <string name="converting">Umrechnen…</string>
     <string name="enter_amount">Geben Sie einen Betrag zum Umrechnen ein</string>
     <string name="swap_currencies">Währungen tauschen</string>
     <string name="recent_conversions">Letzte Umrechnungen</string>

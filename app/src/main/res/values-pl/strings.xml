@@ -50,7 +50,6 @@
     <string name="from">Z</string>
     <string name="to">Na</string>
     <string name="result">Wynik</string>
-    <string name="converting">Konwersja…</string>
     <string name="enter_amount">Wprowadź kwotę do konwersji</string>
     <string name="swap_currencies">Zamień waluty</string>
     <string name="recent_conversions">Ostatnie konwersje</string>

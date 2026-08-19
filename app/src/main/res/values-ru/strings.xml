@@ -50,7 +50,6 @@
     <string name="from">Из</string>
     <string name="to">В</string>
     <string name="result">Результат</string>
-    <string name="converting">Конвертация…</string>
     <string name="enter_amount">Введите сумму для конвертации</string>
     <string name="swap_currencies">Обменять валюты</string>
     <string name="recent_conversions">Недавние конвертации</string>

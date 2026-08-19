@@ -50,7 +50,6 @@
     <string name="from">에서</string>
     <string name="to">으로</string>
     <string name="result">결과</string>
-    <string name="converting">변환 중…</string>
     <string name="enter_amount">변환할 금액 입력</string>
     <string name="swap_currencies">통화 교환</string>
     <string name="recent_conversions">최근 변환</string>

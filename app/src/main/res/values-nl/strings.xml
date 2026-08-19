@@ -50,7 +50,6 @@
     <string name="from">Van</string>
     <string name="to">Naar</string>
     <string name="result">Resultaat</string>
-    <string name="converting">Omrekenen…</string>
     <string name="enter_amount">Voer een bedrag in om te converteren</string>
     <string name="swap_currencies">Valuta omwisselen</string>
     <string name="recent_conversions">Recente conversies</string>

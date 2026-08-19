@@ -50,7 +50,6 @@
     <string name="from">Da</string>
     <string name="to">A</string>
     <string name="result">Risultato</string>
-    <string name="converting">Conversione…</string>
     <string name="enter_amount">Inserisci un importo da convertire</string>
     <string name="swap_currencies">Scambia valute</string>
     <string name="recent_conversions">Conversioni recenti</string>

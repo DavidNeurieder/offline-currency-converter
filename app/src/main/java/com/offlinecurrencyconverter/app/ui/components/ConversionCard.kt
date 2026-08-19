@@ -62,7 +62,6 @@ fun ConversionCard(
     onSwap: () -> Unit,
     conversionResult: ConversionResult?,
     error: String?,
-    isLoading: Boolean,
     lastSyncTime: Long?,
     multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
     modifier: Modifier = Modifier,
@@ -164,13 +163,7 @@ fun ConversionCard(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (isLoading) {
-                Text(
-                    text = stringResource(R.string.converting),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            } else if (error != null) {
+            if (error != null) {
                 Text(
                     text = error,
                     style = MaterialTheme.typography.bodyMedium,
