@@ -90,7 +90,7 @@ fun ConvertScreen(
                     onClick = viewModel::retryLoadingCurrencies,
                     modifier = Modifier.testTag("retry_button")
                 ) {
-                    Text("Retry")
+                    Text(stringResource(R.string.retry))
                 }
             }
         }

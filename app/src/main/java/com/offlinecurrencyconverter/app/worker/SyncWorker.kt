@@ -1,7 +1,6 @@
 package com.offlinecurrencyconverter.app.worker
 
 import android.content.Context
-import android.content.Intent
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -24,11 +23,11 @@ class SyncWorker @AssistedInject constructor(
         return try {
             val syncIntervalHours = preferencesManager.syncInterval.first()
             val syncIntervalMillis = syncIntervalHours * 60 * 60 * 1000
-            
+
             val result = syncExchangeRatesUseCase(syncIntervalMillis)
             result.fold(
                 onSuccess = {
-                    updateWidget()
+                    CurrencyWidgetProvider.updateAllWidgets(applicationContext)
                     Result.success()
                 },
                 onFailure = {
@@ -46,13 +45,6 @@ class SyncWorker @AssistedInject constructor(
                 Result.failure()
             }
         }
-    }
-
-    private fun updateWidget() {
-        val intent = Intent(applicationContext, CurrencyWidgetProvider::class.java).apply {
-            action = CurrencyWidgetProvider.ACTION_UPDATE_WIDGET
-        }
-        applicationContext.sendBroadcast(intent)
     }
 
     companion object {

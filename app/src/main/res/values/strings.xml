@@ -67,9 +67,20 @@
     <string name="multi_currency_view_description">Show conversions to all favorite currencies below the result</string>
     <string name="historical_rates_chart">Historical Rate Chart</string>
     <string name="historical_rates_chart_description">Show trend chart on the convert screen</string>
+    <string name="theme">Theme</string>
+    <string name="theme_system">Follow System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
 
 
     <string name="copy_result">Copy</string>
     <string name="result_copied">Result copied</string>
+
+    <!-- Actions -->
+    <string name="retry">Retry</string>
+
+    <!-- About -->
+    <string name="github_label" translatable="false">GitHub</string>
+    <string name="flags_attribution" translatable="false">Flags from Flagpedia.net</string>
 
 </resources>

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.CloudSync
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -35,6 +36,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,6 +67,13 @@ fun SettingsScreen(
     val uiState by viewModel.uiState.collectAsState()
     val currencies by viewModel.currencies.collectAsState()
     var showFavoritesPicker by remember { mutableStateOf(false) }
+
+    LaunchedEffect(uiState.syncError, uiState.syncSuccess) {
+        if (uiState.syncError != null || uiState.syncSuccess) {
+            kotlinx.coroutines.delay(3000)
+            viewModel.clearSyncStatus()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -105,7 +114,9 @@ fun SettingsScreen(
                     onSyncIntervalChange = viewModel::onSyncIntervalChange,
                     lastSyncTime = uiState.lastSyncTime,
                     isSyncing = uiState.isSyncing,
-                    onSyncNow = viewModel::syncNow
+                    onSyncNow = viewModel::syncNow,
+                    syncError = uiState.syncError,
+                    syncSuccess = uiState.syncSuccess
                 )
             }
 
@@ -120,6 +131,13 @@ fun SettingsScreen(
                 HistoricalRatesChartSection(
                     historicalRatesChart = uiState.historicalRatesChart,
                     onHistoricalRatesChartToggle = viewModel::onHistoricalRatesChartToggle
+                )
+            }
+
+            item {
+                ThemeSection(
+                    themeMode = uiState.themeMode,
+                    onThemeModeChange = viewModel::onThemeModeChange
                 )
             }
 
@@ -154,7 +172,9 @@ private fun SyncSection(
     onSyncIntervalChange: (SyncInterval) -> Unit,
     lastSyncTime: Long?,
     isSyncing: Boolean,
-    onSyncNow: () -> Unit
+    onSyncNow: () -> Unit,
+    syncError: String? = null,
+    syncSuccess: Boolean = false
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -257,6 +277,26 @@ private fun SyncSection(
                 }
                 Text(if (isSyncing) stringResource(R.string.syncing) else stringResource(R.string.sync_now))
             }
+
+            if (syncError != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = syncError,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.testTag("sync_error")
+                )
+            }
+
+            if (syncSuccess) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.sync_completed),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.testTag("sync_success")
+                )
+            }
         }
     }
 }
@@ -334,6 +374,87 @@ private fun HistoricalRatesChartSection(
                 modifier = Modifier.testTag("historical_rates_chart_switch")
             )
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun ThemeSection(
+    themeMode: String,
+    onThemeModeChange: (String) -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.padding(8.dp))
+                Text(
+                    text = stringResource(R.string.theme),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.testTag("theme_section")
+                )
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = it }
+            ) {
+                OutlinedTextField(
+                    value = getThemeModeDisplayName(themeMode),
+                    onValueChange = {},
+                    readOnly = true,
+                    label = { Text(stringResource(R.string.theme)) },
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                        .testTag("theme_dropdown")
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    listOf("system", "light", "dark").forEach { mode ->
+                        DropdownMenuItem(
+                            text = { Text(getThemeModeDisplayName(mode)) },
+                            onClick = {
+                                onThemeModeChange(mode)
+                                expanded = false
+                            },
+                            modifier = Modifier.testTag("theme_item_${mode}")
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun getThemeModeDisplayName(mode: String): String {
+    return when (mode) {
+        "light" -> stringResource(R.string.theme_light)
+        "dark" -> stringResource(R.string.theme_dark)
+        else -> stringResource(R.string.theme_system)
     }
 }
 
@@ -467,7 +588,7 @@ private fun AboutSection() {
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    text = "GitHub",
+                    text = stringResource(R.string.github_label),
                     style = MaterialTheme.typography.bodySmall.copy(
                         textDecoration = TextDecoration.Underline
                     ),
@@ -479,7 +600,7 @@ private fun AboutSection() {
             }
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = "Flags from Flagpedia.net",
+                text = stringResource(R.string.flags_attribution),
                 style = MaterialTheme.typography.bodySmall.copy(
                     textDecoration = TextDecoration.Underline
                 ),

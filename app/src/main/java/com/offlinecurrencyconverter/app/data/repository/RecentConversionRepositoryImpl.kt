@@ -17,9 +17,12 @@ class RecentConversionRepositoryImpl @Inject constructor(
 
     override fun getRecentConversions(limit: Int): Flow<List<ConversionResult>> {
         return recentConversionDao.getRecentConversions(limit).map { entities ->
+            val allCodes = entities.flatMap { listOf(it.sourceCurrencyCode, it.targetCurrencyCode) }.distinct()
+            val currencies = currencyDao.getCurrenciesByCodes(allCodes).associateBy { it.code }
+
             entities.mapNotNull { entity ->
-                val sourceCurrency = currencyDao.getCurrencyByCode(entity.sourceCurrencyCode)
-                val targetCurrency = currencyDao.getCurrencyByCode(entity.targetCurrencyCode)
+                val sourceCurrency = currencies[entity.sourceCurrencyCode]
+                val targetCurrency = currencies[entity.targetCurrencyCode]
 
                 if (sourceCurrency != null && targetCurrency != null) {
                     ConversionResult(

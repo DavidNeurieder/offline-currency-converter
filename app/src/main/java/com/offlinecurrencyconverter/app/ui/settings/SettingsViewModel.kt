@@ -36,7 +36,8 @@ data class SettingsUiState(
     val syncError: String? = null,
     val syncSuccess: Boolean = false,
     val multiCurrencyView: Boolean = false,
-    val historicalRatesChart: Boolean = true
+    val historicalRatesChart: Boolean = true,
+    val themeMode: String = "system"
 )
 
 @HiltViewModel
@@ -59,6 +60,7 @@ class SettingsViewModel @Inject constructor(
         loadSyncInterval()
         loadMultiCurrencyView()
         loadHistoricalRatesChart()
+        loadThemeMode()
     }
 
     private fun loadLastSyncTime() {
@@ -152,6 +154,21 @@ class SettingsViewModel @Inject constructor(
     fun onFavoriteToggle(currencyCode: String, isFavorite: Boolean) {
         viewModelScope.launch {
             currencyRepository.updateFavorite(currencyCode, isFavorite)
+        }
+    }
+
+    private fun loadThemeMode() {
+        viewModelScope.launch {
+            preferencesManager.themeMode.collect { mode ->
+                _uiState.value = _uiState.value.copy(themeMode = mode)
+            }
+        }
+    }
+
+    fun onThemeModeChange(mode: String) {
+        _uiState.value = _uiState.value.copy(themeMode = mode)
+        viewModelScope.launch {
+            preferencesManager.saveThemeMode(mode)
         }
     }
 }

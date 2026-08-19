@@ -22,6 +22,9 @@ interface CurrencyDao {
     @Query("SELECT * FROM currencies WHERE code = :code")
     suspend fun getCurrencyByCode(code: String): CurrencyEntity?
 
+    @Query("SELECT * FROM currencies WHERE code IN (:codes)")
+    suspend fun getCurrenciesByCodes(codes: List<String>): List<CurrencyEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrency(currency: CurrencyEntity)
 

@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.di
 
+import com.offlinecurrencyconverter.app.BuildConfig
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,8 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient {
         val loggingInterceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                    else HttpLoggingInterceptor.Level.NONE
         }
 
         return OkHttpClient.Builder()

@@ -9,7 +9,6 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import android.content.Intent
 import com.offlinecurrencyconverter.app.widget.CurrencyWidgetProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -37,6 +36,7 @@ class PreferencesManager @Inject constructor(
         val AMOUNT = stringPreferencesKey("amount")
         val CHART_DATE_RANGE = intPreferencesKey("chart_date_range")
         val LAST_INSTALLED_VERSION = intPreferencesKey("last_installed_version")
+        val THEME_MODE = stringPreferencesKey("theme_mode")
     }
 
     companion object {
@@ -85,6 +85,10 @@ class PreferencesManager @Inject constructor(
 
     val lastInstalledVersion: Flow<Int> = dataStore.data.map { prefs ->
         prefs[Keys.LAST_INSTALLED_VERSION] ?: 0
+    }
+
+    val themeMode: Flow<String> = dataStore.data.map { prefs ->
+        prefs[Keys.THEME_MODE] ?: "system"
     }
 
     suspend fun saveSourceCurrency(code: String) {
@@ -159,10 +163,13 @@ class PreferencesManager @Inject constructor(
         }
     }
 
-    private fun updateWidget() {
-        val intent = Intent(context, CurrencyWidgetProvider::class.java).apply {
-            action = CurrencyWidgetProvider.ACTION_UPDATE_WIDGET
+    suspend fun saveThemeMode(mode: String) {
+        dataStore.edit { prefs ->
+            prefs[Keys.THEME_MODE] = mode
         }
-        context.sendBroadcast(intent)
+    }
+
+    private fun updateWidget() {
+        CurrencyWidgetProvider.updateAllWidgets(context)
     }
 }

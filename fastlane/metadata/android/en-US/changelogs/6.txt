@@ -1,0 +1,7 @@
+Theme toggle in Settings: choose between System, Light, or Dark mode.
+Sync status feedback: error and success messages shown after manual sync.
+Widget uses Hilt singleton database instead of creating new Room instances.
+Widget updates use explicit AppWidgetManager calls instead of implicit broadcasts.
+HTTP logging disabled in release builds.
+Currency picker uses full screen height.
+Removed unused CurrencyFormatter duplicate.

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.0
+
+### Added
+- Theme toggle in Settings: choose between System, Light, or Dark mode
+- Sync status feedback: error and success messages shown after manual sync
+
+### Changed
+- Widget now uses Hilt singleton database instead of creating a new Room instance on every update
+- Widget updates use explicit AppWidgetManager calls instead of implicit broadcasts
+- Widget validates broadcast sender package
+- HTTP logging disabled in release builds (was always logging BODY)
+- Currency picker sheet uses full screen height instead of fixed 500dp
+- Recent conversions use batch currency query instead of N+1 per-item queries
+
+### Fixed
+- Removed unused CurrencyFormatter duplicate
+
 ## 0.4.0
 
 ### Added

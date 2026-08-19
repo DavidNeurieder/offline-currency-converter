@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -80,7 +81,7 @@ fun CurrencyPickerBottomSheet(
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             sheetState = sheetState,
-            modifier = Modifier.height(500.dp).testTag("currency_picker_sheet")
+            modifier = Modifier.fillMaxSize().testTag("currency_picker_sheet")
         ) {
             Column(
                 modifier = Modifier

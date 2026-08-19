@@ -1,7 +1,6 @@
 package com.offlinecurrencyconverter.app
 
 import android.app.Application
-import android.content.Intent
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
@@ -71,10 +70,7 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
     }
 
     private fun updateWidget() {
-        val intent = Intent(this, CurrencyWidgetProvider::class.java).apply {
-            action = CurrencyWidgetProvider.ACTION_UPDATE_WIDGET
-        }
-        sendBroadcast(intent)
+        CurrencyWidgetProvider.updateAllWidgets(this)
     }
 
     override val workManagerConfiguration: Configuration
