@@ -71,4 +71,9 @@
     <string name="copy_result">Copy</string>
     <string name="result_copied">Result copied</string>
 
+    <string name="theme">Thème</string>
+    <string name="theme_system">Suivre le système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+    <string name="retry">Réessayer</string>
 </resources>

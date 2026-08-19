@@ -71,4 +71,9 @@
     <string name="copy_result">Copy</string>
     <string name="result_copied">Result copied</string>
 
+    <string name="theme">Motyw</string>
+    <string name="theme_system">Według systemu</string>
+    <string name="theme_light">Jasny</string>
+    <string name="theme_dark">Ciemny</string>
+    <string name="retry">Ponów</string>
 </resources>
