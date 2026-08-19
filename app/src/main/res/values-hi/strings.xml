@@ -14,7 +14,6 @@
     <string name="sync_now">अभी सिंक करें</string>
     <string name="syncing">सिंक हो रहा है…</string>
     <string name="sync_completed">सिंक्रनाइज़ेशन सफलतापूर्वक पूर्ण</string>
-    <string name="sync_failed">सिंक विफल: %1$s</string>
     <string name="never_synced">कभी सिंक नहीं हुआ</string>
     <string name="last_synced_just_now">अंतिम सिंक: अभी</string>
     <string name="last_synced_minutes">अंतिम सिंक: %1$d मिनट पहले</string>
@@ -32,7 +31,6 @@
     <string name="rate_trend">%1$s से %2$s रुझान</string>
     <string name="historical_rates_unavailable">ऐतिहासिक दरें उपलब्ध नहीं हैं</string>
     <string name="widget_description">त्वरित पहुंच के लिए आपकी चयनित मुद्रा जोड़ी दिखाता है</string>
-    <string name="close">बंद करें</string>
     <string name="chart_high">उच्च</string>
     <string name="chart_low">निम्न</string>
     <string name="chart_change">परिवर्तन</string>

@@ -14,7 +14,6 @@
     <string name="sync_now">今すぐ同期</string>
     <string name="syncing">同期中…</string>
     <string name="sync_completed">同期が完了しました</string>
-    <string name="sync_failed">同期に失敗しました: %1$s</string>
     <string name="never_synced">同期されていません</string>
     <string name="last_synced_just_now">最終同期: たった今</string>
     <string name="last_synced_minutes">最終同期: %1$d分前</string>
@@ -32,7 +31,6 @@
     <string name="rate_trend">%1$s → %2$s の推移</string>
     <string name="historical_rates_unavailable">過去の為替レートは利用できません</string>
     <string name="widget_description">選択した通貨ペアを素早く確認できるウィジェット</string>
-    <string name="close">閉じる</string>
     <string name="chart_high">高値</string>
     <string name="chart_low">安値</string>
     <string name="chart_change">変動</string>

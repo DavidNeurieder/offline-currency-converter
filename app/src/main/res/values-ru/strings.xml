@@ -14,7 +14,6 @@
     <string name="sync_now">Синхронизировать сейчас</string>
     <string name="syncing">Синхронизация…</string>
     <string name="sync_completed">Синхронизация успешно завершена</string>
-    <string name="sync_failed">Синхронизация не удалась: %1$s</string>
     <string name="never_synced">Никогда не синхронизировалось</string>
     <string name="last_synced_just_now">Последняя синхронизация: только что</string>
     <string name="last_synced_minutes">Последняя синхронизация: %1$d мин. назад</string>
@@ -32,7 +31,6 @@
     <string name="rate_trend">Тренд %1$s к %2$s</string>
     <string name="historical_rates_unavailable">Исторические курсы недоступны</string>
     <string name="widget_description">Показывает выбранную валютную пару для быстрого доступа</string>
-    <string name="close">Закрыть</string>
     <string name="chart_high">Максимум</string>
     <string name="chart_low">Минимум</string>
     <string name="chart_change">Изменение</string>

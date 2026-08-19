@@ -14,7 +14,6 @@
     <string name="sync_now">مزامنة الآن</string>
     <string name="syncing">جارٍ المزامنة…</string>
     <string name="sync_completed">تمت المزامنة بنجاح</string>
-    <string name="sync_failed">فشلت المزامنة: %1$s</string>
     <string name="never_synced">لم تتم المزامنة</string>
     <string name="last_synced_just_now">آخر مزامنة: الآن</string>
     <string name="last_synced_minutes">آخر مزامنة: منذ %1$d دقيقة</string>
@@ -32,7 +31,6 @@
     <string name="rate_trend">اتجاه %1$s إلى %2$s</string>
     <string name="historical_rates_unavailable">البيانات التاريخية غير متاحة</string>
     <string name="widget_description">يعرض زوج العملات المحدد للوصول السريع</string>
-    <string name="close">إغلاق</string>
     <string name="chart_high">الأعلى</string>
     <string name="chart_low">الأدنى</string>
     <string name="chart_change">التغيير</string>

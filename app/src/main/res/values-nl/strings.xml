@@ -14,7 +14,6 @@
     <string name="sync_now">Nu synchroniseren</string>
     <string name="syncing">Synchroniseren…</string>
     <string name="sync_completed">Synchronisatie succesvol voltooid</string>
-    <string name="sync_failed">Synchronisatie mislukt: %1$s</string>
     <string name="never_synced">Nooit gesynchroniseerd</string>
     <string name="last_synced_just_now">Laatst gesynchroniseerd: Zojuist</string>
     <string name="last_synced_minutes">Laatst gesynchroniseerd: %1$d min geleden</string>
@@ -32,7 +31,6 @@
     <string name="rate_trend">%1$s naar %2$s trend</string>
     <string name="historical_rates_unavailable">Historische koersen niet beschikbaar</string>
     <string name="widget_description">Toont je geselecteerde valutapaar voor snelle toegang</string>
-    <string name="close">Sluiten</string>
     <string name="chart_high">Hoog</string>
     <string name="chart_low">Laag</string>
     <string name="chart_change">Verandering</string>

@@ -133,7 +133,7 @@ class ConvertViewModel @Inject constructor(
                 onSuccess = {
                     _uiState.value = _uiState.value.copy(isCurrenciesLoading = false)
                 },
-                onFailure = { error ->
+                onFailure = { _ ->
                     _uiState.value = _uiState.value.copy(
                         isCurrenciesLoading = false,
                         currenciesError = "Internet connection is required on first launch to download currency data"

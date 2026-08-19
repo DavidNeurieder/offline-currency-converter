@@ -14,7 +14,6 @@
     <string name="sync_now">Sync Now</string>
     <string name="syncing">Syncing…</string>
     <string name="sync_completed">Sync completed successfully</string>
-    <string name="sync_failed">Sync failed: %1$s</string>
     <string name="never_synced">Never synced</string>
     <string name="last_synced_just_now">Last synced: Just now</string>
     <string name="last_synced_minutes">Last synced: %1$d min ago</string>
@@ -57,7 +56,6 @@
     <string name="rate_trend">%1$s to %2$s trend</string>
     <string name="historical_rates_unavailable">Historical rates unavailable</string>
     <string name="widget_description">Shows your selected currency pair for quick access</string>
-    <string name="close">Close</string>
     <string name="chart_high">High</string>
     <string name="chart_low">Low</string>
     <string name="chart_change">Change</string>

@@ -14,7 +14,6 @@
     <string name="sync_now">Sincronizar agora</string>
     <string name="syncing">Sincronizando…</string>
     <string name="sync_completed">Sincronização concluída com sucesso</string>
-    <string name="sync_failed">Sincronização falhou: %1$s</string>
     <string name="never_synced">Nunca sincronizado</string>
     <string name="last_synced_just_now">Última sincronização: Agora</string>
     <string name="last_synced_minutes">Última sincronização: Há %1$d min</string>
@@ -32,7 +31,6 @@
     <string name="rate_trend">Tendência de %1$s para %2$s</string>
     <string name="historical_rates_unavailable">Taxas históricas indisponíveis</string>
     <string name="widget_description">Mostra o par de moedas selecionado para acesso rápido</string>
-    <string name="close">Fechar</string>
     <string name="chart_high">Máximo</string>
     <string name="chart_low">Mínimo</string>
     <string name="chart_change">Variação</string>

@@ -57,8 +57,6 @@ fun ConversionCard(
     onAmountChange: (String) -> Unit,
     sourceCurrency: Currency?,
     targetCurrency: Currency?,
-    currencies: List<Currency>,
-    recentCurrencies: List<Currency>,
     onSourceCurrencyClick: () -> Unit,
     onTargetCurrencyClick: () -> Unit,
     onSwap: () -> Unit,
@@ -67,7 +65,6 @@ fun ConversionCard(
     isLoading: Boolean,
     lastSyncTime: Long?,
     multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
-    onMultiCurrencyTargetClick: (Currency) -> Unit = {},
     modifier: Modifier = Modifier,
     detectionInfo: String? = null
 ) {

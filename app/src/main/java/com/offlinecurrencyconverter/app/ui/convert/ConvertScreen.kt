@@ -149,8 +149,6 @@ fun ConvertScreen(
                         onAmountChange = viewModel::onAmountChange,
                         sourceCurrency = uiState.sourceCurrency,
                         targetCurrency = uiState.targetCurrency,
-                        currencies = currencies,
-                        recentCurrencies = uiState.recentCurrencies,
                         onSourceCurrencyClick = { showSourceCurrencyPicker = true },
                         onTargetCurrencyClick = { showTargetCurrencyPicker = true },
                         onSwap = viewModel::swapCurrencies,
@@ -158,10 +156,7 @@ fun ConvertScreen(
                         error = uiState.error,
                         isLoading = uiState.isLoading,
                         lastSyncTime = uiState.lastSyncTime,
-                        multiCurrencyConversions = uiState.multiCurrencyConversions,
-                        onMultiCurrencyTargetClick = { currency ->
-                            viewModel.onTargetCurrencyChange(currency)
-                        }
+                        multiCurrencyConversions = uiState.multiCurrencyConversions
                     )
                 }
 
