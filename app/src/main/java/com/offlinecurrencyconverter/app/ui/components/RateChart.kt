@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -259,8 +260,8 @@ fun RateChartSummary(
                 color = MaterialTheme.colorScheme.onSurface
             )
             Text(
-                text = if (change >= 0) "+${String.format(Locale.getDefault(), "%.2f", changePercent)}%"
-                else String.format(Locale.getDefault(), "%.2f", changePercent) + "%",
+                text = if (change >= 0) "+${String.format(LocalLocale.current.platformLocale, "%.2f", changePercent)}%"
+                else String.format(LocalLocale.current.platformLocale, "%.2f", changePercent) + "%",
                 style = MaterialTheme.typography.bodySmall,
                 color = trendColor,
                 fontWeight = FontWeight.SemiBold
@@ -304,7 +305,7 @@ fun RateChartDetail(
     changePercent: Double,
     modifier: Modifier = Modifier
 ) {
-    val numberFormat = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
+    val numberFormat = NumberFormat.getNumberInstance(LocalLocale.current.platformLocale).apply {
         maximumFractionDigits = 4
     }
     val trendColor = if (changePercent >= 0) INCREASE_COLOR else DECREASE_COLOR
@@ -372,7 +373,7 @@ fun RateChartDetail(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "${if (changePercent >= 0) "+" else ""}${String.format(Locale.getDefault(), "%.2f", changePercent)}%",
+                    text = "${if (changePercent >= 0) "+" else ""}${String.format(LocalLocale.current.platformLocale, "%.2f", changePercent)}%",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = trendColor

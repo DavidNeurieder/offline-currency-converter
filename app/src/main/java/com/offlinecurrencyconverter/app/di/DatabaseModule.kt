@@ -28,7 +28,7 @@ object DatabaseModule {
         )
             .addMigrations(CurrencyDatabase.MIGRATION_4_5)
             .addMigrations(CurrencyDatabase.MIGRATION_5_6)
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(false)
             .build()
     }
 

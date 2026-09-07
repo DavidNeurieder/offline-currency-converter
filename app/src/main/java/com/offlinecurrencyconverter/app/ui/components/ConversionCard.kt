@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -342,7 +343,7 @@ private fun formatLastSyncTimeComposable(timestamp: Long?): String {
                 diff < 60_000 -> stringResource(R.string.last_synced_just_now)
                 diff < 3600_000 -> stringResource(R.string.last_synced_minutes, (diff / 60_000).toInt())
                 else -> {
-                    val sdf = java.text.SimpleDateFormat("MMM d, HH:mm", java.util.Locale.getDefault())
+                    val sdf = java.text.SimpleDateFormat("MMM d, HH:mm", LocalLocale.current.platformLocale)
                     stringResource(R.string.last_synced_date, sdf.format(java.util.Date(timestamp)))
                 }
             }
