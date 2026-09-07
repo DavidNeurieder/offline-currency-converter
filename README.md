@@ -1,6 +1,6 @@
 # Offline Currency Converter
 
-**Version:** 0.4.0
+**Version:** 0.6.0
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -17,7 +17,7 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **100% offline** — no internet required after initial sync
 - **160+ currencies** — all ECB reference rates
 - **Favorites** — star your most-used currencies for quick access
-- **Multi-currency view** — see conversions to all your favorites at once
+- **Multi-currency view** — see conversions to all your favorites at once; favorites stay visible when the amount is cleared
 - **Rate trend charts** — 90-day historical charts with gradient fill, cubic curves, and trend colors
 - **Interactive charts** — long-press for crosshair tooltip with date and rate
 - **Date range tabs** — switch between 7D, 30D, and 90D views (persisted across restarts)
@@ -69,13 +69,13 @@ No data leaves your device during conversion; only rate syncs contact the Frankf
 ## Tech Stack
 
 - **Language:** Kotlin
-- **UI:** Jetpack Compose with Material 3
+- **UI:** Jetpack Compose (BOM 2026.06.01) with Material 3
 - **Architecture:** MVVM + Clean Architecture
 - **DI:** Hilt
 - **Database:** Room
 - **Networking:** Retrofit + OkHttp
 - **Background:** WorkManager
-- **Build:** Gradle (Kotlin DSL)
+- **Build:** Gradle 9.6 + Android Gradle Plugin 9.4 (Kotlin DSL, version catalog)
 
 ## License
 

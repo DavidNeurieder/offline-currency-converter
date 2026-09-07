@@ -1,0 +1,5 @@
+Version 0.6.0:
+- Clearing the amount keeps your favorite currencies visible (shows a dash until you enter a new amount)
+- Updated build system: Gradle 9.6, Android Gradle Plugin 9.4, target SDK 37
+- Upgraded Compose, Room, Hilt, WorkManager, DataStore, Retrofit, OkHttp, and coroutines
+- Formatting for charts, conversions, and last-sync time now respects the device locale

@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.6.0
+
+### Changed
+- Upgraded build system: Gradle 9.6 and Android Gradle Plugin 9.4 (Kotlin built into AGP)
+- Migrated dependencies to a Gradle version catalog
+- Raised compile and target SDK to 37 (Android 16)
+- Upgraded Compose to BOM 2026.06.01, lifecycle, navigation, activity-compose, Room, Hilt, WorkManager, DataStore, coroutines, Retrofit 3 and OkHttp 5.5, plus all test dependencies
+- Fixed locale-aware formatting: chart labels, conversion results, and last-sync time now respect the device locale
+
+### Fixed
+- Clearing the amount no longer hides the favorites list — favorite rows stay visible with a dash placeholder until you enter a new amount
+
 ## 0.5.0
 
 ### Added

@@ -2,9 +2,11 @@ package com.offlinecurrencyconverter.app.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -50,6 +52,8 @@ import com.offlinecurrencyconverter.app.domain.model.ConversionResult
 import com.offlinecurrencyconverter.app.domain.model.Currency
 import com.offlinecurrencyconverter.app.ui.convert.MultiCurrencyResult
 import java.text.DecimalFormat
+
+private val ResultAreaReservedHeight = 116.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,74 +168,81 @@ fun ConversionCard(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            if (error != null) {
-                Text(
-                    text = error,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.error,
-                    textAlign = TextAlign.Center
-                )
-            } else if (conversionResult != null) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .defaultMinSize(minHeight = ResultAreaReservedHeight),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                if (error != null) {
                     Text(
-                        text = stringResource(R.string.result),
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = error,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                        textAlign = TextAlign.Center
                     )
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
+                } else if (conversionResult != null) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Spacer(modifier = Modifier.weight(1f))
                         Text(
-                            text = "${conversionResult.targetCurrency.symbol}${
-                                DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
-                            }",
-                            style = MaterialTheme.typography.displaySmall,
-                            fontWeight = FontWeight.Bold,
-                            color = MaterialTheme.colorScheme.primary
+                            text = stringResource(R.string.result),
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Spacer(modifier = Modifier.weight(1f))
-                        val clipboardManager = LocalClipboardManager.current
-                        val context = LocalContext.current
-                        IconButton(
-                            onClick = {
-                                val copyText = "${conversionResult.sourceCurrency.symbol}${
-                                    DecimalFormat("#,##0.00").format(conversionResult.sourceAmount)
-                                } ${conversionResult.sourceCurrency.code} = ${conversionResult.targetCurrency.symbol}${
-                                    DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
-                                } ${conversionResult.targetCurrency.code} (1 ${conversionResult.sourceCurrency.code} = ${
-                                    DecimalFormat("#,##0.####").format(conversionResult.rate)
-                                } ${conversionResult.targetCurrency.code})"
-                                clipboardManager.setText(AnnotatedString(copyText))
-                                Toast.makeText(context, R.string.result_copied, Toast.LENGTH_SHORT).show()
-                            },
-                            modifier = Modifier.testTag("copy_result_button")
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.ContentCopy,
-                                contentDescription = stringResource(R.string.copy_result),
-                                modifier = Modifier.size(18.dp)
+                            Spacer(modifier = Modifier.weight(1f))
+                            Text(
+                                text = "${conversionResult.targetCurrency.symbol}${
+                                    DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
+                                }",
+                                style = MaterialTheme.typography.displaySmall,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
                             )
+                            Spacer(modifier = Modifier.weight(1f))
+                            val clipboardManager = LocalClipboardManager.current
+                            val context = LocalContext.current
+                            IconButton(
+                                onClick = {
+                                    val copyText = "${conversionResult.sourceCurrency.symbol}${
+                                        DecimalFormat("#,##0.00").format(conversionResult.sourceAmount)
+                                    } ${conversionResult.sourceCurrency.code} = ${conversionResult.targetCurrency.symbol}${
+                                        DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
+                                    } ${conversionResult.targetCurrency.code} (1 ${conversionResult.sourceCurrency.code} = ${
+                                        DecimalFormat("#,##0.####").format(conversionResult.rate)
+                                    } ${conversionResult.targetCurrency.code})"
+                                    clipboardManager.setText(AnnotatedString(copyText))
+                                    Toast.makeText(context, R.string.result_copied, Toast.LENGTH_SHORT).show()
+                                },
+                                modifier = Modifier.testTag("copy_result_button")
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.ContentCopy,
+                                    contentDescription = stringResource(R.string.copy_result),
+                                    modifier = Modifier.size(18.dp)
+                                )
+                            }
                         }
+                        Text(
+                            text = "1 ${conversionResult.sourceCurrency.code} = ${
+                                DecimalFormat("#,##0.####").format(conversionResult.rate)
+                            } ${conversionResult.targetCurrency.code}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
+                } else {
                     Text(
-                        text = "1 ${conversionResult.sourceCurrency.code} = ${
-                            DecimalFormat("#,##0.####").format(conversionResult.rate)
-                        } ${conversionResult.targetCurrency.code}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = stringResource(R.string.enter_amount),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.testTag("placeholder_text")
                     )
                 }
-            } else {
-                Text(
-                    text = stringResource(R.string.enter_amount),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.testTag("placeholder_text")
-                )
             }
 
             if (multiCurrencyConversions.isNotEmpty()) {
