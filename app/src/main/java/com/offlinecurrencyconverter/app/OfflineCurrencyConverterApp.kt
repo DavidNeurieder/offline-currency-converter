@@ -5,15 +5,13 @@ import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
-import com.offlinecurrencyconverter.app.data.PreferencesManager
+import com.offlinecurrencyconverter.app.domain.usecase.InstallAutoSyncUseCase
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
-import com.offlinecurrencyconverter.app.domain.usecase.SyncHistoricalRatesUseCase
 import com.offlinecurrencyconverter.app.widget.CurrencyWidgetProvider
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,10 +32,7 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
     lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
 
     @Inject
-    lateinit var syncHistoricalRatesUseCase: SyncHistoricalRatesUseCase
-
-    @Inject
-    lateinit var preferencesManager: PreferencesManager
+    lateinit var installAutoSyncUseCase: InstallAutoSyncUseCase
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
@@ -53,31 +48,13 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
         applicationScope.launch {
             try {
                 currencyInitializer.initializeIfNeeded()
-
-                val currentVersion = BuildConfig.VERSION_CODE
-                val lastVersion = preferencesManager.lastInstalledVersion.first()
-                val isFirstInstall = lastVersion == 0
-                val isUpdate = !isFirstInstall && currentVersion > lastVersion
-
-                if (isFirstInstall || isUpdate) {
-                    val syncIntervalHours = preferencesManager.syncInterval.first()
-                    if (syncIntervalHours > 0L) {
-                        val latestSync = syncExchangeRatesUseCase.forceSync()
-                        if (latestSync.isSuccess) {
-                            syncHistoricalRatesUseCase()
-                        }
-                        updateWidget()
-                    }
-                    preferencesManager.saveLastInstalledVersion(currentVersion)
+                installAutoSyncUseCase(BuildConfig.VERSION_CODE) {
+                    CurrencyWidgetProvider.updateAllWidgets(this@OfflineCurrencyConverterApp)
                 }
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to initialize currencies", e)
             }
         }
-    }
-
-    private fun updateWidget() {
-        CurrencyWidgetProvider.updateAllWidgets(this)
     }
 
     override val workManagerConfiguration: Configuration
