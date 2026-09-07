@@ -177,21 +177,23 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 }
 
             val currentTime = System.currentTimeMillis()
-            val rateEntities = body.map { item ->
-                ExchangeRateEntity(
-                    baseCurrency = item.base,
-                    targetCurrency = item.quote,
-                    rate = item.rate,
+            val rateEntities = body
+                .filterNot { it.quote == baseCurrency }
+                .map { item ->
+                    ExchangeRateEntity(
+                        baseCurrency = item.base,
+                        targetCurrency = item.quote,
+                        rate = item.rate,
+                        lastUpdated = currentTime,
+                        isOfflineAvailable = true
+                    )
+                } + ExchangeRateEntity(
+                    baseCurrency = baseCurrency,
+                    targetCurrency = baseCurrency,
+                    rate = 1.0,
                     lastUpdated = currentTime,
                     isOfflineAvailable = true
                 )
-            } + ExchangeRateEntity(
-                baseCurrency = baseCurrency,
-                targetCurrency = baseCurrency,
-                rate = 1.0,
-                lastUpdated = currentTime,
-                isOfflineAvailable = true
-            )
 
             exchangeRateDao.replaceAll(rateEntities)
             Log.d(
@@ -244,14 +246,16 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                     return Result.failure(error)
                 }
 
-            val entities = body.map { item ->
-                HistoricalRateEntity(
-                    baseCurrency = item.base,
-                    targetCurrency = item.quote,
-                    rate = item.rate,
-                    date = item.date
-                )
-            }
+            val entities = body
+                .filterNot { it.quote == BASE_CURRENCY }
+                .map { item ->
+                    HistoricalRateEntity(
+                        baseCurrency = item.base,
+                        targetCurrency = item.quote,
+                        rate = item.rate,
+                        date = item.date
+                    )
+                }
             historicalRateDao.replaceAll(entities)
             Log.d(
                 TAG,

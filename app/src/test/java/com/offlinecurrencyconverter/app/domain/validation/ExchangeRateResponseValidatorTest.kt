@@ -177,8 +177,27 @@ class ExchangeRateResponseValidatorTest {
     }
 
     @Test
-    fun `validateLatest rejects self pair`() = runTest {
-        val result = validator().validateLatest(listOf(latestItem(quote = "EUR")), "EUR", emptyList())
+    fun `validateLatest accepts self-row for requested base`() = runTest {
+        val rates = listOf(
+            latestItem("EUR", "USD"),
+            latestItem("EUR", "GBP"),
+            latestItem("EUR", "EUR", rate = 1.0)
+        )
+
+        val result = validator().validateLatest(rates, "EUR", emptyList())
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `validateLatest rejects duplicate self-row`() = runTest {
+        val rates = listOf(
+            latestItem("EUR", "USD"),
+            latestItem("EUR", "EUR", rate = 1.0),
+            latestItem("EUR", "EUR", rate = 1.0)
+        )
+
+        val result = validator().validateLatest(rates, "EUR", emptyList())
 
         assertTrue(result.isFailure)
         assertEquals(
@@ -396,5 +415,15 @@ class ExchangeRateResponseValidatorTest {
             SyncError.InvalidResponse,
             (result.exceptionOrNull() as SyncErrorException).syncError
         )
+    }
+
+    @Test
+    fun `validateHistorical accepts self-row for requested base`() = runTest {
+        val items = historicalItems().toMutableList()
+        items.add(ExchangeRateItem("2024-01-02", "EUR", "EUR", 1.0))
+
+        val result = validator().validateHistorical(items, "EUR", "2024-01-01", "2024-01-31")
+
+        assertTrue(result.isSuccess)
     }
 }

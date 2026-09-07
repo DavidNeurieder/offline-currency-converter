@@ -35,7 +35,6 @@ class ExchangeRateResponseValidator @Inject constructor(
         val invalidItems = rates.filterNot { item ->
             item.base == requestedBase &&
                 item.quote in supportedCurrencies &&
-                item.quote != item.base &&
                 item.rate.isValidExchangeRate()
         }
         if (invalidItems.isNotEmpty()) {
@@ -87,7 +86,6 @@ class ExchangeRateResponseValidator @Inject constructor(
         val validCount = rates.count { item ->
             item.base == requestedBase &&
                 item.quote in supportedCurrencies &&
-                item.quote != item.base &&
                 item.rate.isValidExchangeRate() &&
                 isWithinWindow(item.date, start, end)
         }

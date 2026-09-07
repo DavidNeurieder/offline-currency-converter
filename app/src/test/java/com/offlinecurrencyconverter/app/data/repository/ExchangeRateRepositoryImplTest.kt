@@ -213,7 +213,8 @@ class ExchangeRateRepositoryImplTest {
     fun `fetchLatestRates stores rates correctly`() = runTest {
         val rateItems = listOf(
             ExchangeRateItem("2024-01-15", "EUR", "USD", 1.09),
-            ExchangeRateItem("2024-01-15", "EUR", "GBP", 0.8562)
+            ExchangeRateItem("2024-01-15", "EUR", "GBP", 0.8562),
+            ExchangeRateItem("2024-01-15", "EUR", "EUR", 1.0)
         )
         coEvery { frankfurterApi.getRates("EUR", null) } returns Response.success(rateItems)
 
@@ -223,6 +224,7 @@ class ExchangeRateRepositoryImplTest {
         coVerify { exchangeRateDao.replaceAll(match { rates ->
             rates.any { it.baseCurrency == "EUR" && it.targetCurrency == "USD" && it.rate == 1.09 } &&
             rates.any { it.baseCurrency == "EUR" && it.targetCurrency == "GBP" && it.rate == 0.8562 } &&
+            rates.count { it.targetCurrency == "EUR" } == 1 &&
             rates.any { it.baseCurrency == "EUR" && it.targetCurrency == "EUR" && it.rate == 1.0 }
         }) }
     }
@@ -306,7 +308,8 @@ class ExchangeRateRepositoryImplTest {
         val (today, yesterday) = inWindowDates()
         val rateItems = listOf(
             ExchangeRateItem(yesterday, "EUR", "USD", 1.09),
-            ExchangeRateItem(today, "EUR", "USD", 1.08)
+            ExchangeRateItem(today, "EUR", "USD", 1.08),
+            ExchangeRateItem(today, "EUR", "EUR", 1.0)
         )
         coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
 
@@ -315,6 +318,7 @@ class ExchangeRateRepositoryImplTest {
         assertTrue(result.isSuccess)
         coVerify { historicalRateDao.replaceAll(match { entities ->
             entities.size == 2 &&
+            entities.none { it.targetCurrency == "EUR" } &&
             entities[0].baseCurrency == "EUR" &&
             entities[0].targetCurrency == "USD" &&
             entities[0].rate == 1.09
