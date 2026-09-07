@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -52,6 +53,7 @@ class ConvertViewModelTest {
 
         every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currencies)
         every { recentConversionRepository.getRecentConversions(any()) } returns flowOf(emptyList())
+        every { exchangeRateRepository.getOfflineAvailableRates() } returns flowOf(emptyList())
         coEvery { exchangeRateRepository.getLastUpdateTime() } returns System.currentTimeMillis()
         coEvery { convertCurrencyUseCase(any(), any(), any()) } returns Result.success(
             TestFixtures.createConversionResult()
@@ -325,5 +327,27 @@ class ConvertViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertTrue(vm.uiState.value.multiCurrencyConversions.isEmpty())
+    }
+
+    @Test
+    fun `lastSyncTime refreshes when rates arrive after initial load`() = runTest {
+        every { exchangeRateRepository.getOfflineAvailableRates() } returns flow {
+            emit(emptyList())
+            emit(listOf(TestFixtures.createExchangeRate("EUR", "USD", 1.09)))
+        }
+        coEvery { exchangeRateRepository.getLastUpdateTime() } returnsMany listOf(null, 1788784013136L)
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(1788784013136L, vm.uiState.value.lastSyncTime)
     }
 }

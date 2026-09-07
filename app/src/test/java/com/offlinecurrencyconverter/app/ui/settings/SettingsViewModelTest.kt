@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.ui.settings
 
+import com.offlinecurrencyconverter.app.TestFixtures
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
@@ -13,6 +14,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -51,6 +53,7 @@ class SettingsViewModelTest {
         currencyRepository = mockk(relaxed = true)
 
         coEvery { exchangeRateRepository.getLastUpdateTime() } returns null
+        every { exchangeRateRepository.getOfflineAvailableRates() } returns flowOf(emptyList())
         every { preferencesManager.syncInterval } returns flowOf(24L)
         coEvery { syncExchangeRatesUseCase.forceSync() } returns Result.success(Unit)
 
@@ -180,5 +183,26 @@ class SettingsViewModelTest {
     fun `MANUAL_ONLY interval has isManualOnly true`() = runTest {
         assertTrue(SyncInterval.MANUAL_ONLY.isManualOnly)
         assertFalse(SyncInterval.TWENTY_FOUR_HOURS.isManualOnly)
+    }
+
+    @Test
+    fun `lastSyncTime refreshes when rates arrive after initial load`() = runTest {
+        every { exchangeRateRepository.getOfflineAvailableRates() } returns flow {
+            emit(emptyList())
+            emit(listOf(TestFixtures.createExchangeRate("EUR", "USD", 1.09)))
+        }
+        coEvery { exchangeRateRepository.getLastUpdateTime() } returnsMany listOf(null, 1788784013136L)
+
+        val vm = SettingsViewModel(
+            exchangeRateRepository,
+            syncExchangeRatesUseCase,
+            syncHistoricalRatesUseCase,
+            preferencesManager,
+            syncScheduler,
+            currencyRepository
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(1788784013136L, vm.uiState.value.lastSyncTime)
     }
 }

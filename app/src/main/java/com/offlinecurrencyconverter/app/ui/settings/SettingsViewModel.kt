@@ -59,6 +59,7 @@ class SettingsViewModel @Inject constructor(
 
     init {
         loadLastSyncTime()
+        observeRatesForLastSyncTime()
         loadSyncInterval()
         loadMultiCurrencyView()
         loadHistoricalRatesChart()
@@ -69,6 +70,17 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             val lastUpdate = exchangeRateRepository.getLastUpdateTime()
             _uiState.value = _uiState.value.copy(lastSyncTime = lastUpdate)
+        }
+    }
+
+    private fun observeRatesForLastSyncTime() {
+        viewModelScope.launch {
+            exchangeRateRepository.getOfflineAvailableRates().collect { rates ->
+                if (rates.isNotEmpty()) {
+                    val lastUpdate = exchangeRateRepository.getLastUpdateTime()
+                    _uiState.value = _uiState.value.copy(lastSyncTime = lastUpdate)
+                }
+            }
         }
     }
 

@@ -79,6 +79,7 @@ class ConvertViewModel @Inject constructor(
     init {
         loadSavedCurrencies()
         loadLastSyncTime()
+        observeRatesForLastSyncTime()
         loadRecentCurrencies()
         retryLoadingCurrencies()
         loadInitialHistoricalRates()
@@ -172,6 +173,17 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             val lastSync = exchangeRateRepository.getLastUpdateTime()
             _uiState.value = _uiState.value.copy(lastSyncTime = lastSync)
+        }
+    }
+
+    private fun observeRatesForLastSyncTime() {
+        viewModelScope.launch {
+            exchangeRateRepository.getOfflineAvailableRates().collect { rates ->
+                if (rates.isNotEmpty()) {
+                    val lastSync = exchangeRateRepository.getLastUpdateTime()
+                    _uiState.value = _uiState.value.copy(lastSyncTime = lastSync)
+                }
+            }
         }
     }
 
