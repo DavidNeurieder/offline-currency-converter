@@ -5,7 +5,9 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.offlinecurrencyconverter.app.MainActivity
 import org.junit.Rule
@@ -131,5 +133,27 @@ class ConvertScreenUiTest {
 
         composeTestRule.onNodeWithTag("multi_currency_section")
             .assertExists()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_011_clearInput_favoritesStayWithDash() {
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextInput("100")
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("multi_currency_section")
+            .assertExists()
+
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextClearance()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("multi_currency_section")
+            .assertExists()
+        composeTestRule.onNodeWithTag("multi_result_EUR")
+            .assertTextEquals("-")
     }
 }

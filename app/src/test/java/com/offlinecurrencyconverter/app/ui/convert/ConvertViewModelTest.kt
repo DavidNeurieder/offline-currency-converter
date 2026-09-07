@@ -274,7 +274,43 @@ class ConvertViewModelTest {
         assertTrue(conversions.any { it.currency.code == "JPY" })
 
         val eurResult = conversions.find { it.currency.code == "EUR" }!!
-        assertEquals(92.0, eurResult.convertedAmount, 0.01)
+        assertEquals(92.0, eurResult.convertedAmount ?: 0.0, 0.01)
+    }
+
+    @Test
+    fun `clearing amount keeps favorites with null converted amounts`() = runTest {
+        every { preferencesManager.multiCurrencyView } returns flowOf(true)
+        every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currenciesWithFavorites)
+        coEvery { exchangeRateRepository.getAllRatesForCurrency("USD") } returns listOf(
+            TestFixtures.createExchangeRate("USD", "EUR", 0.92),
+            TestFixtures.createExchangeRate("USD", "GBP", 0.79),
+            TestFixtures.createExchangeRate("USD", "JPY", 149.50)
+        )
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        vm.onAmountChange("100")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(vm.uiState.value.multiCurrencyConversions.isNotEmpty())
+
+        vm.onAmountChange("")
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val conversions = vm.uiState.value.multiCurrencyConversions
+        assertTrue(conversions.isNotEmpty())
+        assertEquals(listOf("EUR", "GBP", "JPY"), conversions.map { it.currency.code })
+        assertTrue(conversions.all { it.convertedAmount == null })
+        assertNull(vm.uiState.value.conversionResult)
     }
 
     @Test

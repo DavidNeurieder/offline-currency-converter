@@ -28,7 +28,7 @@ import javax.inject.Inject
 data class MultiCurrencyResult(
     val currency: Currency,
     val rate: Double,
-    val convertedAmount: Double
+    val convertedAmount: Double?
 )
 
 data class ConvertUiState(
@@ -98,10 +98,8 @@ class ConvertViewModel @Inject constructor(
                 if (amount.isNotEmpty() && amount.toDoubleOrNull() != null) {
                     performConversion(amount.toDouble(), source, target)
                 } else {
-                    _uiState.value = _uiState.value.copy(
-                        conversionResult = null,
-                        multiCurrencyConversions = emptyList()
-                    )
+                    _uiState.value = _uiState.value.copy(conversionResult = null)
+                    recomputeMultiCurrency()
                 }
             }
         }
@@ -224,10 +222,9 @@ class ConvertViewModel @Inject constructor(
     }
 
     private fun recomputeMultiCurrency() {
-        val amount = _amount.value.toDoubleOrNull()
         val source = _uiState.value.sourceCurrency
-        if (amount != null && source != null) {
-            performMultiCurrencyConversion(amount, source)
+        if (_uiState.value.multiCurrencyView && source != null) {
+            performMultiCurrencyConversion(_amount.value.toDoubleOrNull(), source)
         }
     }
 
@@ -290,10 +287,8 @@ class ConvertViewModel @Inject constructor(
         val filtered = newAmount.filter { it.isDigit() || it == '.' }
         _amount.value = filtered
         if (filtered.isEmpty() || filtered.toDoubleOrNull() == null) {
-            _uiState.value = _uiState.value.copy(
-                conversionResult = null,
-                multiCurrencyConversions = emptyList()
-            )
+            _uiState.value = _uiState.value.copy(conversionResult = null)
+            recomputeMultiCurrency()
         }
     }
 
@@ -307,6 +302,7 @@ class ConvertViewModel @Inject constructor(
         if (amount != null) {
             performConversion(amount, currency, _uiState.value.targetCurrency ?: return)
         }
+        recomputeMultiCurrency()
         loadHistoricalRates()
     }
 
@@ -320,6 +316,7 @@ class ConvertViewModel @Inject constructor(
         if (amount != null) {
             performConversion(amount, _uiState.value.sourceCurrency ?: return, currency)
         }
+        recomputeMultiCurrency()
         loadHistoricalRates()
     }
 
@@ -349,6 +346,7 @@ class ConvertViewModel @Inject constructor(
         if (amount != null && newSource != null && newTarget != null) {
             performConversion(amount, newSource, newTarget)
         }
+        recomputeMultiCurrency()
         loadHistoricalRates()
     }
 
@@ -406,7 +404,7 @@ class ConvertViewModel @Inject constructor(
         }
     }
 
-    private fun performMultiCurrencyConversion(amount: Double, source: Currency) {
+    private fun performMultiCurrencyConversion(amount: Double?, source: Currency) {
         viewModelScope.launch {
             val allRates = exchangeRateRepository.getAllRatesForCurrency(source.code)
             if (allRates.isEmpty()) {
@@ -427,7 +425,7 @@ class ConvertViewModel @Inject constructor(
                 MultiCurrencyResult(
                     currency = currency,
                     rate = rate,
-                    convertedAmount = amount * rate
+                    convertedAmount = amount?.times(rate)
                 )
             }
 

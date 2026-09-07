@@ -282,9 +282,11 @@ fun ConversionCard(
                             )
                         }
                         Text(
-                            text = "${result.currency.symbol}${
-                                DecimalFormat("#,##0.00").format(result.convertedAmount)
-                            }",
+                            text = result.convertedAmount?.let {
+                                "${result.currency.symbol}${
+                                    DecimalFormat("#,##0.00").format(it)
+                                }"
+                            } ?: "-",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             modifier = Modifier.testTag("multi_result_${result.currency.code}")
