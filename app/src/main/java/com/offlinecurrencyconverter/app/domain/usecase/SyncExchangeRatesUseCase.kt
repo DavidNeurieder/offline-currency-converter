@@ -1,42 +1,38 @@
 package com.offlinecurrencyconverter.app.domain.usecase
 
-import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class SyncExchangeRatesUseCase @Inject constructor(
-    private val exchangeRateRepository: ExchangeRateRepository,
-    private val preferencesManager: PreferencesManager
+    private val exchangeRateRepository: ExchangeRateRepository
 ) {
     suspend operator fun invoke(syncIntervalMillis: Long): Result<Unit> {
         val lastUpdateTime = exchangeRateRepository.getLastUpdateTime()
-        
-        if (lastUpdateTime != null) {
-            val timeSinceLastSync = System.currentTimeMillis() - lastUpdateTime
-            if (timeSinceLastSync < syncIntervalMillis) {
-                return Result.success(Unit)
-            }
+
+        if (!isCacheStale(lastUpdateTime, syncIntervalMillis)) {
+            return Result.success(Unit)
         }
 
-        val latestResult = exchangeRateRepository.fetchLatestRates(
-            baseCurrency = "EUR",
+        return exchangeRateRepository.fetchLatestRates(
+            baseCurrency = BASE_CURRENCY,
             targetCurrencies = emptyList()
         )
-        if (latestResult.isSuccess && preferencesManager.historicalRatesChart.first()) {
-            exchangeRateRepository.fetchAndStoreHistoricalRates()
-        }
-        return latestResult
     }
 
     suspend fun forceSync(): Result<Unit> {
-        val latestResult = exchangeRateRepository.fetchLatestRates(
-            baseCurrency = "EUR",
+        return exchangeRateRepository.fetchLatestRates(
+            baseCurrency = BASE_CURRENCY,
             targetCurrencies = emptyList()
         )
-        if (latestResult.isSuccess && preferencesManager.historicalRatesChart.first()) {
-            exchangeRateRepository.fetchAndStoreHistoricalRates()
+    }
+
+    companion object {
+        const val BASE_CURRENCY = "EUR"
+
+        fun isCacheStale(lastUpdated: Long?, maxAgeMillis: Long): Boolean {
+            if (lastUpdated == null) return true
+            val elapsed = maxOf(0L, System.currentTimeMillis() - lastUpdated)
+            return elapsed >= maxAgeMillis
         }
-        return latestResult
     }
 }

@@ -6,6 +6,9 @@ import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.domain.model.ExchangeRate
+import com.offlinecurrencyconverter.app.domain.model.SyncError
+import com.offlinecurrencyconverter.app.domain.model.SyncErrorException
+import com.offlinecurrencyconverter.app.domain.model.isValidExchangeRate
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -34,12 +37,17 @@ class ExchangeRateRepositoryImpl @Inject constructor(
 
     override suspend fun getAllRatesForCurrency(baseCurrency: String): List<ExchangeRate> {
         if (baseCurrency == BASE_CURRENCY) {
-            return exchangeRateDao.getRatesForCurrencyOnce(baseCurrency).map { it.toDomain() }
+            return exchangeRateDao.getRatesForCurrencyOnce(baseCurrency)
+                .map { it.toDomain() }
+                .filter { it.rate.isValidExchangeRate() }
         }
 
         val eurToBase = exchangeRateDao.getRate(BASE_CURRENCY, baseCurrency)?.toDomain()
             ?: return emptyList()
-        val allEurRates = exchangeRateDao.getRatesForCurrencyOnce(BASE_CURRENCY).map { it.toDomain() }
+        if (!eurToBase.rate.isValidExchangeRate()) return emptyList()
+        val allEurRates = exchangeRateDao.getRatesForCurrencyOnce(BASE_CURRENCY)
+            .map { it.toDomain() }
+            .filter { it.rate.isValidExchangeRate() }
 
         return allEurRates.filter { it.targetCurrency != baseCurrency }.map { eurToTarget ->
             ExchangeRate(
@@ -64,7 +72,7 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         }
 
         val dbRate = exchangeRateDao.getRate(baseCurrency, targetCurrency)?.toDomain()
-        if (dbRate != null) return dbRate
+        if (dbRate != null && dbRate.rate.isValidExchangeRate()) return dbRate
 
         val crossRateFromDb = calculateCrossRateFromDb(baseCurrency, targetCurrency)
         if (crossRateFromDb != null) return crossRateFromDb
@@ -76,8 +84,11 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         val eurToBase = exchangeRateDao.getRate(BASE_CURRENCY, baseCurrency)?.toDomain()
         val eurToTarget = exchangeRateDao.getRate(BASE_CURRENCY, targetCurrency)?.toDomain()
 
-        if (eurToBase != null && eurToTarget != null) {
+        if (eurToBase != null && eurToTarget != null &&
+            eurToBase.rate.isValidExchangeRate() && eurToTarget.rate.isValidExchangeRate()
+        ) {
             val crossRate = eurToTarget.rate / eurToBase.rate
+            if (!crossRate.isValidExchangeRate()) return null
             val latestUpdate = maxOf(eurToBase.lastUpdated, eurToTarget.lastUpdated)
             return ExchangeRate(
                 baseCurrency = baseCurrency,
@@ -88,7 +99,7 @@ class ExchangeRateRepositoryImpl @Inject constructor(
             )
         }
 
-        if (baseCurrency == BASE_CURRENCY && eurToTarget != null) {
+        if (baseCurrency == BASE_CURRENCY && eurToTarget != null && eurToTarget.rate.isValidExchangeRate()) {
             return ExchangeRate(
                 baseCurrency = baseCurrency,
                 targetCurrency = targetCurrency,
@@ -98,8 +109,9 @@ class ExchangeRateRepositoryImpl @Inject constructor(
             )
         }
 
-        if (targetCurrency == BASE_CURRENCY && eurToBase != null) {
+        if (targetCurrency == BASE_CURRENCY && eurToBase != null && eurToBase.rate.isValidExchangeRate()) {
             val inverseRate = 1.0 / eurToBase.rate
+            if (!inverseRate.isValidExchangeRate()) return null
             return ExchangeRate(
                 baseCurrency = baseCurrency,
                 targetCurrency = targetCurrency,
@@ -114,6 +126,14 @@ class ExchangeRateRepositoryImpl @Inject constructor(
 
     companion object {
         const val BASE_CURRENCY = "EUR"
+    }
+
+    private fun mapHttpError(code: Int): Exception {
+        return if (code >= 500) {
+            SyncErrorException(SyncError.Server)
+        } else {
+            SyncErrorException(SyncError.Http(code))
+        }
     }
 
     override suspend fun fetchLatestRates(
@@ -131,7 +151,20 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 val currentTime = System.currentTimeMillis()
                 val rateItems = response.body() ?: emptyList()
 
-                val rateEntities = rateItems.map { item ->
+                val validRateItems = rateItems.filter { item ->
+                    item.rate.isValidExchangeRate() &&
+                        item.base.isNotBlank() &&
+                        item.quote.isNotBlank()
+                }
+
+                if (rateItems.isEmpty()) {
+                    return Result.failure(SyncErrorException(SyncError.EmptyResponse))
+                }
+                if (validRateItems.isEmpty()) {
+                    return Result.failure(SyncErrorException(SyncError.InvalidResponse))
+                }
+
+                val rateEntities = validRateItems.map { item ->
                     ExchangeRateEntity(
                         baseCurrency = item.base,
                         targetCurrency = item.quote,
@@ -147,11 +180,13 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                     isOfflineAvailable = true
                 )
 
-                exchangeRateDao.insertRates(rateEntities)
+                exchangeRateDao.replaceAll(rateEntities)
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("Failed to fetch rates: ${response.code()}"))
+                Result.failure(mapHttpError(response.code()))
             }
+        } catch (e: java.io.IOException) {
+            Result.failure(SyncErrorException(SyncError.Network))
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -174,7 +209,23 @@ class ExchangeRateRepositoryImpl @Inject constructor(
 
             if (response.isSuccessful) {
                 val rateItems = response.body() ?: emptyList()
-                val entities = rateItems.map { item ->
+
+                val validRateItems = rateItems.filter { item ->
+                    item.rate.isValidExchangeRate() &&
+                        item.base.isNotBlank() &&
+                        item.quote.isNotBlank() &&
+                        item.date.isNotBlank() &&
+                        item.date in startDate..endDate
+                }
+
+                if (rateItems.isEmpty()) {
+                    return Result.failure(SyncErrorException(SyncError.EmptyResponse))
+                }
+                if (validRateItems.isEmpty()) {
+                    return Result.failure(SyncErrorException(SyncError.InvalidResponse))
+                }
+
+                val entities = validRateItems.map { item ->
                     HistoricalRateEntity(
                         baseCurrency = item.base,
                         targetCurrency = item.quote,
@@ -182,12 +233,13 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                         date = item.date
                     )
                 }
-                historicalRateDao.deleteAll()
-                historicalRateDao.insertRates(entities)
+                historicalRateDao.replaceAll(entities)
                 Result.success(Unit)
             } else {
-                Result.failure(Exception("Failed to fetch historical rates: ${response.code()}"))
+                Result.failure(mapHttpError(response.code()))
             }
+        } catch (e: java.io.IOException) {
+            Result.failure(SyncErrorException(SyncError.Network))
         } catch (e: Exception) {
             Result.failure(e)
         }

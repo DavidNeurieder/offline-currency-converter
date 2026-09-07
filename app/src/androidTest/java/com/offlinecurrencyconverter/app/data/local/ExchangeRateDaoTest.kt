@@ -8,6 +8,7 @@ import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -146,5 +147,55 @@ class ExchangeRateDaoTest {
 
         assertNotNull(result)
         assertEquals(timestamp2, result)
+    }
+
+    @Test
+    fun replaceAll_swapsRatesAtomically() = runBlocking {
+        exchangeRateDao.replaceAll(listOf(
+            ExchangeRateEntity("USD", "EUR", 0.92, System.currentTimeMillis()),
+            ExchangeRateEntity("USD", "GBP", 0.79, System.currentTimeMillis())
+        ))
+
+        exchangeRateDao.replaceAll(listOf(
+            ExchangeRateEntity("EUR", "USD", 1.09, System.currentTimeMillis())
+        ))
+
+        val afterReplace = exchangeRateDao.getRatesForCurrency("USD").first()
+        assertTrue(afterReplace.isEmpty())
+        val newRates = exchangeRateDao.getRatesForCurrency("EUR").first()
+        assertEquals(1, newRates.size)
+        assertEquals("USD", newRates[0].targetCurrency)
+    }
+
+    @Test
+    fun getRatesForCurrency_usesPrimaryKeyIndex() {
+        val plan = queryPlan(
+            "SELECT * FROM exchange_rates WHERE baseCurrency = ? AND targetCurrency = ?"
+        )
+
+        assertTrue("Expected index usage, got: $plan", plan.contains("USING"))
+        assertFalse("Expected indexed lookup, got: $plan", plan.contains("SCAN"))
+    }
+
+    @Test
+    fun getRateByBaseCurrency_usesPrimaryKeyPrefixIndex() {
+        val plan = queryPlan(
+            "SELECT * FROM exchange_rates WHERE baseCurrency = ?"
+        )
+
+        assertTrue("Expected index usage, got: $plan", plan.contains("USING"))
+        assertFalse("Expected indexed lookup, got: $plan", plan.contains("SCAN"))
+    }
+
+    private fun queryPlan(sql: String): String {
+        val db = database.openHelper.writableDatabase
+        val cursor = db.query("EXPLAIN QUERY PLAN $sql")
+        val details = buildString {
+            while (cursor.moveToNext()) {
+                append(cursor.getString(cursor.getColumnIndexOrThrow("detail"))).append('\n')
+            }
+        }
+        cursor.close()
+        return details
     }
 }

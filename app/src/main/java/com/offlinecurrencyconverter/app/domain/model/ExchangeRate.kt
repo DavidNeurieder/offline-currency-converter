@@ -11,3 +11,5 @@ data class ExchangeRate(
         baseCurrency == other.baseCurrency && targetCurrency == other.targetCurrency
     override fun hashCode(): Int = 31 * baseCurrency.hashCode() + targetCurrency.hashCode()
 }
+
+fun Double.isValidExchangeRate(): Boolean = isFinite() && this > 0.0

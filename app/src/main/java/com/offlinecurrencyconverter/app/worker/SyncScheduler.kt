@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.worker
 
 import android.content.Context
+import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
@@ -21,21 +22,51 @@ class SyncScheduler @Inject constructor(
             .setRequiresBatteryNotLow(true)
             .build()
 
-        val syncRequest = PeriodicWorkRequestBuilder<SyncWorker>(
+        val latestRatesRequest = PeriodicWorkRequestBuilder<SyncWorker>(
             intervalHours, TimeUnit.HOURS,
             15, TimeUnit.MINUTES
         )
             .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                BACKOFF_DELAY_SECONDS,
+                TimeUnit.SECONDS
+            )
             .build()
 
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+        val historicalRatesRequest = PeriodicWorkRequestBuilder<SyncHistoricalRatesWorker>(
+            HISTORICAL_SYNC_INTERVAL_HOURS, TimeUnit.HOURS,
+            15, TimeUnit.MINUTES
+        )
+            .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                BACKOFF_DELAY_SECONDS,
+                TimeUnit.SECONDS
+            )
+            .build()
+
+        val workManager = WorkManager.getInstance(context)
+        workManager.enqueueUniquePeriodicWork(
             SyncWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.UPDATE,
-            syncRequest
+            latestRatesRequest
+        )
+        workManager.enqueueUniquePeriodicWork(
+            SyncHistoricalRatesWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.UPDATE,
+            historicalRatesRequest
         )
     }
 
     fun cancelSync() {
-        WorkManager.getInstance(context).cancelUniqueWork(SyncWorker.WORK_NAME)
+        val workManager = WorkManager.getInstance(context)
+        workManager.cancelUniqueWork(SyncWorker.WORK_NAME)
+        workManager.cancelUniqueWork(SyncHistoricalRatesWorker.WORK_NAME)
+    }
+
+    companion object {
+        const val HISTORICAL_SYNC_INTERVAL_HOURS = 24L
+        private const val BACKOFF_DELAY_SECONDS = 30L
     }
 }

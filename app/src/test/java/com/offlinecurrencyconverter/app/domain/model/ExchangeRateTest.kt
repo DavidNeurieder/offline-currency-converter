@@ -98,4 +98,25 @@ class ExchangeRateTest {
 
         assertFalse(rate1 == rate2)
     }
+
+    @Test
+    fun `isValidExchangeRate accepts positive finite rates`() {
+        assertTrue(0.0001.isValidExchangeRate())
+        assertTrue(1.0.isValidExchangeRate())
+        assertTrue(150.5.isValidExchangeRate())
+        assertTrue(Double.MAX_VALUE.isValidExchangeRate())
+    }
+
+    @Test
+    fun `isValidExchangeRate rejects zero and negative rates`() {
+        assertFalse(0.0.isValidExchangeRate())
+        assertFalse((-1.0).isValidExchangeRate())
+        assertFalse(Double.NEGATIVE_INFINITY.isValidExchangeRate())
+    }
+
+    @Test
+    fun `isValidExchangeRate rejects NaN and infinity`() {
+        assertFalse(Double.NaN.isValidExchangeRate())
+        assertFalse(Double.POSITIVE_INFINITY.isValidExchangeRate())
+    }
 }

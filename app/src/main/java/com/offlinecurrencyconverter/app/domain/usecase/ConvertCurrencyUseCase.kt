@@ -13,8 +13,10 @@ class ConvertCurrencyUseCase @Inject constructor(
         sourceCurrency: Currency,
         targetCurrency: Currency
     ): Result<ConversionResult> {
-        if (amount < 0) {
-            return Result.failure(IllegalArgumentException("Amount cannot be negative"))
+        if (!amount.isFinite() || amount < 0.0) {
+            return Result.failure(
+                IllegalArgumentException("Amount must be a finite, non-negative number")
+            )
         }
 
         if (sourceCurrency.code == targetCurrency.code) {
@@ -35,7 +37,20 @@ class ConvertCurrencyUseCase @Inject constructor(
         )
 
         return exchangeRate?.let {
+            if (!it.rate.isFinite() || it.rate <= 0.0) {
+                return Result.failure(
+                    IllegalArgumentException("Exchange rate is invalid")
+                )
+            }
+
             val convertedAmount = amount * it.rate
+
+            if (!convertedAmount.isFinite()) {
+                return Result.failure(
+                    IllegalArgumentException("Conversion result is out of range")
+                )
+            }
+
             Result.success(
                 ConversionResult(
                     sourceAmount = amount,

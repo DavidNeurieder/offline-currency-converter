@@ -72,7 +72,85 @@ class ConvertCurrencyUseCaseTest {
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is IllegalArgumentException)
-        assertEquals("Amount cannot be negative", result.exceptionOrNull()?.message)
+        assertEquals("Amount must be a finite, non-negative number", result.exceptionOrNull()?.message)
+    }
+
+    @Test
+    fun `invoke with NaN amount returns failure`() = runTest {
+        val result = convertCurrencyUseCase(Double.NaN, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+        assertEquals("Amount must be a finite, non-negative number", result.exceptionOrNull()?.message)
+    }
+
+    @Test
+    fun `invoke with positive infinity amount returns failure`() = runTest {
+        val result = convertCurrencyUseCase(Double.POSITIVE_INFINITY, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+        assertEquals("Amount must be a finite, non-negative number", result.exceptionOrNull()?.message)
+    }
+
+    @Test
+    fun `invoke with negative infinity amount returns failure`() = runTest {
+        val result = convertCurrencyUseCase(Double.NEGATIVE_INFINITY, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+        assertEquals("Amount must be a finite, non-negative number", result.exceptionOrNull()?.message)
+    }
+
+    @Test
+    fun `invoke with overflowing conversion returns failure`() = runTest {
+        val amount = Double.MAX_VALUE / 2.0
+        val rate = 10.0
+        coEvery {
+            exchangeRateRepository.getRate("USD", "EUR")
+        } returns ExchangeRate("USD", "EUR", rate, System.currentTimeMillis())
+
+        val result = convertCurrencyUseCase(amount, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+        assertEquals("Conversion result is out of range", result.exceptionOrNull()?.message)
+    }
+
+    @Test
+    fun `invoke with NaN rate returns failure`() = runTest {
+        coEvery {
+            exchangeRateRepository.getRate("USD", "EUR")
+        } returns ExchangeRate("USD", "EUR", Double.NaN, System.currentTimeMillis())
+
+        val result = convertCurrencyUseCase(100.0, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `invoke with infinite rate returns failure`() = runTest {
+        coEvery {
+            exchangeRateRepository.getRate("USD", "EUR")
+        } returns ExchangeRate("USD", "EUR", Double.POSITIVE_INFINITY, System.currentTimeMillis())
+
+        val result = convertCurrencyUseCase(100.0, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
+    }
+
+    @Test
+    fun `invoke with non-positive rate returns failure`() = runTest {
+        coEvery {
+            exchangeRateRepository.getRate("USD", "EUR")
+        } returns ExchangeRate("USD", "EUR", 0.0, System.currentTimeMillis())
+
+        val result = convertCurrencyUseCase(100.0, TestFixtures.USD, TestFixtures.EUR)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.exceptionOrNull() is IllegalArgumentException)
     }
 
     @Test

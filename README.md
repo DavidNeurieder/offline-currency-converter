@@ -57,6 +57,15 @@ The app declares the following permissions:
 
 No data leaves your device during conversion; only rate syncs contact the Frankfurter API.
 
+## Privacy
+
+- **Conversions:** performed locally on device
+- **Exchange rates:** downloaded from [Frankfurter](https://frankfurter.app) (ECB data)
+- **User-entered amounts:** stored locally only
+- **Network:** no conversion request is ever sent; the only outbound traffic is periodic rate syncs
+- **Backup:** cloud backup is disabled (`android:allowBackup="false"`); your data stays on your device
+- **Logging:** network logging is limited to request metadata in debug builds and fully disabled in release builds
+
 ## Tech Stack
 
 - **Language:** Kotlin

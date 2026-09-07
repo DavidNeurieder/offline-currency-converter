@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -23,6 +24,12 @@ interface HistoricalRateDao {
 
     @Query("DELETE FROM historical_rates")
     suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(rates: List<HistoricalRateEntity>) {
+        deleteAll()
+        insertRates(rates)
+    }
 
     @Query("SELECT COUNT(*) FROM historical_rates WHERE baseCurrency = :baseCurrency AND targetCurrency = :targetCurrency")
     suspend fun getCount(baseCurrency: String, targetCurrency: String): Int

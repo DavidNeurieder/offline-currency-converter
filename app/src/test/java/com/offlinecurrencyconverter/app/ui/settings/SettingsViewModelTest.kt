@@ -4,6 +4,7 @@ import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
+import com.offlinecurrencyconverter.app.domain.usecase.SyncHistoricalRatesUseCase
 import com.offlinecurrencyconverter.app.worker.SyncScheduler
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -31,6 +32,7 @@ class SettingsViewModelTest {
 
     private lateinit var exchangeRateRepository: ExchangeRateRepository
     private lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
+    private lateinit var syncHistoricalRatesUseCase: SyncHistoricalRatesUseCase
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var syncScheduler: SyncScheduler
     private lateinit var currencyRepository: CurrencyRepository
@@ -43,6 +45,7 @@ class SettingsViewModelTest {
         Dispatchers.setMain(testDispatcher)
         exchangeRateRepository = mockk(relaxed = true)
         syncExchangeRatesUseCase = mockk(relaxed = true)
+        syncHistoricalRatesUseCase = mockk(relaxed = true)
         preferencesManager = mockk(relaxed = true)
         syncScheduler = mockk(relaxed = true)
         currencyRepository = mockk(relaxed = true)
@@ -54,6 +57,7 @@ class SettingsViewModelTest {
         viewModel = SettingsViewModel(
             exchangeRateRepository,
             syncExchangeRatesUseCase,
+            syncHistoricalRatesUseCase,
             preferencesManager,
             syncScheduler,
             currencyRepository
@@ -105,6 +109,27 @@ class SettingsViewModelTest {
         assertFalse(viewModel.uiState.value.syncSuccess)
         assertNotNull(viewModel.uiState.value.syncError)
         assertFalse(viewModel.uiState.value.isSyncing)
+    }
+
+    @Test
+    fun `syncNow triggers historical sync on success`() = runTest {
+        coEvery { syncExchangeRatesUseCase.forceSync() } returns Result.success(Unit)
+        coEvery { syncHistoricalRatesUseCase() } returns Result.success(Unit)
+
+        viewModel.syncNow()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        coVerify(exactly = 1) { syncHistoricalRatesUseCase() }
+    }
+
+    @Test
+    fun `syncNow skips historical sync on failure`() = runTest {
+        coEvery { syncExchangeRatesUseCase.forceSync() } returns Result.failure(Exception("Network error"))
+
+        viewModel.syncNow()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        coVerify(exactly = 0) { syncHistoricalRatesUseCase() }
     }
 
     @Test

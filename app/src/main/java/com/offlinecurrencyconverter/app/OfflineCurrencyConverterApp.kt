@@ -7,6 +7,7 @@ import androidx.work.Configuration
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
+import com.offlinecurrencyconverter.app.domain.usecase.SyncHistoricalRatesUseCase
 import com.offlinecurrencyconverter.app.widget.CurrencyWidgetProvider
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
@@ -31,6 +32,9 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
 
     @Inject
     lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
+
+    @Inject
+    lateinit var syncHistoricalRatesUseCase: SyncHistoricalRatesUseCase
 
     @Inject
     lateinit var preferencesManager: PreferencesManager
@@ -58,7 +62,10 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
                 if (isFirstInstall || isUpdate) {
                     val syncIntervalHours = preferencesManager.syncInterval.first()
                     if (syncIntervalHours > 0L) {
-                        syncExchangeRatesUseCase.forceSync()
+                        val latestSync = syncExchangeRatesUseCase.forceSync()
+                        if (latestSync.isSuccess) {
+                            syncHistoricalRatesUseCase()
+                        }
                         updateWidget()
                     }
                     preferencesManager.saveLastInstalledVersion(currentVersion)

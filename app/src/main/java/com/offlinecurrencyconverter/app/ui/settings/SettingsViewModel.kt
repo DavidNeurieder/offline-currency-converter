@@ -7,6 +7,7 @@ import com.offlinecurrencyconverter.app.domain.model.Currency
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
+import com.offlinecurrencyconverter.app.domain.usecase.SyncHistoricalRatesUseCase
 import com.offlinecurrencyconverter.app.worker.SyncScheduler
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +45,7 @@ data class SettingsUiState(
 class SettingsViewModel @Inject constructor(
     private val exchangeRateRepository: ExchangeRateRepository,
     private val syncExchangeRatesUseCase: SyncExchangeRatesUseCase,
+    private val syncHistoricalRatesUseCase: SyncHistoricalRatesUseCase,
     private val preferencesManager: PreferencesManager,
     private val syncScheduler: SyncScheduler,
     private val currencyRepository: CurrencyRepository
@@ -129,6 +131,9 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isSyncing = true, syncError = null, syncSuccess = false)
             val result = syncExchangeRatesUseCase.forceSync()
+            if (result.isSuccess) {
+                syncHistoricalRatesUseCase()
+            }
             result.fold(
                 onSuccess = {
                     _uiState.value = _uiState.value.copy(

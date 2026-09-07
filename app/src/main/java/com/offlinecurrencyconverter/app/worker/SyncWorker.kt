@@ -5,6 +5,7 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.offlinecurrencyconverter.app.data.PreferencesManager
+import com.offlinecurrencyconverter.app.domain.model.isRetryable
 import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
 import com.offlinecurrencyconverter.app.widget.CurrencyWidgetProvider
 import dagger.assisted.Assisted
@@ -30,8 +31,8 @@ class SyncWorker @AssistedInject constructor(
                     CurrencyWidgetProvider.updateAllWidgets(applicationContext)
                     Result.success()
                 },
-                onFailure = {
-                    if (runAttemptCount < 3) {
+                onFailure = { error ->
+                    if (error.isRetryable()) {
                         Result.retry()
                     } else {
                         Result.failure()
@@ -39,7 +40,7 @@ class SyncWorker @AssistedInject constructor(
                 }
             )
         } catch (e: Exception) {
-            if (runAttemptCount < 3) {
+            if (e.isRetryable()) {
                 Result.retry()
             } else {
                 Result.failure()

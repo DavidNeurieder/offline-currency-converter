@@ -1,7 +1,11 @@
 package com.offlinecurrencyconverter.app.worker
 
+import com.offlinecurrencyconverter.app.domain.model.SyncError
+import com.offlinecurrencyconverter.app.domain.model.SyncErrorException
+import com.offlinecurrencyconverter.app.domain.model.isRetryable
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
@@ -30,21 +34,51 @@ class SyncWorkerTest {
     }
 
     @Test
-    fun `doWork failure with retry returns retry`() = runBlocking {
-        syncUseCase.result = Result.failure(Exception("Network error"))
+    fun `doWork retryable failure returns retry`() = runBlocking {
+        syncUseCase.result = Result.failure(SyncErrorException(SyncError.Network))
         preferencesManager.syncIntervalHours = 24L
 
-        val result = workerLogic.doWork(attemptCount = 0)
+        val result = workerLogic.doWork()
 
         assertEquals(TestableSyncWorkerLogic.Result.RETRY, result)
     }
 
     @Test
-    fun `doWork max attempts returns failure`() = runBlocking {
-        syncUseCase.result = Result.failure(Exception("Persistent error"))
+    fun `doWork server failure returns retry`() = runBlocking {
+        syncUseCase.result = Result.failure(SyncErrorException(SyncError.Server))
         preferencesManager.syncIntervalHours = 24L
 
-        val result = workerLogic.doWork(attemptCount = 3)
+        val result = workerLogic.doWork()
+
+        assertEquals(TestableSyncWorkerLogic.Result.RETRY, result)
+    }
+
+    @Test
+    fun `doWork non-retryable failure returns failure`() = runBlocking {
+        syncUseCase.result = Result.failure(SyncErrorException(SyncError.InvalidResponse))
+        preferencesManager.syncIntervalHours = 24L
+
+        val result = workerLogic.doWork()
+
+        assertEquals(TestableSyncWorkerLogic.Result.FAILURE, result)
+    }
+
+    @Test
+    fun `doWork empty response failure returns failure`() = runBlocking {
+        syncUseCase.result = Result.failure(SyncErrorException(SyncError.EmptyResponse))
+        preferencesManager.syncIntervalHours = 24L
+
+        val result = workerLogic.doWork()
+
+        assertEquals(TestableSyncWorkerLogic.Result.FAILURE, result)
+    }
+
+    @Test
+    fun `doWork http 400 failure returns failure`() = runBlocking {
+        syncUseCase.result = Result.failure(SyncErrorException(SyncError.Http(400)))
+        preferencesManager.syncIntervalHours = 24L
+
+        val result = workerLogic.doWork()
 
         assertEquals(TestableSyncWorkerLogic.Result.FAILURE, result)
     }
@@ -61,23 +95,29 @@ class SyncWorkerTest {
     }
 
     @Test
-    fun `doWork exception with retry returns retry`() = runBlocking {
+    fun `doWork exception returns retry`() = runBlocking {
         syncUseCase.shouldThrowException = true
         preferencesManager.syncIntervalHours = 24L
 
-        val result = workerLogic.doWork(attemptCount = 0)
+        val result = workerLogic.doWork()
 
         assertEquals(TestableSyncWorkerLogic.Result.RETRY, result)
     }
 
     @Test
-    fun `doWork exception after max attempts returns failure`() = runBlocking {
-        syncUseCase.shouldThrowException = true
-        preferencesManager.syncIntervalHours = 24L
+    fun `isRetryable classifies network error as retryable`() {
+        assertTrue(SyncErrorException(SyncError.Network).isRetryable())
+        assertTrue(SyncErrorException(SyncError.Server).isRetryable())
+        assertTrue(SyncErrorException(SyncError.Http(503)).isRetryable())
+        assertTrue(java.io.IOException("timeout").isRetryable())
+    }
 
-        val result = workerLogic.doWork(attemptCount = 3)
-
-        assertEquals(TestableSyncWorkerLogic.Result.FAILURE, result)
+    @Test
+    fun `isRetryable classifies permanent errors as non-retryable`() {
+        assertFalse(SyncErrorException(SyncError.InvalidResponse).isRetryable())
+        assertFalse(SyncErrorException(SyncError.EmptyResponse).isRetryable())
+        assertFalse(SyncErrorException(SyncError.Http(400)).isRetryable())
+        assertFalse(SyncErrorException(SyncError.Http(404)).isRetryable())
     }
 
     private class MockSyncPreferencesManager {
@@ -102,9 +142,7 @@ class SyncWorkerTest {
         private val syncUseCase: MockSyncUseCase,
         private val preferencesManager: MockSyncPreferencesManager
     ) {
-        private val MAX_ATTEMPTS = 3
-
-        suspend fun doWork(attemptCount: Int = 0): Result {
+        suspend fun doWork(): Result {
             return try {
                 val syncIntervalHours = preferencesManager.syncIntervalHours
                 val syncIntervalMillis = syncIntervalHours * 60 * 60 * 1000
@@ -112,8 +150,8 @@ class SyncWorkerTest {
                 val result = syncUseCase.doSync(syncIntervalMillis)
                 result.fold(
                     onSuccess = { Result.SUCCESS },
-                    onFailure = {
-                        if (attemptCount < MAX_ATTEMPTS) {
+                    onFailure = { error ->
+                        if (error.isRetryable()) {
                             Result.RETRY
                         } else {
                             Result.FAILURE
@@ -121,11 +159,7 @@ class SyncWorkerTest {
                     }
                 )
             } catch (e: Exception) {
-                if (attemptCount < MAX_ATTEMPTS) {
-                    Result.RETRY
-                } else {
-                    Result.FAILURE
-                }
+                if (e.isRetryable()) Result.RETRY else Result.FAILURE
             }
         }
 

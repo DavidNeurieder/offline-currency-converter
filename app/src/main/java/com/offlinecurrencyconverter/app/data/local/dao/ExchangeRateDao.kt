@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -32,6 +33,12 @@ interface ExchangeRateDao {
 
     @Query("DELETE FROM exchange_rates")
     suspend fun deleteAll()
+
+    @Transaction
+    suspend fun replaceAll(rates: List<ExchangeRateEntity>) {
+        deleteAll()
+        insertRates(rates)
+    }
 
     @Query("SELECT MAX(lastUpdated) FROM exchange_rates")
     suspend fun getLastUpdateTime(): Long?
