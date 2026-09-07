@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.data.repository
 
+import android.util.Log
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
 import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
@@ -128,6 +129,15 @@ class ExchangeRateRepositoryImpl @Inject constructor(
 
     companion object {
         const val BASE_CURRENCY = "EUR"
+        private const val TAG = "ExchangeRateRepository"
+    }
+
+    private fun reasonOf(error: Throwable): String {
+        return (error as? SyncErrorException)?.syncError?.toString() ?: error.toString()
+    }
+
+    private fun requestedLabel(targets: List<String>): String {
+        return if (targets.isEmpty()) "all" else targets.size.toString()
     }
 
     private fun mapHttpError(code: Int): Exception {
@@ -143,11 +153,13 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         targetCurrencies: List<String>
     ): Result<Unit> {
         return try {
+            val startedAt = System.currentTimeMillis()
             val quotesParam = targetCurrencies.takeIf { it.isNotEmpty() }
                 ?.joinToString(",")
             val response = frankfurterApi.getRates(baseCurrency, quotesParam)
 
             if (!response.isSuccessful) {
+                Log.d(TAG, "Rate sync failed: reason=${mapHttpError(response.code())} code=${response.code()}")
                 return Result.failure(mapHttpError(response.code()))
             }
 
@@ -155,7 +167,14 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 ?: return Result.failure(SyncErrorException(SyncError.EmptyResponse))
 
             responseValidator.validateLatest(body, baseCurrency, targetCurrencies)
-                .getOrElse { return Result.failure(it) }
+                .getOrElse { error ->
+                    Log.d(
+                        TAG,
+                        "Rate sync failed: reason=${reasonOf(error)} " +
+                            "requested=${requestedLabel(targetCurrencies)} received=${body.size}"
+                    )
+                    return Result.failure(error)
+                }
 
             val currentTime = System.currentTimeMillis()
             val rateEntities = body.map { item ->
@@ -175,16 +194,25 @@ class ExchangeRateRepositoryImpl @Inject constructor(
             )
 
             exchangeRateDao.replaceAll(rateEntities)
+            Log.d(
+                TAG,
+                "Rate sync: base=$baseCurrency requested=${requestedLabel(targetCurrencies)} " +
+                    "received=${body.size} validated=${body.size} stored=${rateEntities.size} " +
+                    "duration=${System.currentTimeMillis() - startedAt}ms"
+            )
             Result.success(Unit)
         } catch (e: java.io.IOException) {
+            Log.d(TAG, "Rate sync failed: reason=Network")
             Result.failure(SyncErrorException(SyncError.Network))
         } catch (e: Exception) {
+            Log.d(TAG, "Rate sync failed: reason=Unexpected")
             Result.failure(e)
         }
     }
 
     override suspend fun fetchAndStoreHistoricalRates(): Result<Unit> {
         return try {
+            val startedAt = System.currentTimeMillis()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
             val calendar = Calendar.getInstance()
             val endDate = dateFormat.format(calendar.time)
@@ -199,6 +227,7 @@ class ExchangeRateRepositoryImpl @Inject constructor(
             )
 
             if (!response.isSuccessful) {
+                Log.d(TAG, "History sync failed: reason=${mapHttpError(response.code())} code=${response.code()}")
                 return Result.failure(mapHttpError(response.code()))
             }
 
@@ -206,7 +235,14 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 ?: return Result.failure(SyncErrorException(SyncError.EmptyResponse))
 
             responseValidator.validateHistorical(body, BASE_CURRENCY, startDate, endDate)
-                .getOrElse { return Result.failure(it) }
+                .getOrElse { error ->
+                    Log.d(
+                        TAG,
+                        "History sync failed: reason=${reasonOf(error)} " +
+                            "window=$startDate..$endDate received=${body.size}"
+                    )
+                    return Result.failure(error)
+                }
 
             val entities = body.map { item ->
                 HistoricalRateEntity(
@@ -217,10 +253,18 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 )
             }
             historicalRateDao.replaceAll(entities)
+            Log.d(
+                TAG,
+                "History sync: base=$BASE_CURRENCY window=$startDate..$endDate " +
+                    "received=${body.size} validated=${body.size} stored=${entities.size} " +
+                    "duration=${System.currentTimeMillis() - startedAt}ms"
+            )
             Result.success(Unit)
         } catch (e: java.io.IOException) {
+            Log.d(TAG, "History sync failed: reason=Network")
             Result.failure(SyncErrorException(SyncError.Network))
         } catch (e: Exception) {
+            Log.d(TAG, "History sync failed: reason=Unexpected")
             Result.failure(e)
         }
     }

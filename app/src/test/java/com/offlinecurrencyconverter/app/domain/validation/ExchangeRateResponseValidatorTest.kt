@@ -199,6 +199,47 @@ class ExchangeRateResponseValidatorTest {
     }
 
     @Test
+    fun `validateLatest rejects unsupported requested base`() = runTest {
+        val result = validator().validateLatest(listOf(latestItem(base = "XXX")), "XXX", emptyList())
+
+        assertTrue(result.isFailure)
+        assertEquals(
+            SyncError.InvalidResponse,
+            (result.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
+    fun `validateLatest rejects duplicate quote`() = runTest {
+        val rates = listOf(latestItem("EUR", "USD"), latestItem("EUR", "USD"))
+
+        val result = validator().validateLatest(rates, "EUR", emptyList())
+
+        assertTrue(result.isFailure)
+        assertEquals(
+            SyncError.InvalidResponse,
+            (result.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
+    fun `validateLatest rejects extra unsupported currency amid valid ones`() = runTest {
+        val rates = listOf(
+            latestItem("EUR", "USD"),
+            latestItem("EUR", "GBP"),
+            latestItem("EUR", "FOO")
+        )
+
+        val result = validator().validateLatest(rates, "EUR", emptyList())
+
+        assertTrue(result.isFailure)
+        assertEquals(
+            SyncError.InvalidResponse,
+            (result.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
     fun `validateLatest rejects missing requested target`() = runTest {
         val rates = listOf(latestItem("EUR", "USD"))
 
@@ -339,6 +380,20 @@ class ExchangeRateResponseValidatorTest {
         assertTrue(result.isFailure)
         assertEquals(
             SyncError.IncompleteResponse,
+            (result.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
+    fun `validateHistorical rejects duplicate base quote date key`() = runTest {
+        val items = historicalItems().toMutableList()
+        items.add(ExchangeRateItem("2024-01-01", "EUR", "USD", 1.1))
+
+        val result = validator().validateHistorical(items, "EUR", "2024-01-01", "2024-01-31")
+
+        assertTrue(result.isFailure)
+        assertEquals(
+            SyncError.InvalidResponse,
             (result.exceptionOrNull() as SyncErrorException).syncError
         )
     }

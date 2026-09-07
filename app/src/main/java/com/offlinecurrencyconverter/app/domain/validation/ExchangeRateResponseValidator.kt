@@ -25,6 +25,9 @@ class ExchangeRateResponseValidator @Inject constructor(
         if (supportedCurrencies.isEmpty()) {
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
+        if (requestedBase !in supportedCurrencies) {
+            return Result.failure(SyncErrorException(SyncError.InvalidResponse))
+        }
         if (rates.isEmpty()) {
             return Result.failure(SyncErrorException(SyncError.EmptyResponse))
         }
@@ -36,6 +39,11 @@ class ExchangeRateResponseValidator @Inject constructor(
                 item.rate.isValidExchangeRate()
         }
         if (invalidItems.isNotEmpty()) {
+            return Result.failure(SyncErrorException(SyncError.InvalidResponse))
+        }
+
+        val duplicateKeys = rates.groupBy { it.base to it.quote }.any { it.value.size > 1 }
+        if (duplicateKeys) {
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
 
@@ -60,6 +68,9 @@ class ExchangeRateResponseValidator @Inject constructor(
         if (supportedCurrencies.isEmpty()) {
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
+        if (requestedBase !in supportedCurrencies) {
+            return Result.failure(SyncErrorException(SyncError.InvalidResponse))
+        }
         if (rates.isEmpty()) {
             return Result.failure(SyncErrorException(SyncError.EmptyResponse))
         }
@@ -82,6 +93,13 @@ class ExchangeRateResponseValidator @Inject constructor(
         }
 
         if (validCount != rates.size) {
+            return Result.failure(SyncErrorException(SyncError.InvalidResponse))
+        }
+
+        val duplicateKeys = rates
+            .groupBy { Triple(it.base, it.quote, it.date) }
+            .any { it.value.size > 1 }
+        if (duplicateKeys) {
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
 
