@@ -5,6 +5,9 @@ import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.data.remote.dto.ExchangeRateItem
+import com.offlinecurrencyconverter.app.domain.model.SyncError
+import com.offlinecurrencyconverter.app.domain.model.SyncErrorException
+import com.offlinecurrencyconverter.app.domain.validation.ExchangeRateResponseValidator
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -26,6 +29,7 @@ class ExchangeRateRepositoryImplTest {
     private lateinit var exchangeRateDao: ExchangeRateDao
     private lateinit var historicalRateDao: HistoricalRateDao
     private lateinit var frankfurterApi: FrankfurterApi
+    private lateinit var responseValidator: ExchangeRateResponseValidator
     private lateinit var repository: ExchangeRateRepositoryImpl
 
     @Before
@@ -33,7 +37,15 @@ class ExchangeRateRepositoryImplTest {
         exchangeRateDao = mockk(relaxed = true)
         historicalRateDao = mockk(relaxed = true)
         frankfurterApi = mockk(relaxed = true)
-        repository = ExchangeRateRepositoryImpl(exchangeRateDao, historicalRateDao, frankfurterApi)
+        responseValidator = mockk()
+        coEvery { responseValidator.validateLatest(any(), any(), any()) } returns Result.success(Unit)
+        coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns Result.success(Unit)
+        repository = ExchangeRateRepositoryImpl(
+            exchangeRateDao,
+            historicalRateDao,
+            frankfurterApi,
+            responseValidator
+        )
     }
 
     private fun createEntity(
@@ -216,30 +228,9 @@ class ExchangeRateRepositoryImplTest {
     }
 
     @Test
-    fun `fetchLatestRates filters out invalid rates`() = runTest {
-        val rateItems = listOf(
-            ExchangeRateItem("2024-01-15", "EUR", "USD", 1.09),
-            ExchangeRateItem("2024-01-15", "EUR", "JPY", Double.NaN),
-            ExchangeRateItem("2024-01-15", "EUR", "GBP", 0.0)
-        )
-        coEvery { frankfurterApi.getRates("EUR", null) } returns Response.success(rateItems)
-
-        val result = repository.fetchLatestRates("EUR", emptyList())
-
-        assertTrue(result.isSuccess)
-        coVerify { exchangeRateDao.replaceAll(match { rates ->
-            rates.none { it.targetCurrency == "JPY" } &&
-            rates.none { it.targetCurrency == "GBP" } &&
-            rates.any { it.targetCurrency == "USD" }
-        }) }
-    }
-
-    @Test
-    fun `fetchLatestRates rejects response with no valid rates`() = runTest {
-        val rateItems = listOf(
-            ExchangeRateItem("2024-01-15", "EUR", "USD", Double.NaN)
-        )
-        coEvery { frankfurterApi.getRates("EUR", null) } returns Response.success(rateItems)
+    fun `fetchLatestRates with one malformed rate does not replace cache`() = runTest {
+        coEvery { responseValidator.validateLatest(any(), any(), any()) } returns
+            Result.failure(SyncErrorException(SyncError.InvalidResponse))
 
         val result = repository.fetchLatestRates("EUR", emptyList())
 
@@ -248,8 +239,25 @@ class ExchangeRateRepositoryImplTest {
     }
 
     @Test
-    fun `fetchLatestRates rejects empty response list`() = runTest {
-        coEvery { frankfurterApi.getRates("EUR", null) } returns Response.success(emptyList())
+    fun `fetchLatestRates with partial coverage does not replace cache`() = runTest {
+        val rateItems = listOf(
+            ExchangeRateItem("2024-01-15", "EUR", "USD", 1.09),
+            ExchangeRateItem("2024-01-15", "EUR", "GBP", 0.8562)
+        )
+        coEvery { frankfurterApi.getRates("EUR", null) } returns Response.success(rateItems)
+        coEvery { responseValidator.validateLatest(any(), any(), any()) } returns
+            Result.failure(SyncErrorException(SyncError.IncompleteResponse))
+
+        val result = repository.fetchLatestRates("EUR", emptyList())
+
+        assertTrue(result.isFailure)
+        coVerify(exactly = 0) { exchangeRateDao.replaceAll(any()) }
+    }
+
+    @Test
+    fun `fetchLatestRates rejects null body`() = runTest {
+        coEvery { frankfurterApi.getRates("EUR", null) } returns
+            Response.success<List<ExchangeRateItem>>(null)
 
         val result = repository.fetchLatestRates("EUR", emptyList())
 
@@ -314,48 +322,9 @@ class ExchangeRateRepositoryImplTest {
     }
 
     @Test
-    fun `fetchAndStoreHistoricalRates filters out invalid rates`() = runTest {
-        val (today, yesterday) = inWindowDates()
-        val rateItems = listOf(
-            ExchangeRateItem(yesterday, "EUR", "USD", 1.09),
-            ExchangeRateItem(today, "EUR", "GBP", Double.POSITIVE_INFINITY),
-            ExchangeRateItem("", "EUR", "JPY", 160.0)
-        )
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
-
-        val result = repository.fetchAndStoreHistoricalRates()
-
-        assertTrue(result.isSuccess)
-        coVerify { historicalRateDao.replaceAll(match { entities ->
-            entities.size == 1 &&
-            entities[0].targetCurrency == "USD"
-        }) }
-    }
-
-    @Test
-    fun `fetchAndStoreHistoricalRates filters out dates outside requested window`() = runTest {
-        val (today, _) = inWindowDates()
-        val rateItems = listOf(
-            ExchangeRateItem(today, "EUR", "USD", 1.09),
-            ExchangeRateItem("1999-01-01", "EUR", "GBP", 0.7)
-        )
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
-
-        val result = repository.fetchAndStoreHistoricalRates()
-
-        assertTrue(result.isSuccess)
-        coVerify { historicalRateDao.replaceAll(match { entities ->
-            entities.size == 1 &&
-            entities[0].targetCurrency == "USD"
-        }) }
-    }
-
-    @Test
-    fun `fetchAndStoreHistoricalRates rejects response with no valid rates`() = runTest {
-        val rateItems = listOf(
-            ExchangeRateItem("1999-01-01", "EUR", "USD", Double.NaN)
-        )
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
+    fun `fetchAndStoreHistoricalRates with invalid rate does not replace history`() = runTest {
+        coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns
+            Result.failure(SyncErrorException(SyncError.InvalidResponse))
 
         val result = repository.fetchAndStoreHistoricalRates()
 
@@ -364,8 +333,26 @@ class ExchangeRateRepositoryImplTest {
     }
 
     @Test
-    fun `fetchAndStoreHistoricalRates rejects empty response list`() = runTest {
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(emptyList())
+    fun `fetchAndStoreHistoricalRates with partial history does not replace history`() = runTest {
+        val (today, _) = inWindowDates()
+        val rateItems = listOf(
+            ExchangeRateItem(today, "EUR", "USD", 1.09),
+            ExchangeRateItem(today, "EUR", "GBP", 0.8562)
+        )
+        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
+        coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns
+            Result.failure(SyncErrorException(SyncError.IncompleteResponse))
+
+        val result = repository.fetchAndStoreHistoricalRates()
+
+        assertTrue(result.isFailure)
+        coVerify(exactly = 0) { historicalRateDao.replaceAll(any()) }
+    }
+
+    @Test
+    fun `fetchAndStoreHistoricalRates rejects null body`() = runTest {
+        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns
+            Response.success<List<ExchangeRateItem>>(null)
 
         val result = repository.fetchAndStoreHistoricalRates()
 

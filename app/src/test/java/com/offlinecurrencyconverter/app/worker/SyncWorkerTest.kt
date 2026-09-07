@@ -95,13 +95,13 @@ class SyncWorkerTest {
     }
 
     @Test
-    fun `doWork exception returns retry`() = runBlocking {
+    fun `doWork exception returns failure`() = runBlocking {
         syncUseCase.shouldThrowException = true
         preferencesManager.syncIntervalHours = 24L
 
         val result = workerLogic.doWork()
 
-        assertEquals(TestableSyncWorkerLogic.Result.RETRY, result)
+        assertEquals(TestableSyncWorkerLogic.Result.FAILURE, result)
     }
 
     @Test
@@ -109,15 +109,19 @@ class SyncWorkerTest {
         assertTrue(SyncErrorException(SyncError.Network).isRetryable())
         assertTrue(SyncErrorException(SyncError.Server).isRetryable())
         assertTrue(SyncErrorException(SyncError.Http(503)).isRetryable())
+        assertTrue(SyncErrorException(SyncError.Http(408)).isRetryable())
+        assertTrue(SyncErrorException(SyncError.Http(429)).isRetryable())
         assertTrue(java.io.IOException("timeout").isRetryable())
     }
 
     @Test
     fun `isRetryable classifies permanent errors as non-retryable`() {
         assertFalse(SyncErrorException(SyncError.InvalidResponse).isRetryable())
+        assertFalse(SyncErrorException(SyncError.IncompleteResponse).isRetryable())
         assertFalse(SyncErrorException(SyncError.EmptyResponse).isRetryable())
         assertFalse(SyncErrorException(SyncError.Http(400)).isRetryable())
         assertFalse(SyncErrorException(SyncError.Http(404)).isRetryable())
+        assertFalse(Exception("Unexpected").isRetryable())
     }
 
     private class MockSyncPreferencesManager {

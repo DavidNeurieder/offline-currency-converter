@@ -10,6 +10,7 @@ import com.offlinecurrencyconverter.app.domain.model.SyncError
 import com.offlinecurrencyconverter.app.domain.model.SyncErrorException
 import com.offlinecurrencyconverter.app.domain.model.isValidExchangeRate
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
+import com.offlinecurrencyconverter.app.domain.validation.ExchangeRateResponseValidator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
@@ -20,7 +21,8 @@ import javax.inject.Inject
 class ExchangeRateRepositoryImpl @Inject constructor(
     private val exchangeRateDao: ExchangeRateDao,
     private val historicalRateDao: HistoricalRateDao,
-    private val frankfurterApi: FrankfurterApi
+    private val frankfurterApi: FrankfurterApi,
+    private val responseValidator: ExchangeRateResponseValidator
 ) : ExchangeRateRepository {
 
     override fun getRatesForCurrency(baseCurrency: String): Flow<List<ExchangeRate>> {
@@ -141,50 +143,39 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         targetCurrencies: List<String>
     ): Result<Unit> {
         return try {
-            val quotesParam = if (targetCurrencies.isNotEmpty()) {
-                targetCurrencies.joinToString(",")
-            } else {
-                null
-            }
+            val quotesParam = targetCurrencies.takeIf { it.isNotEmpty() }
+                ?.joinToString(",")
             val response = frankfurterApi.getRates(baseCurrency, quotesParam)
-            if (response.isSuccessful) {
-                val currentTime = System.currentTimeMillis()
-                val rateItems = response.body() ?: emptyList()
 
-                val validRateItems = rateItems.filter { item ->
-                    item.rate.isValidExchangeRate() &&
-                        item.base.isNotBlank() &&
-                        item.quote.isNotBlank()
-                }
+            if (!response.isSuccessful) {
+                return Result.failure(mapHttpError(response.code()))
+            }
 
-                if (rateItems.isEmpty()) {
-                    return Result.failure(SyncErrorException(SyncError.EmptyResponse))
-                }
-                if (validRateItems.isEmpty()) {
-                    return Result.failure(SyncErrorException(SyncError.InvalidResponse))
-                }
+            val body = response.body()
+                ?: return Result.failure(SyncErrorException(SyncError.EmptyResponse))
 
-                val rateEntities = validRateItems.map { item ->
-                    ExchangeRateEntity(
-                        baseCurrency = item.base,
-                        targetCurrency = item.quote,
-                        rate = item.rate,
-                        lastUpdated = currentTime,
-                        isOfflineAvailable = true
-                    )
-                } + ExchangeRateEntity(
-                    baseCurrency = baseCurrency,
-                    targetCurrency = baseCurrency,
-                    rate = 1.0,
+            responseValidator.validateLatest(body, baseCurrency, targetCurrencies)
+                .getOrElse { return Result.failure(it) }
+
+            val currentTime = System.currentTimeMillis()
+            val rateEntities = body.map { item ->
+                ExchangeRateEntity(
+                    baseCurrency = item.base,
+                    targetCurrency = item.quote,
+                    rate = item.rate,
                     lastUpdated = currentTime,
                     isOfflineAvailable = true
                 )
+            } + ExchangeRateEntity(
+                baseCurrency = baseCurrency,
+                targetCurrency = baseCurrency,
+                rate = 1.0,
+                lastUpdated = currentTime,
+                isOfflineAvailable = true
+            )
 
-                exchangeRateDao.replaceAll(rateEntities)
-                Result.success(Unit)
-            } else {
-                Result.failure(mapHttpError(response.code()))
-            }
+            exchangeRateDao.replaceAll(rateEntities)
+            Result.success(Unit)
         } catch (e: java.io.IOException) {
             Result.failure(SyncErrorException(SyncError.Network))
         } catch (e: Exception) {
@@ -207,37 +198,26 @@ class ExchangeRateRepositoryImpl @Inject constructor(
                 endDate = endDate
             )
 
-            if (response.isSuccessful) {
-                val rateItems = response.body() ?: emptyList()
-
-                val validRateItems = rateItems.filter { item ->
-                    item.rate.isValidExchangeRate() &&
-                        item.base.isNotBlank() &&
-                        item.quote.isNotBlank() &&
-                        item.date.isNotBlank() &&
-                        item.date in startDate..endDate
-                }
-
-                if (rateItems.isEmpty()) {
-                    return Result.failure(SyncErrorException(SyncError.EmptyResponse))
-                }
-                if (validRateItems.isEmpty()) {
-                    return Result.failure(SyncErrorException(SyncError.InvalidResponse))
-                }
-
-                val entities = validRateItems.map { item ->
-                    HistoricalRateEntity(
-                        baseCurrency = item.base,
-                        targetCurrency = item.quote,
-                        rate = item.rate,
-                        date = item.date
-                    )
-                }
-                historicalRateDao.replaceAll(entities)
-                Result.success(Unit)
-            } else {
-                Result.failure(mapHttpError(response.code()))
+            if (!response.isSuccessful) {
+                return Result.failure(mapHttpError(response.code()))
             }
+
+            val body = response.body()
+                ?: return Result.failure(SyncErrorException(SyncError.EmptyResponse))
+
+            responseValidator.validateHistorical(body, BASE_CURRENCY, startDate, endDate)
+                .getOrElse { return Result.failure(it) }
+
+            val entities = body.map { item ->
+                HistoricalRateEntity(
+                    baseCurrency = item.base,
+                    targetCurrency = item.quote,
+                    rate = item.rate,
+                    date = item.date
+                )
+            }
+            historicalRateDao.replaceAll(entities)
+            Result.success(Unit)
         } catch (e: java.io.IOException) {
             Result.failure(SyncErrorException(SyncError.Network))
         } catch (e: Exception) {
