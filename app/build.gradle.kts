@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.offlinecurrencyconverter.app"
-    compileSdk = 36
+    compileSdk = 37
 
     dependenciesInfo {
         includeInApk = false
@@ -21,7 +21,7 @@ android {
     defaultConfig {
         applicationId = "com.offlinecurrencyconverter.app"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 6
         versionName = "0.5.0"
 
