@@ -22,6 +22,19 @@ class HistoricalRateRepositoryImpl @Inject constructor(
         }
 
         val eurToBase = historicalRateDao.getHistoricalRates(BASE_CURRENCY, baseCurrency).first()
+
+        if (targetCurrency == BASE_CURRENCY) {
+            return eurToBase.mapNotNull { eurToBaseRate ->
+                if (eurToBaseRate.rate == 0.0) return@mapNotNull null
+                HistoricalRateEntity(
+                    baseCurrency = baseCurrency,
+                    targetCurrency = targetCurrency,
+                    rate = 1.0 / eurToBaseRate.rate,
+                    date = eurToBaseRate.date
+                )
+            }.sortedBy { it.date }
+        }
+
         val eurToTarget = historicalRateDao.getHistoricalRates(BASE_CURRENCY, targetCurrency).first()
 
         if (eurToBase.isEmpty() || eurToTarget.isEmpty()) {

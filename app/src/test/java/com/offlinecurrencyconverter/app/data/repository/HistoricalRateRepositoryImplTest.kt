@@ -120,4 +120,32 @@ class HistoricalRateRepositoryImplTest {
         assertEquals("2024-01-01", result[0].date)
         assertEquals(0.86 / 1.10, result[0].rate, 0.01)
     }
+
+    @Test
+    fun `getHistoricalRates calculates inverse rate when target is EUR`() = runTest {
+        val eurToUsd = listOf(
+            HistoricalRateEntity("EUR", "USD", 1.10, "2024-01-01"),
+            HistoricalRateEntity("EUR", "USD", 1.08, "2024-01-02")
+        )
+        coEvery { historicalRateDao.getHistoricalRates("EUR", "USD") } returns flowOf(eurToUsd)
+
+        val result = repository.getHistoricalRates("USD", "EUR")
+
+        assertEquals(2, result.size)
+        assertEquals(1.0 / 1.10, result[0].rate, 0.01)
+        assertEquals(1.0 / 1.08, result[1].rate, 0.01)
+        assertEquals("USD", result[0].baseCurrency)
+        assertEquals("EUR", result[0].targetCurrency)
+        assertEquals("2024-01-01", result[0].date)
+        assertEquals("2024-01-02", result[1].date)
+    }
+
+    @Test
+    fun `getHistoricalRates returns empty when target is EUR and no EUR data`() = runTest {
+        coEvery { historicalRateDao.getHistoricalRates("EUR", "USD") } returns flowOf(emptyList())
+
+        val result = repository.getHistoricalRates("USD", "EUR")
+
+        assertTrue(result.isEmpty())
+    }
 }
