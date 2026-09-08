@@ -10,7 +10,21 @@ Les taux sont fournis par l'API Frankfurter à partir des données de référenc
 
 <b>Fonctionnalités</b><br>
 
-<ul> <li><b>Convertisseur de devises</b> – convertissez entre plus de 160 devises</li> <li><b>Mode hors ligne</b> – convertissez des devises sans connexion Internet après synchronisation</li> <li><b>Taux de change</b> – taux de référence de la Banque centrale européenne</li> <li><b>Favoris</b> – accédez rapidement à vos devises les plus utilisées</li> <li><b>Conversion multi-devises</b> – comparez plusieurs devises à la fois</li> <li><b>Taux de change historiques</b> – graphiques sur 7, 30 et 90 jours</li> <li><b>Graphiques de taux de change</b> – graphiques interactifs avec date et taux</li> <li><b>Widget d'écran d'accueil</b> – consultez une paire de devises directement depuis l'écran d'accueil</li> <li><b>Synchronisation automatique</b> – gardez vos taux à jour en arrière-plan</li> <li><b>Synchronisation manuelle</b> – mettez à jour les taux quand vous le souhaitez</li> <li><b>Respect de la vie privée</b> – aucun compte, aucune publicité, aucun suivi et aucune analyse</li> <li><b>Open source</b> – licencié sous AGPLv3</li> <li><b>13 langues</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Convertisseur de devises</b> – convertissez entre plus de 160 devises</li>
+<li><b>Mode hors ligne</b> – convertissez des devises sans connexion Internet après synchronisation</li>
+<li><b>Taux de change</b> – taux de référence de la Banque centrale européenne</li>
+<li><b>Favoris</b> – accédez rapidement à vos devises les plus utilisées</li>
+<li><b>Conversion multi-devises</b> – comparez plusieurs devises à la fois</li>
+<li><b>Taux de change historiques</b> – graphiques sur 7, 30 et 90 jours</li>
+<li><b>Graphiques de taux de change</b> – graphiques interactifs avec date et taux</li>
+<li><b>Widget d'écran d'accueil</b> – consultez une paire de devises directement depuis l'écran d'accueil</li>
+<li><b>Synchronisation automatique</b> – gardez vos taux à jour en arrière-plan</li>
+<li><b>Synchronisation manuelle</b> – mettez à jour les taux quand vous le souhaitez</li>
+<li><b>Respect de la vie privée</b> – aucun compte, aucune publicité, aucun suivi et aucune analyse</li>
+<li><b>Open source</b> – licencié sous AGPLv3</li>
+<li><b>13 langues</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Vie privée</b><br>
 La conversion de devises se fait sur votre appareil. L'accès au réseau ne sert qu'à synchroniser les taux de change. Aucun compte n'est requis et l'application ne contient ni publicité, ni analyse, ni suivi.

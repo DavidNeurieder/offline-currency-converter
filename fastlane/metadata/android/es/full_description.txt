@@ -10,7 +10,21 @@ Los tipos los proporciona la API de Frankfurter con datos de referencia del Banc
 
 <b>Funciones</b><br>
 
-<ul> <li><b>Conversor de moneda</b> – convierte entre más de 160 monedas</li> <li><b>Modo sin conexión</b> – convierte divisas sin conexión a internet tras sincronizar</li> <li><b>Tipos de cambio</b> – tipos de referencia del Banco Central Europeo</li> <li><b>Favoritos</b> – acceso rápido a tus monedas más usadas</li> <li><b>Conversión multidivisa</b> – compara varias monedas a la vez</li> <li><b>Tipos de cambio históricos</b> – gráficos de 7, 30 y 90 días</li> <li><b>Gráficos de tipos de cambio</b> – gráficos interactivos con fecha e información del tipo</li> <li><b>Widget de pantalla de inicio</b> – consulta un par de divisas directamente desde la pantalla de inicio</li> <li><b>Sincronización automática</b> – mantén los tipos de cambio al día en segundo plano</li> <li><b>Sincronización manual</b> – actualiza los tipos cuando quieras</li> <li><b>Respetuoso con la privacidad</b> – sin cuenta, sin anuncios, sin rastreo y sin análisis</li> <li><b>Código abierto</b> – licencia AGPLv3</li> <li><b>13 idiomas</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Conversor de moneda</b> – convierte entre más de 160 monedas</li>
+<li><b>Modo sin conexión</b> – convierte divisas sin conexión a internet tras sincronizar</li>
+<li><b>Tipos de cambio</b> – tipos de referencia del Banco Central Europeo</li>
+<li><b>Favoritos</b> – acceso rápido a tus monedas más usadas</li>
+<li><b>Conversión multidivisa</b> – compara varias monedas a la vez</li>
+<li><b>Tipos de cambio históricos</b> – gráficos de 7, 30 y 90 días</li>
+<li><b>Gráficos de tipos de cambio</b> – gráficos interactivos con fecha e información del tipo</li>
+<li><b>Widget de pantalla de inicio</b> – consulta un par de divisas directamente desde la pantalla de inicio</li>
+<li><b>Sincronización automática</b> – mantén los tipos de cambio al día en segundo plano</li>
+<li><b>Sincronización manual</b> – actualiza los tipos cuando quieras</li>
+<li><b>Respetuoso con la privacidad</b> – sin cuenta, sin anuncios, sin rastreo y sin análisis</li>
+<li><b>Código abierto</b> – licencia AGPLv3</li>
+<li><b>13 idiomas</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Privacidad</b><br>
 La conversión de moneda se realiza en tu dispositivo. El acceso a la red solo se usa para sincronizar los tipos de cambio. No se requiere ninguna cuenta y la aplicación no contiene publicidad, análisis ni rastreo.

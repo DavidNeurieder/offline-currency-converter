@@ -10,7 +10,21 @@ De koersen worden geleverd door de Frankfurter API op basis van referentiegegeve
 
 <b>Functies</b><br>
 
-<ul> <li><b>Valutaomzetter</b> – zet meer dan 160 valuta's om</li> <li><b>Offline modus</b> – converteer valuta's zonder internetverbinding na synchronisatie</li> <li><b>Wisselkoersen</b> – referentiekoersen van de Europese Centrale Bank</li> <li><b>Favorieten</b> – snel toegang tot je meest gebruikte valuta's</li> <li><b>Multi-valutaconversie</b> – vergelijk meerdere valuta's tegelijk</li> <li><b>Historische wisselkoersen</b> – koersgrafieken voor 7, 30 en 90 dagen</li> <li><b>Koersgrafieken</b> – interactieve grafieken met datum- en koersinformatie</li> <li><b>Widget voor het startscherm</b> – bekijk een valutapaar direct vanaf je startscherm</li> <li><b>Automatische synchronisatie</b> – houd wisselkoersen op de achtergrond actueel</li> <li><b>Handmatige synchronisatie</b> – werk koersen bij wanneer je wilt</li> <li><b>Privacygericht</b> – geen account, geen advertenties, geen tracking en geen analytics</li> <li><b>Open source</b> – gelicenseerd onder AGPLv3</li> <li><b>13 talen</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Valutaomzetter</b> – zet meer dan 160 valuta's om</li>
+<li><b>Offline modus</b> – converteer valuta's zonder internetverbinding na synchronisatie</li>
+<li><b>Wisselkoersen</b> – referentiekoersen van de Europese Centrale Bank</li>
+<li><b>Favorieten</b> – snel toegang tot je meest gebruikte valuta's</li>
+<li><b>Multi-valutaconversie</b> – vergelijk meerdere valuta's tegelijk</li>
+<li><b>Historische wisselkoersen</b> – koersgrafieken voor 7, 30 en 90 dagen</li>
+<li><b>Koersgrafieken</b> – interactieve grafieken met datum- en koersinformatie</li>
+<li><b>Widget voor het startscherm</b> – bekijk een valutapaar direct vanaf je startscherm</li>
+<li><b>Automatische synchronisatie</b> – houd wisselkoersen op de achtergrond actueel</li>
+<li><b>Handmatige synchronisatie</b> – werk koersen bij wanneer je wilt</li>
+<li><b>Privacygericht</b> – geen account, geen advertenties, geen tracking en geen analytics</li>
+<li><b>Open source</b> – gelicenseerd onder AGPLv3</li>
+<li><b>13 talen</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Privacy</b><br>
 Valutaconversie vindt plaats op je apparaat. Netwerktoegang wordt alleen gebruikt om wisselkoersen te synchroniseren. Er is geen account vereist en de app bevat geen advertenties, analytics of tracking.

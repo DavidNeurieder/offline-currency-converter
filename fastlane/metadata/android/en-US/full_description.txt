@@ -10,7 +10,21 @@ Rates are provided by the Frankfurter API using European Central Bank reference 
 
 <b>Features</b><br>
 
-<ul> <li><b>Currency converter</b> — convert between 160+ currencies</li> <li><b>Offline mode</b> — convert currencies without an internet connection after syncing</li> <li><b>Exchange rates</b> — use European Central Bank reference rates</li> <li><b>Favorites</b> — quickly access your most-used currencies</li> <li><b>Multi-currency conversion</b> — compare several currencies at once</li> <li><b>Historical exchange rates</b> — view 7, 30, and 90-day rate charts</li> <li><b>Exchange rate charts</b> — interactive charts with date and rate information</li> <li><b>Home screen widget</b> — see a currency pair directly from your home screen</li> <li><b>Automatic synchronization</b> — keep exchange rates up to date in the background</li> <li><b>Manual synchronization</b> — update rates whenever you want</li> <li><b>Privacy-focused</b> — no account, no ads, no tracking, and no analytics</li> <li><b>Open source</b> — licensed under AGPLv3</li> <li><b>13 languages</b> — ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Currency converter</b> — convert between 160+ currencies</li>
+<li><b>Offline mode</b> — convert currencies without an internet connection after syncing</li>
+<li><b>Exchange rates</b> — use European Central Bank reference rates</li>
+<li><b>Favorites</b> — quickly access your most-used currencies</li>
+<li><b>Multi-currency conversion</b> — compare several currencies at once</li>
+<li><b>Historical exchange rates</b> — view 7, 30, and 90-day rate charts</li>
+<li><b>Exchange rate charts</b> — interactive charts with date and rate information</li>
+<li><b>Home screen widget</b> — see a currency pair directly from your home screen</li>
+<li><b>Automatic synchronization</b> — keep exchange rates up to date in the background</li>
+<li><b>Manual synchronization</b> — update rates whenever you want</li>
+<li><b>Privacy-focused</b> — no account, no ads, no tracking, and no analytics</li>
+<li><b>Open source</b> — licensed under AGPLv3</li>
+<li><b>13 languages</b> — ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Privacy</b><br>
 Currency conversion happens on your device. Network access is only used to synchronize exchange rates. No account is required and the app does not contain advertising, analytics, or tracking.

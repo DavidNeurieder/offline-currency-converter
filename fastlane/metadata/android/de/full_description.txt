@@ -10,7 +10,21 @@ Die Kurse werden von der Frankfurter API bereitgestellt und basieren auf Referen
 
 <b>Funktionen</b><br>
 
-<ul> <li><b>Währungsumrechner</b> – rechne zwischen über 160 Währungen um</li> <li><b>Offline-Modus</b> – rechne nach der Synchronisierung ohne Internetverbindung um</li> <li><b>Wechselkurse</b> – Referenzkurse der Europäischen Zentralbank</li> <li><b>Favoriten</b> – schneller Zugriff auf deine meistgenutzten Währungen</li> <li><b>Multi-Währungs-Umrechnung</b> – vergleiche mehrere Währungen auf einmal</li> <li><b>Historische Wechselkurse</b> – Kursdiagramme für 7, 30 und 90 Tage</li> <li><b>Kursdiagramme</b> – interaktive Diagramme mit Datums- und Kursinformationen</li> <li><b>Widget für den Startbildschirm</b> – sieh ein Währungspaar direkt auf deinem Startbildschirm</li> <li><b>Automatische Synchronisierung</b> – halte Wechselkurse im Hintergrund aktuell</li> <li><b>Manuelle Synchronisierung</b> – aktualisiere die Kurse, wann immer du möchtest</li> <li><b>Datenschutzorientiert</b> – kein Konto, keine Werbung, kein Tracking und keine Analyse</li> <li><b>Open Source</b> – lizenziert unter AGPLv3</li> <li><b>13 Sprachen</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Währungsumrechner</b> – rechne zwischen über 160 Währungen um</li>
+<li><b>Offline-Modus</b> – rechne nach der Synchronisierung ohne Internetverbindung um</li>
+<li><b>Wechselkurse</b> – Referenzkurse der Europäischen Zentralbank</li>
+<li><b>Favoriten</b> – schneller Zugriff auf deine meistgenutzten Währungen</li>
+<li><b>Multi-Währungs-Umrechnung</b> – vergleiche mehrere Währungen auf einmal</li>
+<li><b>Historische Wechselkurse</b> – Kursdiagramme für 7, 30 und 90 Tage</li>
+<li><b>Kursdiagramme</b> – interaktive Diagramme mit Datums- und Kursinformationen</li>
+<li><b>Widget für den Startbildschirm</b> – sieh ein Währungspaar direkt auf deinem Startbildschirm</li>
+<li><b>Automatische Synchronisierung</b> – halte Wechselkurse im Hintergrund aktuell</li>
+<li><b>Manuelle Synchronisierung</b> – aktualisiere die Kurse, wann immer du möchtest</li>
+<li><b>Datenschutzorientiert</b> – kein Konto, keine Werbung, kein Tracking und keine Analyse</li>
+<li><b>Open Source</b> – lizenziert unter AGPLv3</li>
+<li><b>13 Sprachen</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Datenschutz</b><br>
 Die Währungsumrechnung erfolgt auf deinem Gerät. Netzwerkzugriff wird nur zum Synchronisieren der Wechselkurse genutzt. Es ist kein Konto erforderlich, und die App enthält keine Werbung, Analysen oder Tracking.

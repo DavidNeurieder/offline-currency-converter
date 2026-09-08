@@ -10,7 +10,21 @@ I tassi sono forniti dall'API Frankfurter usando i dati di riferimento della Ban
 
 <b>Funzionalità</b><br>
 
-<ul> <li><b>Convertitore di valuta</b> – converti tra oltre 160 valute</li> <li><b>Modalità offline</b> – converti valute senza connessione Internet dopo la sincronizzazione</li> <li><b>Tassi di cambio</b> – tassi di riferimento della Banca centrale europea</li> <li><b>Preferiti</b> – accesso rapido alle valute più usate</li> <li><b>Conversione multi-valuta</b> – confronta più valute contemporaneamente</li> <li><b>Tassi di cambio storici</b> – grafici sui tassi da 7, 30 e 90 giorni</li> <li><b>Grafici dei tassi di cambio</b> – grafici interattivi con data e valore del tasso</li> <li><b>Widget per la schermata iniziale</b> – visualizza una coppia di valute direttamente dalla schermata iniziale</li> <li><b>Sincronizzazione automatica</b> – mantieni aggiornati i tassi in background</li> <li><b>Sincronizzazione manuale</b> – aggiorna i tassi quando vuoi</li> <li><b>Rispetto della privacy</b> – nessun account, nessuna pubblicità, nessun tracciamento e nessuna analisi</li> <li><b>Open source</b> – concesso in licenza AGPLv3</li> <li><b>13 lingue</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Convertitore di valuta</b> – converti tra oltre 160 valute</li>
+<li><b>Modalità offline</b> – converti valute senza connessione Internet dopo la sincronizzazione</li>
+<li><b>Tassi di cambio</b> – tassi di riferimento della Banca centrale europea</li>
+<li><b>Preferiti</b> – accesso rapido alle valute più usate</li>
+<li><b>Conversione multi-valuta</b> – confronta più valute contemporaneamente</li>
+<li><b>Tassi di cambio storici</b> – grafici sui tassi da 7, 30 e 90 giorni</li>
+<li><b>Grafici dei tassi di cambio</b> – grafici interattivi con data e valore del tasso</li>
+<li><b>Widget per la schermata iniziale</b> – visualizza una coppia di valute direttamente dalla schermata iniziale</li>
+<li><b>Sincronizzazione automatica</b> – mantieni aggiornati i tassi in background</li>
+<li><b>Sincronizzazione manuale</b> – aggiorna i tassi quando vuoi</li>
+<li><b>Rispetto della privacy</b> – nessun account, nessuna pubblicità, nessun tracciamento e nessuna analisi</li>
+<li><b>Open source</b> – concesso in licenza AGPLv3</li>
+<li><b>13 lingue</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Privacy</b><br>
 La conversione di valuta avviene sul tuo dispositivo. L'accesso alla rete viene usato solo per sincronizzare i tassi di cambio. Non è richiesto alcun account e l'app non contiene pubblicità, analisi o tracciamento.

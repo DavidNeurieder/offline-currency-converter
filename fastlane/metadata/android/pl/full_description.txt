@@ -10,7 +10,21 @@ Kursy dostarcza API Frankfurter na podstawie danych referencyjnych Europejskiego
 
 <b>Funkcje</b><br>
 
-<ul> <li><b>Konwerter walut</b> – konwersja między ponad 160 walutami</li> <li><b>Tryb offline</b> – przeliczaj waluty bez połączenia z internetem po synchronizacji</li> <li><b>Kursy walut</b> – referencyjne kursy Europejskiego Banku Centralnego</li> <li><b>Ulubione</b> – szybki dostęp do najczęściej używanych walut</li> <li><b>Konwersja wielowalutowa</b> – porównuj kilka walut naraz</li> <li><b>Historyczne kursy walut</b> – wykresy kursów dla 7, 30 i 90 dni</li> <li><b>Wykresy kursów</b> – interaktywne wykresy z datą i kursem</li> <li><b>Widget na ekranie głównym</b> – sprawdzaj parę walut bezpośrednio z ekranu głównego</li> <li><b>Automatyczna synchronizacja</b> – aktualizuj kursy w tle</li> <li><b>Ręczna synchronizacja</b> – aktualizuj kursy, kiedy chcesz</li> <li><b>Ochrona prywatności</b> – bez konta, reklam, śledzenia i analityki</li> <li><b>Otwarty kod źródłowy</b> – licencja AGPLv3</li> <li><b>13 języków</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+<ul>
+<li><b>Konwerter walut</b> – konwersja między ponad 160 walutami</li>
+<li><b>Tryb offline</b> – przeliczaj waluty bez połączenia z internetem po synchronizacji</li>
+<li><b>Kursy walut</b> – referencyjne kursy Europejskiego Banku Centralnego</li>
+<li><b>Ulubione</b> – szybki dostęp do najczęściej używanych walut</li>
+<li><b>Konwersja wielowalutowa</b> – porównuj kilka walut naraz</li>
+<li><b>Historyczne kursy walut</b> – wykresy kursów dla 7, 30 i 90 dni</li>
+<li><b>Wykresy kursów</b> – interaktywne wykresy z datą i kursem</li>
+<li><b>Widget na ekranie głównym</b> – sprawdzaj parę walut bezpośrednio z ekranu głównego</li>
+<li><b>Automatyczna synchronizacja</b> – aktualizuj kursy w tle</li>
+<li><b>Ręczna synchronizacja</b> – aktualizuj kursy, kiedy chcesz</li>
+<li><b>Ochrona prywatności</b> – bez konta, reklam, śledzenia i analityki</li>
+<li><b>Otwarty kod źródłowy</b> – licencja AGPLv3</li>
+<li><b>13 języków</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
+</ul>
 
 <b>Prywatność</b><br>
 Konwersja walut odbywa się na urządzeniu. Dostęp do sieci służy wyłącznie synchronizacji kursów walut. Konto nie jest wymagane, a aplikacja nie zawiera reklam, analityki ani śledzenia.
