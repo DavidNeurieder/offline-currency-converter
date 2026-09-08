@@ -9,7 +9,6 @@ Pobierz kursy wymiany i przeliczaj waluty bezpośrednio na urządzeniu. Po zsync
 Kursy dostarcza API Frankfurter na podstawie danych referencyjnych Europejskiego Banku Centralnego. Wybierz, jak często kursy będą synchronizowane — od co 6 godzin do co tydzień — lub aktualizuj je ręcznie.
 
 <b>Funkcje</b><br>
-
 <ul>
 <li><b>Konwerter walut</b> – konwersja między ponad 160 walutami</li>
 <li><b>Tryb offline</b> – przeliczaj waluty bez połączenia z internetem po synchronizacji</li>

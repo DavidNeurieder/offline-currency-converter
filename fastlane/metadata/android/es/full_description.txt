@@ -9,7 +9,6 @@ Descarga los tipos de cambio y realiza conversiones de divisas directamente en t
 Los tipos los proporciona la API de Frankfurter con datos de referencia del Banco Central Europeo. Elige con qué frecuencia se sincronizan, desde cada 6 horas hasta semanalmente, o actualízalos manualmente.
 
 <b>Funciones</b><br>
-
 <ul>
 <li><b>Conversor de moneda</b> – convierte entre más de 160 monedas</li>
 <li><b>Modo sin conexión</b> – convierte divisas sin conexión a internet tras sincronizar</li>

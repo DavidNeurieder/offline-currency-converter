@@ -9,7 +9,6 @@ Download exchange rates and perform currency conversions directly on your device
 Rates are provided by the Frankfurter API using European Central Bank reference data. Choose how often rates are synchronized, from every 6 hours to weekly, or update them manually.
 
 <b>Features</b><br>
-
 <ul>
 <li><b>Currency converter</b> — convert between 160+ currencies</li>
 <li><b>Offline mode</b> — convert currencies without an internet connection after syncing</li>

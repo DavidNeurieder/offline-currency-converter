@@ -9,7 +9,6 @@ Download wisselkoersen en voer conversies rechtstreeks op je apparaat uit. Zodra
 De koersen worden geleverd door de Frankfurter API op basis van referentiegegevens van de Europese Centrale Bank. Kies hoe vaak koersen worden gesynchroniseerd – van elke 6 uur tot wekelijks – of werk ze handmatig bij.
 
 <b>Functies</b><br>
-
 <ul>
 <li><b>Valutaomzetter</b> – zet meer dan 160 valuta's om</li>
 <li><b>Offline modus</b> – converteer valuta's zonder internetverbinding na synchronisatie</li>

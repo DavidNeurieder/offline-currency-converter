@@ -9,7 +9,6 @@ Téléchargez les taux de change et effectuez vos conversions directement sur vo
 Les taux sont fournis par l'API Frankfurter à partir des données de référence de la Banque centrale européenne. Choisissez la fréquence de synchronisation, de toutes les 6 heures à une fois par semaine, ou mettez-les à jour manuellement.
 
 <b>Fonctionnalités</b><br>
-
 <ul>
 <li><b>Convertisseur de devises</b> – convertissez entre plus de 160 devises</li>
 <li><b>Mode hors ligne</b> – convertissez des devises sans connexion Internet après synchronisation</li>

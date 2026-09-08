@@ -9,7 +9,6 @@ Descarregue as taxas de câmbio e efetue conversões diretamente no seu disposit
 As taxas são fornecidas pela API Frankfurter, que utiliza dados de referência do Banco Central Europeu. Escolha a frequência de sincronização, de 6 em 6 horas a semanalmente, ou atualize-as manualmente.
 
 <b>Funcionalidades</b><br>
-
 <ul>
 <li><b>Conversor de moeda</b> – converta entre mais de 160 moedas</li>
 <li><b>Modo offline</b> – converta moedas sem ligação à Internet após sincronizar</li>

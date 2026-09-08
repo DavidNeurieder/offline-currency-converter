@@ -9,7 +9,6 @@ Scarica i tassi di cambio ed esegui le conversioni direttamente sul tuo disposit
 I tassi sono forniti dall'API Frankfurter usando i dati di riferimento della Banca centrale europea. Scegli con quale frequenza sincronizzare i tassi, da ogni 6 ore a settimanalmente, oppure aggiornali manualmente.
 
 <b>Funzionalità</b><br>
-
 <ul>
 <li><b>Convertitore di valuta</b> – converti tra oltre 160 valute</li>
 <li><b>Modalità offline</b> – converti valute senza connessione Internet dopo la sincronizzazione</li>
