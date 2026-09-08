@@ -1,16 +1,19 @@
-<b>Offline Currency Converter</b> is a privacy-focused currency converter that works completely offline. No account, no tracking, no analytics — just exchange rates in your pocket.<br><br>
-Sync rates from the free Frankfurter API (European Central Bank) and convert 160+ currencies entirely offline. Configure sync intervals (6h, 12h, 24h, 48h, weekly, or manual only) and let WorkManager handle background updates.<br><br>
-<b>Features:</b><br>
-<ul>
-  <li><b>Favorites</b> — star your most-used currencies for quick access</li>
-  <li><b>Multi-currency view</b> — see conversions to all your favorites at once</li>
-  <li><b>Rate trend charts</b> — 90-day interactive charts with touch tooltips and date range tabs</li>
-  <li><b>Home screen widget</b> — Material You dynamic colors, works with any currency pair</li>
-  <li><b>Sync status</b> — colored badge shows how fresh your rates are</li>
-  <li><b>160+ currencies</b> — all ECB reference rates</li>
-  <li><b>Offline-first</b> — all conversions happen on device</li>
-  <li><b>Privacy first</b> — no accounts, no tracking, no network permissions at runtime</li>
-  <li><b>Material Design 3</b> — modern UI with dynamic theming</li>
-  <li><b>13 languages</b> — ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li>
-</ul>
-Free and open source (AGPLv3).
+<b>Offline Currency Converter</b> is a free and open-source currency converter for Android. Convert between 160+ currencies using the latest downloaded exchange rates — even when you are offline.
+
+Ideal for travel, shopping, international payments, or anyone who needs a simple currency calculator without relying on a permanent internet connection.
+
+<b>Offline currency conversion</b><br>
+Download exchange rates and perform currency conversions directly on your device. Once rates are synchronized, conversions work completely offline.
+
+<b>Exchange rates</b><br>
+Rates are provided by the Frankfurter API using European Central Bank reference data. Choose how often rates are synchronized, from every 6 hours to weekly, or update them manually.
+
+<b>Features</b><br>
+
+<ul> <li><b>Currency converter</b> — convert between 160+ currencies</li> <li><b>Offline mode</b> — convert currencies without an internet connection after syncing</li> <li><b>Exchange rates</b> — use European Central Bank reference rates</li> <li><b>Favorites</b> — quickly access your most-used currencies</li> <li><b>Multi-currency conversion</b> — compare several currencies at once</li> <li><b>Historical exchange rates</b> — view 7, 30, and 90-day rate charts</li> <li><b>Currency rate charts</b> — interactive charts with date and rate information</li> <li><b>Home screen widget</b> — see a currency pair directly from your home screen</li> <li><b>Automatic synchronization</b> — keep exchange rates up to date in the background</li> <li><b>Manual synchronization</b> — update rates whenever you want</li> <li><b>Privacy-focused</b> — no account, no ads, no tracking, and no analytics</li> <li><b>Open source</b> — licensed under AGPLv3</li> <li><b>13 languages</b> — ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+
+<b>Privacy</b><br>
+Currency conversion happens on your device. Network access is only used to synchronize exchange rates. No account is required and the app does not contain advertising, analytics, or tracking.
+
+<b>Free and open source</b><br>
+Offline Currency Converter is free software released under the AGPLv3 license.

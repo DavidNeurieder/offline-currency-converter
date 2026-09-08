@@ -1,1 +1,1 @@
-Offline currency converter with favorites, charts, and widget
+Offline currency converter with exchange rates, charts, and widget
