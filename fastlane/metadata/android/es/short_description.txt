@@ -1,0 +1,1 @@
+Conversor de moneda sin conexión con tipos de cambio, gráficos y widget

@@ -1,0 +1,1 @@
+Offline-Währungsrechner mit Wechselkursen, Diagrammen und Widget

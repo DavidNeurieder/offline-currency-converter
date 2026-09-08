@@ -1,0 +1,19 @@
+<b>Conversor de moneda sin conexión</b> es un conversor de moneda gratuito y de código abierto para Android. Convierte entre más de 160 monedas con los últimos tipos de cambio descargados, incluso sin conexión a internet.
+
+Ideal para viajes, compras, pagos internacionales o cualquier persona que necesite una calculadora de divisas sencilla sin depender de una conexión permanente a internet.
+
+<b>Conversión de moneda sin conexión</b><br>
+Descarga los tipos de cambio y realiza conversiones de divisas directamente en tu dispositivo. Una vez sincronizados los tipos, las conversiones funcionan completamente sin conexión.
+
+<b>Tipos de cambio</b><br>
+Los tipos los proporciona la API de Frankfurter con datos de referencia del Banco Central Europeo. Elige con qué frecuencia se sincronizan, desde cada 6 horas hasta semanalmente, o actualízalos manualmente.
+
+<b>Funciones</b><br>
+
+<ul> <li><b>Conversor de moneda</b> – convierte entre más de 160 monedas</li> <li><b>Modo sin conexión</b> – convierte divisas sin conexión a internet tras sincronizar</li> <li><b>Tipos de cambio</b> – tipos de referencia del Banco Central Europeo</li> <li><b>Favoritos</b> – acceso rápido a tus monedas más usadas</li> <li><b>Conversión multidivisa</b> – compara varias monedas a la vez</li> <li><b>Tipos de cambio históricos</b> – gráficos de 7, 30 y 90 días</li> <li><b>Gráficos de tipos de cambio</b> – gráficos interactivos con fecha e información del tipo</li> <li><b>Widget de pantalla de inicio</b> – consulta un par de divisas directamente desde la pantalla de inicio</li> <li><b>Sincronización automática</b> – mantén los tipos de cambio al día en segundo plano</li> <li><b>Sincronización manual</b> – actualiza los tipos cuando quieras</li> <li><b>Respetuoso con la privacidad</b> – sin cuenta, sin anuncios, sin rastreo y sin análisis</li> <li><b>Código abierto</b> – licencia AGPLv3</li> <li><b>13 idiomas</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+
+<b>Privacidad</b><br>
+La conversión de moneda se realiza en tu dispositivo. El acceso a la red solo se usa para sincronizar los tipos de cambio. No se requiere ninguna cuenta y la aplicación no contiene publicidad, análisis ni rastreo.
+
+<b>Gratuito y de código abierto</b><br>
+Conversor de moneda sin conexión es un software libre publicado bajo la licencia AGPLv3.

@@ -1,0 +1,19 @@
+<b>Convertisseur de devises hors ligne</b> est un convertisseur de devises gratuit et open source pour Android. Convertissez entre plus de 160 devises à l'aide des derniers taux de change téléchargés, même hors ligne.
+
+Idéal pour les voyages, les achats, les paiements internationaux ou toute personne ayant besoin d'un calculateur de devises simple sans dépendre d'une connexion Internet permanente.
+
+<b>Conversion de devises hors ligne</b><br>
+Téléchargez les taux de change et effectuez vos conversions directement sur votre appareil. Une fois les taux synchronisés, les conversions fonctionnent entièrement hors ligne.
+
+<b>Taux de change</b><br>
+Les taux sont fournis par l'API Frankfurter à partir des données de référence de la Banque centrale européenne. Choisissez la fréquence de synchronisation, de toutes les 6 heures à une fois par semaine, ou mettez-les à jour manuellement.
+
+<b>Fonctionnalités</b><br>
+
+<ul> <li><b>Convertisseur de devises</b> – convertissez entre plus de 160 devises</li> <li><b>Mode hors ligne</b> – convertissez des devises sans connexion Internet après synchronisation</li> <li><b>Taux de change</b> – taux de référence de la Banque centrale européenne</li> <li><b>Favoris</b> – accédez rapidement à vos devises les plus utilisées</li> <li><b>Conversion multi-devises</b> – comparez plusieurs devises à la fois</li> <li><b>Taux de change historiques</b> – graphiques sur 7, 30 et 90 jours</li> <li><b>Graphiques de taux de change</b> – graphiques interactifs avec date et taux</li> <li><b>Widget d'écran d'accueil</b> – consultez une paire de devises directement depuis l'écran d'accueil</li> <li><b>Synchronisation automatique</b> – gardez vos taux à jour en arrière-plan</li> <li><b>Synchronisation manuelle</b> – mettez à jour les taux quand vous le souhaitez</li> <li><b>Respect de la vie privée</b> – aucun compte, aucune publicité, aucun suivi et aucune analyse</li> <li><b>Open source</b> – licencié sous AGPLv3</li> <li><b>13 langues</b> – ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+
+<b>Vie privée</b><br>
+La conversion de devises se fait sur votre appareil. L'accès au réseau ne sert qu'à synchroniser les taux de change. Aucun compte n'est requis et l'application ne contient ni publicité, ni analyse, ni suivi.
+
+<b>Gratuit et open source</b><br>
+Convertisseur de devises hors ligne est un logiciel libre publié sous licence AGPLv3.
