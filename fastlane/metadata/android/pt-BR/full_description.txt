@@ -1,0 +1,19 @@
+<b>Conversor de moeda offline</b> é um conversor de moeda gratuito e de código aberto para Android. Converta entre mais de 160 moedas usando as últimas taxas de câmbio baixadas, mesmo sem conexão com a internet.
+
+Ideal para viagens, compras, pagamentos internacionais ou para quem precisa de uma calculadora de moedas simples sem depender de uma conexão permanente com a internet.
+
+<b>Conversão de moeda offline</b><br>
+Baixe as taxas de câmbio e faça conversões diretamente no seu dispositivo. Assim que as taxas forem sincronizadas, as conversões funcionam totalmente offline.
+
+<b>Taxas de câmbio</b><br>
+As taxas são fornecidas pela API Frankfurter, que usa dados de referência do Banco Central Europeu. Escolha a frequência de sincronização, de 6 em 6 horas a semanalmente, ou atualize-as manualmente.
+
+<b>Recursos</b><br>
+
+<ul> <li><b>Conversor de moeda</b> — converta entre mais de 160 moedas</li> <li><b>Modo offline</b> — converta moedas sem conexão com a internet após sincronizar</li> <li><b>Taxas de câmbio</b> — taxas de referência do Banco Central Europeu</li> <li><b>Favoritos</b> — acesso rápido às suas moedas mais usadas</li> <li><b>Conversão multimoeda</b> — compare várias moedas ao mesmo tempo</li> <li><b>Taxas de câmbio históricas</b> — gráficos de taxas de 7, 30 e 90 dias</li> <li><b>Gráficos de taxas de câmbio</b> — gráficos interativos com data e valor da taxa</li> <li><b>Widget da tela inicial</b> — consulte um par de moedas diretamente na tela inicial</li> <li><b>Sincronização automática</b> — mantenha as taxas atualizadas em segundo plano</li> <li><b>Sincronização manual</b> — atualize as taxas quando quiser</li> <li><b>Foco em privacidade</b> — sem conta, sem anúncios, sem rastreamento e sem análise</li> <li><b>Código aberto</b> — licenciado sob AGPLv3</li> <li><b>13 idiomas</b> — ar, de, es, fr, hi, it, ja, ko, nl, pl, pt, ru, zh</li> </ul>
+
+<b>Privacidade</b><br>
+A conversão de moeda acontece no seu dispositivo. O acesso à rede é usado apenas para sincronizar as taxas de câmbio. Nenhuma conta é necessária e o aplicativo não contém anúncios, análise ou rastreamento.
+
+<b>Grátis e de código aberto</b><br>
+Conversor de moeda offline é um software livre publicado sob a licença AGPLv3.

@@ -1,4 +1,4 @@
-<b>Conversor de moeda offline</b> é um conversor de moeda gratuito e de código aberto para Android. Converta entre mais de 160 moedas usando os últimos câmbios descarregados, mesmo sem ligação à Internet.
+<b>Conversor de moeda offline</b> é um conversor de moeda gratuito e de código aberto para Android. Converta entre mais de 160 moedas usando as últimas taxas de câmbio descarregadas, mesmo sem ligação à Internet.
 
 Ideal para viagens, compras, pagamentos internacionais ou para quem precisa de uma calculadora de moeda simples sem depender de uma ligação permanente à Internet.
 

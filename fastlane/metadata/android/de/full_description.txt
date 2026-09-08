@@ -6,7 +6,7 @@ Ideal für Reisen, Einkäufe, internationale Zahlungen oder alle, die einen einf
 Lade Wechselkurse herunter und rechne Währungen direkt auf deinem Gerät um. Sobald die Kurse synchronisiert sind, funktioniert die Umrechnung vollständig offline.
 
 <b>Wechselkurse</b><br>
-Die Kurse stammen von der Frankfurter API mit Referenzdaten der Europäischen Zentralbank. Wähle, wie oft die Kurse synchronisiert werden – von alle 6 Stunden bis wöchentlich – oder aktualisiere sie manuell.
+Die Kurse werden von der Frankfurter API bereitgestellt und basieren auf Referenzdaten der Europäischen Zentralbank. Wähle, wie oft die Kurse synchronisiert werden – von alle 6 Stunden bis wöchentlich – oder aktualisiere sie manuell.
 
 <b>Funktionen</b><br>
 
