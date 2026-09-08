@@ -1,12 +1,13 @@
-<b>Offline konwerter walut</b> to darmowy konwerter walut z otwartym kodem źródłowym dla Androida. Konwertuj między ponad 160 walutami przy użyciu najnowszych pobranych kursów wymiany — nawet w trybie offline.
+<b>Offline konwerter walut</b><br>
+to darmowy konwerter walut z otwartym kodem źródłowym dla Androida. Konwertuj między ponad 160 walutami przy użyciu najnowszych pobranych kursów wymiany — nawet w trybie offline.<br>
 
-Idealny do podróży, zakupów, płatności międzynarodowych lub dla każdego, kto potrzebuje prostego kalkulatora walut bez polegania na stałym połączeniu z internetem.
+Idealny do podróży, zakupów, płatności międzynarodowych lub dla każdego, kto potrzebuje prostego kalkulatora walut bez polegania na stałym połączeniu z internetem.<br>
 
 <b>Konwersja walut offline</b><br>
-Pobierz kursy wymiany i przeliczaj waluty bezpośrednio na urządzeniu. Po zsynchronizowaniu kursów konwersja działa w pełni offline.
+Pobierz kursy wymiany i przeliczaj waluty bezpośrednio na urządzeniu. Po zsynchronizowaniu kursów konwersja działa w pełni offline.<br>
 
 <b>Kursy walut</b><br>
-Kursy dostarcza API Frankfurter na podstawie danych referencyjnych Europejskiego Banku Centralnego. Wybierz, jak często kursy będą synchronizowane — od co 6 godzin do co tydzień — lub aktualizuj je ręcznie.
+Kursy dostarcza API Frankfurter na podstawie danych referencyjnych Europejskiego Banku Centralnego. Wybierz, jak często kursy będą synchronizowane — od co 6 godzin do co tydzień — lub aktualizuj je ręcznie.<br>
 
 <b>Funkcje</b><br>
 <ul>
@@ -26,7 +27,7 @@ Kursy dostarcza API Frankfurter na podstawie danych referencyjnych Europejskiego
 </ul>
 
 <b>Prywatność</b><br>
-Konwersja walut odbywa się na urządzeniu. Dostęp do sieci służy wyłącznie synchronizacji kursów walut. Konto nie jest wymagane, a aplikacja nie zawiera reklam, analityki ani śledzenia.
+Konwersja walut odbywa się na urządzeniu. Dostęp do sieci służy wyłącznie synchronizacji kursów walut. Konto nie jest wymagane, a aplikacja nie zawiera reklam, analityki ani śledzenia.<br>
 
 <b>Bezpłatnie i z otwartym kodem źródłowym</b><br>
 Offline konwerter walut to wolne oprogramowanie wydane na licencji AGPLv3.

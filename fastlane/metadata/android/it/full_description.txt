@@ -1,12 +1,13 @@
-<b>Convertitore di valuta offline</b> è un convertitore di valuta gratuito e open source per Android. Converti tra oltre 160 valute usando gli ultimi tassi di cambio scaricati, anche quando sei offline.
+<b>Convertitore di valuta offline</b><br>
+è un convertitore di valuta gratuito e open source per Android. Converti tra oltre 160 valute usando gli ultimi tassi di cambio scaricati, anche quando sei offline.<br>
 
-Ideale per viaggi, acquisti, pagamenti internazionali o per chiunque abbia bisogno di un semplice calcolatore di valuta senza dipendere da una connessione Internet permanente.
+Ideale per viaggi, acquisti, pagamenti internazionali o per chiunque abbia bisogno di un semplice calcolatore di valuta senza dipendere da una connessione Internet permanente.<br>
 
 <b>Conversione di valuta offline</b><br>
-Scarica i tassi di cambio ed esegui le conversioni direttamente sul tuo dispositivo. Una volta sincronizzati i tassi, le conversioni funzionano completamente offline.
+Scarica i tassi di cambio ed esegui le conversioni direttamente sul tuo dispositivo. Una volta sincronizzati i tassi, le conversioni funzionano completamente offline.<br>
 
 <b>Tassi di cambio</b><br>
-I tassi sono forniti dall'API Frankfurter usando i dati di riferimento della Banca centrale europea. Scegli con quale frequenza sincronizzare i tassi, da ogni 6 ore a settimanalmente, oppure aggiornali manualmente.
+I tassi sono forniti dall'API Frankfurter usando i dati di riferimento della Banca centrale europea. Scegli con quale frequenza sincronizzare i tassi, da ogni 6 ore a settimanalmente, oppure aggiornali manualmente.<br>
 
 <b>Funzionalità</b><br>
 <ul>
@@ -26,7 +27,7 @@ I tassi sono forniti dall'API Frankfurter usando i dati di riferimento della Ban
 </ul>
 
 <b>Privacy</b><br>
-La conversione di valuta avviene sul tuo dispositivo. L'accesso alla rete viene usato solo per sincronizzare i tassi di cambio. Non è richiesto alcun account e l'app non contiene pubblicità, analisi o tracciamento.
+La conversione di valuta avviene sul tuo dispositivo. L'accesso alla rete viene usato solo per sincronizzare i tassi di cambio. Non è richiesto alcun account e l'app non contiene pubblicità, analisi o tracciamento.<br>
 
 <b>Gratuito e open source</b><br>
 Convertitore di valuta offline è un software libero rilasciato con licenza AGPLv3.

@@ -1,12 +1,13 @@
-<b>Offline Currency Converter</b> is a free and open-source currency converter for Android. Convert between 160+ currencies using the latest downloaded exchange rates — even when you are offline.
+<b>Offline Currency Converter</b><br>
+is a free and open-source currency converter for Android. Convert between 160+ currencies using the latest downloaded exchange rates — even when you are offline.<br>
 
-Ideal for travel, shopping, international payments, or anyone who needs a simple currency calculator without relying on a permanent internet connection.
+Ideal for travel, shopping, international payments, or anyone who needs a simple currency calculator without relying on a permanent internet connection.<br>
 
 <b>Offline currency conversion</b><br>
-Download exchange rates and perform currency conversions directly on your device. Once rates are synchronized, conversions work completely offline.
+Download exchange rates and perform currency conversions directly on your device. Once rates are synchronized, conversions work completely offline.<br>
 
 <b>Exchange rates</b><br>
-Rates are provided by the Frankfurter API using European Central Bank reference data. Choose how often rates are synchronized, from every 6 hours to weekly, or update them manually.
+Rates are provided by the Frankfurter API using European Central Bank reference data. Choose how often rates are synchronized, from every 6 hours to weekly, or update them manually.<br>
 
 <b>Features</b><br>
 <ul>
@@ -26,7 +27,7 @@ Rates are provided by the Frankfurter API using European Central Bank reference 
 </ul>
 
 <b>Privacy</b><br>
-Currency conversion happens on your device. Network access is only used to synchronize exchange rates. No account is required and the app does not contain advertising, analytics, or tracking.
+Currency conversion happens on your device. Network access is only used to synchronize exchange rates. No account is required and the app does not contain advertising, analytics, or tracking.<br>
 
 <b>Free and open source</b><br>
 Offline Currency Converter is free software released under the AGPLv3 license.

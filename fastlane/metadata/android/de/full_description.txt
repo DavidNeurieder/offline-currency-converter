@@ -1,12 +1,13 @@
-<b>Offline-Währungsrechner</b> ist ein kostenloser Open-Source-Währungsumrechner für Android. Rechne zwischen über 160 Währungen um – mit den zuletzt heruntergeladenen Wechselkursen, selbst wenn du offline bist.
+<b>Offline-Währungsrechner</b><br>
+ist ein kostenloser Open-Source-Währungsumrechner für Android. Rechne zwischen über 160 Währungen um – mit den zuletzt heruntergeladenen Wechselkursen, selbst wenn du offline bist.<br>
 
-Ideal für Reisen, Einkäufe, internationale Zahlungen oder alle, die einen einfachen Währungsrechner ohne dauerhafte Internetverbindung benötigen.
+Ideal für Reisen, Einkäufe, internationale Zahlungen oder alle, die einen einfachen Währungsrechner ohne dauerhafte Internetverbindung benötigen.<br>
 
 <b>Offline-Währungsumrechnung</b><br>
-Lade Wechselkurse herunter und rechne Währungen direkt auf deinem Gerät um. Sobald die Kurse synchronisiert sind, funktioniert die Umrechnung vollständig offline.
+Lade Wechselkurse herunter und rechne Währungen direkt auf deinem Gerät um. Sobald die Kurse synchronisiert sind, funktioniert die Umrechnung vollständig offline.<br>
 
 <b>Wechselkurse</b><br>
-Die Kurse werden von der Frankfurter API bereitgestellt und basieren auf Referenzdaten der Europäischen Zentralbank. Wähle, wie oft die Kurse synchronisiert werden – von alle 6 Stunden bis wöchentlich – oder aktualisiere sie manuell.
+Die Kurse werden von der Frankfurter API bereitgestellt und basieren auf Referenzdaten der Europäischen Zentralbank. Wähle, wie oft die Kurse synchronisiert werden – von alle 6 Stunden bis wöchentlich – oder aktualisiere sie manuell.<br>
 
 <b>Funktionen</b><br>
 <ul>
@@ -26,7 +27,7 @@ Die Kurse werden von der Frankfurter API bereitgestellt und basieren auf Referen
 </ul>
 
 <b>Datenschutz</b><br>
-Die Währungsumrechnung erfolgt auf deinem Gerät. Netzwerkzugriff wird nur zum Synchronisieren der Wechselkurse genutzt. Es ist kein Konto erforderlich, und die App enthält keine Werbung, Analysen oder Tracking.
+Die Währungsumrechnung erfolgt auf deinem Gerät. Netzwerkzugriff wird nur zum Synchronisieren der Wechselkurse genutzt. Es ist kein Konto erforderlich, und die App enthält keine Werbung, Analysen oder Tracking.<br>
 
 <b>Kostenlos und Open Source</b><br>
 Der Offline-Währungsrechner ist freie Software unter der AGPLv3-Lizenz.
