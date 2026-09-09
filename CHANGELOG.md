@@ -2,6 +2,9 @@
 
 ## 0.6.0
 
+### Added
+- Localized F-Droid store listings: title, short, and full descriptions in 13 languages including Brazilian Portuguese
+
 ### Changed
 - Upgraded build system: Gradle 9.6 and Android Gradle Plugin 9.4 (Kotlin built into AGP)
 - Migrated dependencies to a Gradle version catalog
@@ -11,6 +14,7 @@
 
 ### Fixed
 - Clearing the amount no longer hides the favorites list — favorite rows stay visible with a dash placeholder until you enter a new amount
+- Conversion card now has stable geometry: long amounts and wider text no longer shift the favorites list, and clearing the input no longer makes the UI jump
 
 ## 0.5.0
 
