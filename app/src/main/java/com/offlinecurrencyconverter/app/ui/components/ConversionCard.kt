@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -45,7 +46,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import android.widget.Toast
 import com.offlinecurrencyconverter.app.R
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
@@ -72,6 +78,10 @@ fun ConversionCard(
     modifier: Modifier = Modifier,
     detectionInfo: String? = null
 ) {
+    val density = LocalDensity.current
+    var reservedResultHeightPx by remember {
+        mutableIntStateOf(with(density) { ResultAreaReservedHeight.roundToPx() })
+    }
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -171,9 +181,19 @@ fun ConversionCard(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .defaultMinSize(minHeight = ResultAreaReservedHeight),
+                    .height(with(density) { reservedResultHeightPx.toDp() }),
                 contentAlignment = Alignment.TopCenter
             ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onSizeChanged { size ->
+                            if (size.height > reservedResultHeightPx) {
+                                reservedResultHeightPx = size.height
+                            }
+                        },
+                    contentAlignment = Alignment.TopCenter
+                ) {
                 if (error != null) {
                     Text(
                         text = error,
@@ -243,6 +263,7 @@ fun ConversionCard(
                         modifier = Modifier.testTag("placeholder_text")
                     )
                 }
+                }
             }
 
             if (multiCurrencyConversions.isNotEmpty()) {
@@ -289,7 +310,9 @@ fun ConversionCard(
                             Text(
                                 text = result.currency.name,
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                         }
                         Text(
@@ -300,6 +323,8 @@ fun ConversionCard(
                             } ?: "-",
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                             modifier = Modifier.testTag("multi_result_${result.currency.code}")
                         )
                     }
