@@ -7,6 +7,9 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
@@ -175,7 +178,7 @@ class ConvertScreenUiTest {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("amount_input")
-            .assertTextEquals("")
+            .assert(editableTextIsEmpty())
         composeTestRule.onNodeWithTag("amount_input")
             .assertIsFocused()
     }
@@ -193,9 +196,13 @@ class ConvertScreenUiTest {
         composeTestRule.waitForIdle()
 
         composeTestRule.onNodeWithTag("amount_input")
-            .assertTextEquals("")
+            .assert(editableTextIsEmpty())
         composeTestRule.onNodeWithContentDescription(
             composeTestRule.activity.getString(R.string.clear_search)
         ).assertDoesNotExist()
     }
+}
+
+private fun editableTextIsEmpty() = SemanticsMatcher("EditableText is empty") { node ->
+    node.config[SemanticsProperties.EditableText].isNullOrEmpty()
 }
