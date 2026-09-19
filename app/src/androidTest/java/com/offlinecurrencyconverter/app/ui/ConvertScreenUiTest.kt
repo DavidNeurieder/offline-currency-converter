@@ -179,4 +179,23 @@ class ConvertScreenUiTest {
         composeTestRule.onNodeWithTag("amount_input")
             .assertIsFocused()
     }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_013_initialState_amountFieldEmpty() {
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextClearance()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.activityRule.scenario.recreate()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("amount_input")
+            .assertTextEquals("")
+        composeTestRule.onNodeWithContentDescription(
+            composeTestRule.activity.getString(R.string.clear_search)
+        ).assertDoesNotExist()
+    }
 }

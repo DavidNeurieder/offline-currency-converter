@@ -66,7 +66,7 @@ class ConvertViewModelTest {
         coEvery { preferencesManager.saveTargetCurrency(any()) } returns Unit
         every { preferencesManager.historicalRatesChart } returns flowOf(true)
         every { preferencesManager.multiCurrencyView } returns flowOf(false)
-        every { preferencesManager.amount } returns flowOf("1")
+        every { preferencesManager.amount } returns flowOf("")
         coEvery { preferencesManager.saveAmount(any()) } returns Unit
         every { preferencesManager.chartDateRange } returns flowOf(30)
         coEvery { preferencesManager.saveChartDateRange(any()) } returns Unit
@@ -91,8 +91,45 @@ class ConvertViewModelTest {
     @Test
     fun `initial state has default values`() = runTest {
         val state = viewModel.uiState.value
-        assertEquals("1", viewModel.amount.value)
+        assertEquals("", viewModel.amount.value)
         assertNull(state.error)
+    }
+
+    @Test
+    fun `saved amount is restored on start`() = runTest {
+        every { preferencesManager.amount } returns flowOf("25")
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("25", vm.amount.value)
+    }
+
+    @Test
+    fun `empty saved amount keeps amount empty on start`() = runTest {
+        every { preferencesManager.amount } returns flowOf("")
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals("", vm.amount.value)
+        assertNull(vm.uiState.value.conversionResult)
     }
 
     @Test

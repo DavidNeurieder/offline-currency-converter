@@ -76,7 +76,7 @@ class PreferencesManager @Inject constructor(
     }
 
     val amount: Flow<String> = dataStore.data.map { prefs ->
-        prefs[Keys.AMOUNT] ?: "1"
+        prefs[Keys.AMOUNT] ?: ""
     }
 
     val chartDateRange: Flow<Int> = dataStore.data.map { prefs ->

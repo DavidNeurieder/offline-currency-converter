@@ -64,7 +64,7 @@ class ConvertViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ConvertUiState())
     val uiState: StateFlow<ConvertUiState> = _uiState.asStateFlow()
 
-    private val _amount = MutableStateFlow("1")
+    private val _amount = MutableStateFlow("")
     val amount: StateFlow<String> = _amount.asStateFlow()
 
     val currencies: StateFlow<List<Currency>> = currencyRepository.getAllCurrencies()
