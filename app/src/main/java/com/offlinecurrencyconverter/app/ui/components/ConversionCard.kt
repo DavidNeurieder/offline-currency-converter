@@ -30,8 +30,11 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -73,6 +76,7 @@ fun ConversionCard(
     modifier: Modifier = Modifier,
     detectionInfo: String? = null
 ) {
+    val focusRequester = remember { FocusRequester() }
     Card(
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -125,7 +129,12 @@ fun ConversionCard(
                 ),
                 trailingIcon = {
                     if (amount.isNotEmpty()) {
-                        IconButton(onClick = { onAmountChange("") }) {
+                        IconButton(
+                            onClick = {
+                                onAmountChange("")
+                                focusRequester.requestFocus()
+                            }
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Clear,
                                 contentDescription = stringResource(R.string.clear_search)
@@ -133,7 +142,10 @@ fun ConversionCard(
                         }
                     }
                 },
-                modifier = Modifier.fillMaxWidth().testTag("amount_input"),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .focusRequester(focusRequester)
+                    .testTag("amount_input"),
                 singleLine = true
             )
 

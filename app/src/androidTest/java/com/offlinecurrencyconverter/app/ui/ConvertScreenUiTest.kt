@@ -2,7 +2,9 @@ package com.offlinecurrencyconverter.app.ui
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.assertIsFocused
 import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.assertTextEquals
@@ -10,6 +12,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import com.offlinecurrencyconverter.app.MainActivity
+import com.offlinecurrencyconverter.app.R
 import org.junit.Rule
 import org.junit.Test
 
@@ -155,5 +158,25 @@ class ConvertScreenUiTest {
             .assertExists()
         composeTestRule.onNodeWithTag("multi_result_EUR")
             .assertTextEquals("-")
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_012_clearButton_amountEmptyAndFocused() {
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextInput("100")
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithContentDescription(
+            composeTestRule.activity.getString(R.string.clear_search)
+        ).performClick()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("amount_input")
+            .assertTextEquals("")
+        composeTestRule.onNodeWithTag("amount_input")
+            .assertIsFocused()
     }
 }
