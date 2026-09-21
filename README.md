@@ -1,6 +1,6 @@
 # Offline Currency Converter
 
-**Version:** 0.6.0
+**Version:** 0.7.0
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -26,7 +26,9 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **Sync status** — colored badge shows how fresh your rates are
 - **Copy result** — tap to copy any conversion to clipboard
 - **Pull-to-refresh** — manually trigger a rate sync from the convert screen
-- **Amount persistence** — your input survives app restarts
+- **Amount persistence** — your input survives app restarts (starts empty on a fresh install)
+- **Start typing instantly** — the amount field is focused and the keyboard opens when the app starts
+- **Clear and type** — clearing the amount keeps the field focused and opens the keyboard for immediate entry
 - **Auto-sync** — rates sync on first install and app updates, not on every launch
 - **Bundled flags** — country flags are built into the app, no network loading
 - **Material Design 3** — modern UI with dynamic theming

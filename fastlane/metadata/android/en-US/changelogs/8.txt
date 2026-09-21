@@ -1,0 +1,4 @@
+Version 0.7.0:
+- Opening the app now focuses the amount field and opens the keyboard so you can start typing right away
+- Clearing the amount keeps the field focused and opens the keyboard, ready for your next entry
+- The amount field no longer defaults to 1 — it starts empty, while a previously entered amount is still restored

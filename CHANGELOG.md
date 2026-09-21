@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.7.0
+
+### Added
+- Opening the app now focuses the amount field and opens the keyboard so you can start typing immediately
+- Clearing the amount keeps the field focused and opens the keyboard, ready for your next entry
+
+### Changed
+- The amount field no longer defaults to `1` — it starts empty on a fresh install, while a previously entered amount is still restored after restart
+
 ## 0.6.0
 
 ### Added
