@@ -8,9 +8,11 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertTextEquals
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
@@ -223,6 +225,17 @@ class ConvertScreenUiTest {
 
         composeTestRule.onNodeWithTag("amount_input")
             .assert(editableTextIs("5"))
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalTestApi::class)
+    @Test
+    fun TC_015_initialState_amountFieldFocused() {
+        composeTestRule.waitUntilExactlyOneExists(hasTestTag("amount_input"), 10_000)
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("amount_input")
+            .assertIsFocused()
     }
 }
 
