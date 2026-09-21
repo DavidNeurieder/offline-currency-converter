@@ -201,6 +201,33 @@ class ConvertScreenUiTest {
             composeTestRule.activity.getString(R.string.clear_search)
         ).assertDoesNotExist()
     }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
+    fun TC_014_clearButton_typingWorksImmediately() {
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextInput("100")
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithContentDescription(
+            composeTestRule.activity.getString(R.string.clear_search)
+        ).performClick()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("amount_input")
+            .performTextInput("5")
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("amount_input")
+            .assert(editableTextIs("5"))
+    }
+}
+
+private fun editableTextIs(expected: String) = SemanticsMatcher("EditableText is $expected") { node ->
+    node.config[SemanticsProperties.EditableText]?.text == expected
 }
 
 private fun editableTextIsEmpty() = SemanticsMatcher("EditableText is empty") { node ->
