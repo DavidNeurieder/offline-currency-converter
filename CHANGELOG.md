@@ -8,6 +8,7 @@
 
 ### Changed
 - The amount field no longer defaults to `1` — it starts empty on a fresh install, while a previously entered amount is still restored after restart
+- Much smaller app: code shrinking with R8 is now enabled, cutting the release APK from ~15 MB to ~2.6 MB (installed size from ~70 MB to ~6 MB) with reproducible builds
 
 ## 0.6.0
 

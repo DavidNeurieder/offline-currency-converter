@@ -27,3 +27,11 @@
 -keep class dagger.hilt.** { *; }
 -keep class javax.inject.** { *; }
 -keep class * extends dagger.hilt.android.internal.managers.ViewComponentManager$FragmentContextWrapper { *; }
+
+# Keep Retrofit service interface (created reflectively via Retrofit.create)
+-keep,allowobfuscation,allowshrinking interface com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
+
+# Keep WorkManager workers alive and instantiable by name
+-keep class * extends androidx.work.Worker {
+    <init>(...);
+}

@@ -8,6 +8,14 @@ plugins {
     id("jacoco")
 }
 
+// AGP requests a compose-group-mapping version that was never published (2.2.10);
+// pin the producer to the Kotlin version this project compiles with.
+configurations.configureEach {
+    if (name.contains("composemapping", ignoreCase = true)) {
+        resolutionStrategy.force("org.jetbrains.kotlin:compose-group-mapping:${libs.versions.kotlin.get()}")
+    }
+}
+
 android {
     namespace = "com.offlinecurrencyconverter.app"
     compileSdk = 37
@@ -46,7 +54,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

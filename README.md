@@ -15,6 +15,7 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 ## Features
 
 - **100% offline** — no internet required after initial sync
+- **Tiny download** — R8 code shrinking keeps the release APK under 3 MB
 - **160+ currencies** — all ECB reference rates
 - **Favorites** — star your most-used currencies for quick access
 - **Multi-currency view** — see conversions to all your favorites at once; favorites stay visible when the amount is cleared
@@ -50,7 +51,7 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 
 The release APK will be at `app/build/outputs/apk/release/app-release.apk`
 
-> **Note for F-Droid:** This project follows the [F-Droid Reproducible Builds](https://f-droid.org/en/docs/Reproducible_Builds/) guidelines. Minification (R8/ProGuard) is disabled to ensure deterministic output.
+> **Note for F-Droid:** This project follows the [F-Droid Reproducible Builds](https://f-droid.org/en/docs/Reproducible_Builds/) guidelines. The release build is minified and optimized with R8 (`isMinifyEnabled = true`), and reproducibility is verified locally by building twice from a clean state and comparing the APKs byte-for-byte — both builds currently produce an identical SHA-256.
 
 ## Permissions
 
