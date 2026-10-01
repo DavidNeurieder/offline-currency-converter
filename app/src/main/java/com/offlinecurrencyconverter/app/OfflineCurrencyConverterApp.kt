@@ -6,8 +6,6 @@ import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.domain.usecase.InstallAutoSyncUseCase
-import com.offlinecurrencyconverter.app.domain.usecase.SyncExchangeRatesUseCase
-import com.offlinecurrencyconverter.app.widget.CurrencyWidgetProvider
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,9 +27,6 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
     lateinit var currencyInitializer: CurrencyInitializer
 
     @Inject
-    lateinit var syncExchangeRatesUseCase: SyncExchangeRatesUseCase
-
-    @Inject
     lateinit var installAutoSyncUseCase: InstallAutoSyncUseCase
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -48,9 +43,7 @@ class OfflineCurrencyConverterApp : Application(), Configuration.Provider {
         applicationScope.launch {
             try {
                 currencyInitializer.initializeIfNeeded()
-                installAutoSyncUseCase(BuildConfig.VERSION_CODE) {
-                    CurrencyWidgetProvider.updateAllWidgets(this@OfflineCurrencyConverterApp)
-                }
+                installAutoSyncUseCase(BuildConfig.VERSION_CODE)
             } catch (e: Throwable) {
                 Log.e(TAG, "Failed to initialize currencies", e)
             }

@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.worker
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -21,9 +22,14 @@ class SyncHistoricalRatesWorker @AssistedInject constructor(
         return result.fold(
             onSuccess = { Result.success() },
             onFailure = { error ->
-                if (error.isRetryable()) {
+                // Retry retryable errors indefinitely, but give other errors a
+                // few extra attempts: a single rejected response (e.g. the
+                // upstream feed briefly listing a currency we do not know yet)
+                // would otherwise leave the app without history for good.
+                if (error.isRetryable() || runAttemptCount < MAX_ATTEMPTS - 1) {
                     Result.retry()
                 } else {
+                    Log.w(TAG, "Historical sync failed permanently: ${error.message}")
                     Result.failure()
                 }
             }
@@ -32,5 +38,7 @@ class SyncHistoricalRatesWorker @AssistedInject constructor(
 
     companion object {
         const val WORK_NAME = "historical_rates_sync"
+        const val MAX_ATTEMPTS = 3
+        private const val TAG = "SyncHistoricalRates"
     }
 }

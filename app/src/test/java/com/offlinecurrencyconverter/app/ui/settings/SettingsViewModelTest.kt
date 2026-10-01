@@ -205,4 +205,42 @@ class SettingsViewModelTest {
 
         assertEquals(1788784013136L, vm.uiState.value.lastSyncTime)
     }
+
+    @Test
+    fun `syncHistoricalNow forces historical sync and reports success`() = runTest {
+        coEvery { syncHistoricalRatesUseCase(force = true) } returns Result.success(Unit)
+
+        viewModel.syncHistoricalNow()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        coVerify(exactly = 1) { syncHistoricalRatesUseCase(force = true) }
+        assertTrue(viewModel.uiState.value.historicalSyncSuccess)
+        assertNull(viewModel.uiState.value.historicalSyncError)
+        assertFalse(viewModel.uiState.value.isSyncingHistorical)
+    }
+
+    @Test
+    fun `syncHistoricalNow reports failure`() = runTest {
+        coEvery { syncHistoricalRatesUseCase(force = true) } returns Result.failure(Exception("Network error"))
+
+        viewModel.syncHistoricalNow()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertFalse(viewModel.uiState.value.historicalSyncSuccess)
+        assertEquals("Network error", viewModel.uiState.value.historicalSyncError)
+        assertFalse(viewModel.uiState.value.isSyncingHistorical)
+    }
+
+    @Test
+    fun `clearSyncStatus clears historical status`() = runTest {
+        coEvery { syncHistoricalRatesUseCase(force = true) } returns Result.failure(Exception("Error"))
+
+        viewModel.syncHistoricalNow()
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        viewModel.clearSyncStatus()
+
+        assertNull(viewModel.uiState.value.historicalSyncError)
+        assertFalse(viewModel.uiState.value.historicalSyncSuccess)
+    }
 }

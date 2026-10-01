@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">Mostra le conversioni di tutte le valute preferite sotto il risultato</string>
     <string name="historical_rates_chart">Grafico Andamento Storico</string>
     <string name="historical_rates_chart_description">Mostra il grafico dell\'andamento nella schermata di conversione</string>
+    <string name="sync_historical_data">Sincronizza dati storici</string>
+    <string name="syncing_historical_data">Sincronizzazione dei dati storici…</string>
+    <string name="historical_sync_completed">Dati storici aggiornati</string>
+    <string name="historical_sync_failed">Sincronizzazione dei dati storici non riuscita: %1$s</string>
     <string name="about">Info</string>
     <string name="version_format">Versione %1$s</string>
     <string name="about_description">Convertitore di valuta alimentato da Frankfurter API. Supporta oltre 160 valute.</string>

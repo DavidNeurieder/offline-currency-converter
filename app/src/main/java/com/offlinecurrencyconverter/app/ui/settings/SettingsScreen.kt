@@ -69,8 +69,10 @@ fun SettingsScreen(
     val currencies by viewModel.currencies.collectAsState()
     var showFavoritesPicker by remember { mutableStateOf(false) }
 
-    LaunchedEffect(uiState.syncError, uiState.syncSuccess) {
-        if (uiState.syncError != null || uiState.syncSuccess) {
+    LaunchedEffect(uiState.syncError, uiState.syncSuccess, uiState.historicalSyncError, uiState.historicalSyncSuccess) {
+        if (uiState.syncError != null || uiState.syncSuccess ||
+            uiState.historicalSyncError != null || uiState.historicalSyncSuccess
+        ) {
             kotlinx.coroutines.delay(3000)
             viewModel.clearSyncStatus()
         }
@@ -131,7 +133,11 @@ fun SettingsScreen(
             item {
                 HistoricalRatesChartSection(
                     historicalRatesChart = uiState.historicalRatesChart,
-                    onHistoricalRatesChartToggle = viewModel::onHistoricalRatesChartToggle
+                    onHistoricalRatesChartToggle = viewModel::onHistoricalRatesChartToggle,
+                    isSyncingHistorical = uiState.isSyncingHistorical,
+                    onSyncHistoricalNow = viewModel::syncHistoricalNow,
+                    historicalSyncError = uiState.historicalSyncError,
+                    historicalSyncSuccess = uiState.historicalSyncSuccess
                 )
             }
 
@@ -343,37 +349,93 @@ private fun MultiCurrencySection(
 @Composable
 private fun HistoricalRatesChartSection(
     historicalRatesChart: Boolean,
-    onHistoricalRatesChartToggle: (Boolean) -> Unit
+    onHistoricalRatesChartToggle: (Boolean) -> Unit,
+    isSyncingHistorical: Boolean,
+    onSyncHistoricalNow: () -> Unit,
+    historicalSyncError: String?,
+    historicalSyncSuccess: Boolean
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(16.dp)
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = stringResource(R.string.historical_rates_chart),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.testTag("historical_rates_chart_toggle")
-                )
-                Text(
-                    text = stringResource(R.string.historical_rates_chart_description),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = stringResource(R.string.historical_rates_chart),
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        modifier = Modifier.testTag("historical_rates_chart_toggle")
+                    )
+                    Text(
+                        text = stringResource(R.string.historical_rates_chart_description),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = historicalRatesChart,
+                    onCheckedChange = onHistoricalRatesChartToggle,
+                    modifier = Modifier.testTag("historical_rates_chart_switch")
                 )
             }
-            Switch(
-                checked = historicalRatesChart,
-                onCheckedChange = onHistoricalRatesChartToggle,
-                modifier = Modifier.testTag("historical_rates_chart_switch")
-            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(
+                onClick = onSyncHistoricalNow,
+                enabled = !isSyncingHistorical,
+                modifier = Modifier.fillMaxWidth().testTag("sync_historical_button")
+            ) {
+                if (isSyncingHistorical) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.padding(end = 8.dp),
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.CloudSync,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                }
+                Text(
+                    if (isSyncingHistorical) {
+                        stringResource(R.string.syncing_historical_data)
+                    } else {
+                        stringResource(R.string.sync_historical_data)
+                    }
+                )
+            }
+
+            if (historicalSyncError != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.historical_sync_failed, historicalSyncError),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.testTag("historical_sync_error")
+                )
+            }
+
+            if (historicalSyncSuccess) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = stringResource(R.string.historical_sync_completed),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.testTag("historical_sync_success")
+                )
+            }
         }
     }
 }

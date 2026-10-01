@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">عرض التحويلات لجميع العملات المفضلة أسفل النتيجة</string>
     <string name="historical_rates_chart">مخطط الاتجاه التاريخي</string>
     <string name="historical_rates_chart_description">عرض مخطط الاتجاه على شاشة التحويل</string>
+    <string name="sync_historical_data">مزامنة البيانات التاريخية</string>
+    <string name="syncing_historical_data">جارٍ مزامنة البيانات التاريخية…</string>
+    <string name="historical_sync_completed">تم تحديث البيانات التاريخية</string>
+    <string name="historical_sync_failed">فشلت مزامنة البيانات التاريخية: %1$s</string>
     <string name="about">حول</string>
     <string name="version_format">الإصدار %1$s</string>
     <string name="about_description">محول العملات مدعوم من Frankfurter API. يدعم أكثر من 160 عملة.</string>

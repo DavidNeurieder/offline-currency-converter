@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">Pokaż przeliczenia dla wszystkich walut ulubionych pod wynikiem</string>
     <string name="historical_rates_chart">Wykres Trendu Historycznego</string>
     <string name="historical_rates_chart_description">Pokaż wykres trendu na ekranie konwersji</string>
+    <string name="sync_historical_data">Synchronizuj dane historyczne</string>
+    <string name="syncing_historical_data">Synchronizowanie danych historycznych…</string>
+    <string name="historical_sync_completed">Dane historyczne zaktualizowane</string>
+    <string name="historical_sync_failed">Synchronizacja danych historycznych nie powiodła się: %1$s</string>
     <string name="about">O aplikacji</string>
     <string name="version_format">Wersja %1$s</string>
     <string name="about_description">Konwerter walut oparty na Frankfurter API. Obsługuje ponad 160 walut.</string>

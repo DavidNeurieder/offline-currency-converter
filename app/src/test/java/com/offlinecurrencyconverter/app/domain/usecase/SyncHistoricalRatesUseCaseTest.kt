@@ -66,4 +66,16 @@ class SyncHistoricalRatesUseCaseTest {
         assertTrue(result.isSuccess)
         coVerify(exactly = 0) { exchangeRateRepository.fetchAndStoreHistoricalRates() }
     }
+
+    @Test
+    fun `invoke with force fetches even when chart disabled`() = runTest {
+        every { preferencesManager.historicalRatesChart } returns flowOf(false)
+        syncHistoricalRatesUseCase = SyncHistoricalRatesUseCase(exchangeRateRepository, preferencesManager)
+        coEvery { exchangeRateRepository.fetchAndStoreHistoricalRates() } returns Result.success(Unit)
+
+        val result = syncHistoricalRatesUseCase(force = true)
+
+        assertTrue(result.isSuccess)
+        coVerify(exactly = 1) { exchangeRateRepository.fetchAndStoreHistoricalRates() }
+    }
 }

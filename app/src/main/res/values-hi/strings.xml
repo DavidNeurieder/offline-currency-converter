@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">परिणाम के नीचे सभी पसंदीदा मुद्राओं में रूपांतरण दिखाएं</string>
     <string name="historical_rates_chart">ऐतिहासिक दर रुझान</string>
     <string name="historical_rates_chart_description">रूपांतरण स्क्रीन पर रुझान चार्ट दिखाएं</string>
+    <string name="sync_historical_data">ऐतिहासिक डेटा सिंक करें</string>
+    <string name="syncing_historical_data">ऐतिहासिक डेटा सिंक हो रहा है…</string>
+    <string name="historical_sync_completed">ऐतिहासिक डेटा अपडेट किया गया</string>
+    <string name="historical_sync_failed">ऐतिहासिक डेटा सिंक विफल: %1$s</string>
     <string name="about">के बारे में</string>
     <string name="version_format">संस्करण %1$s</string>
     <string name="about_description">Frankfurter API द्वारा संचालित मुद्रा कनवर्टर। 160+ मुद्राओं का समर्थन करता है।</string>

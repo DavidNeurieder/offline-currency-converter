@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,11 +18,52 @@ import javax.inject.Singleton
 class SyncScheduler @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    fun schedulePeriodicSync(intervalHours: Long) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
+    private fun networkConstraints() = Constraints.Builder()
+        .setRequiredNetworkType(NetworkType.CONNECTED)
+        .setRequiresBatteryNotLow(true)
+        .build()
+
+    /**
+     * One-shot bootstrap sync used on first install and after an app update.
+     * Unlike an in-process coroutine this survives process death, and it is
+     * retried with backoff until it succeeds.
+     */
+    fun enqueueInitialSync() {
+        val constraints = networkConstraints()
+        val workManager = WorkManager.getInstance(context)
+
+        val latestRatesRequest = OneTimeWorkRequestBuilder<SyncWorker>()
+            .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                BACKOFF_DELAY_SECONDS,
+                TimeUnit.SECONDS
+            )
             .build()
+
+        val historicalRatesRequest = OneTimeWorkRequestBuilder<SyncHistoricalRatesWorker>()
+            .setConstraints(constraints)
+            .setBackoffCriteria(
+                BackoffPolicy.EXPONENTIAL,
+                BACKOFF_DELAY_SECONDS,
+                TimeUnit.SECONDS
+            )
+            .build()
+
+        workManager.enqueueUniqueWork(
+            INITIAL_SYNC_WORK_NAME,
+            ExistingWorkPolicy.KEEP,
+            latestRatesRequest
+        )
+        workManager.enqueueUniqueWork(
+            INITIAL_HISTORICAL_SYNC_WORK_NAME,
+            ExistingWorkPolicy.KEEP,
+            historicalRatesRequest
+        )
+    }
+
+    fun schedulePeriodicSync(intervalHours: Long) {
+        val constraints = networkConstraints()
 
         val latestRatesRequest = PeriodicWorkRequestBuilder<SyncWorker>(
             intervalHours, TimeUnit.HOURS,
@@ -67,6 +110,8 @@ class SyncScheduler @Inject constructor(
 
     companion object {
         const val HISTORICAL_SYNC_INTERVAL_HOURS = 24L
+        const val INITIAL_SYNC_WORK_NAME = "initial_exchange_rate_sync"
+        const val INITIAL_HISTORICAL_SYNC_WORK_NAME = "initial_historical_rates_sync"
         private const val BACKOFF_DELAY_SECONDS = 30L
     }
 }

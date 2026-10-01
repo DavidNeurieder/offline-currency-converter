@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">Umcryptungen aller Favoritenwährungen unter dem Ergebnis anzeigen</string>
     <string name="historical_rates_chart">Historischer Kurstrend</string>
     <string name="historical_rates_chart_description">Trenddiagramm auf dem Bildschirm Umrechnung anzeigen</string>
+    <string name="sync_historical_data">Historische Daten synchronisieren</string>
+    <string name="syncing_historical_data">Historische Daten werden synchronisiert…</string>
+    <string name="historical_sync_completed">Historische Daten aktualisiert</string>
+    <string name="historical_sync_failed">Synchronisierung historischer Daten fehlgeschlagen: %1$s</string>
     <string name="about">Über</string>
     <string name="version_format">Version %1$s</string>
     <string name="about_description">Währungsumrechner powered by Frankfurter API. Unterstützt 160+ Währungen.</string>

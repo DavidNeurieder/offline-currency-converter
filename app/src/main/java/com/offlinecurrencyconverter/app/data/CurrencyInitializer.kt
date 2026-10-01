@@ -2,6 +2,8 @@ package com.offlinecurrencyconverter.app.data
 
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,21 +16,23 @@ class CurrencyInitializer @Inject constructor(
         val DEFAULT_FAVORITES = listOf("USD", "EUR", "GBP", "JPY", "CNY")
     }
 
-    suspend fun initializeIfNeeded(): Result<Unit> {
+    private val initMutex = Mutex()
+
+    suspend fun initializeIfNeeded(): Result<Unit> = initMutex.withLock {
         val isInitialized = preferencesManager.currenciesInitialized.first()
         val hasCurrencies = currencyRepository.hasCurrencies()
-        
+
         if (!isInitialized || !hasCurrencies) {
             val result = currencyRepository.fetchAndSaveCurrenciesFromApi()
             if (result.isSuccess) {
                 preferencesManager.setCurrenciesInitialized(true)
             }
             seedDefaultFavoritesIfNeeded()
-            return result
+            result
+        } else {
+            seedDefaultFavoritesIfNeeded()
+            Result.success(Unit)
         }
-        
-        seedDefaultFavoritesIfNeeded()
-        return Result.success(Unit)
     }
 
     private suspend fun seedDefaultFavoritesIfNeeded() {

@@ -1,19 +1,16 @@
 package com.offlinecurrencyconverter.app.domain.usecase
 
 import com.offlinecurrencyconverter.app.data.PreferencesManager
+import com.offlinecurrencyconverter.app.worker.SyncScheduler
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class InstallAutoSyncUseCase @Inject constructor(
     private val preferencesManager: PreferencesManager,
-    private val syncExchangeRatesUseCase: SyncExchangeRatesUseCase,
-    private val syncHistoricalRatesUseCase: SyncHistoricalRatesUseCase
+    private val syncScheduler: SyncScheduler
 ) {
 
-    suspend operator fun invoke(
-        currentVersionCode: Int,
-        onSyncAttempt: () -> Unit
-    ) {
+    suspend operator fun invoke(currentVersionCode: Int) {
         val lastVersion = preferencesManager.lastInstalledVersion.first()
         val isFirstInstall = lastVersion == 0
         val isUpdate = !isFirstInstall && currentVersionCode > lastVersion
@@ -22,11 +19,12 @@ class InstallAutoSyncUseCase @Inject constructor(
 
         val syncIntervalHours = preferencesManager.syncInterval.first()
         if (syncIntervalHours > 0L) {
-            val latestSync = syncExchangeRatesUseCase.forceSync()
-            if (latestSync.isSuccess) {
-                syncHistoricalRatesUseCase()
-            }
-            onSyncAttempt()
+            // The sync itself is handed to WorkManager so it survives process
+            // death and is retried with backoff instead of being attempted once.
+            syncScheduler.enqueueInitialSync()
+            syncScheduler.schedulePeriodicSync(syncIntervalHours)
+        } else {
+            syncScheduler.cancelSync()
         }
         preferencesManager.saveLastInstalledVersion(currentVersionCode)
     }

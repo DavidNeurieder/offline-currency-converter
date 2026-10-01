@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">Conversies naar alle favoriete valuta\'s onder het resultaat tonen</string>
     <string name="historical_rates_chart">Historische Koerstrend</string>
     <string name="historical_rates_chart_description">Toon trendgrafiek op het conversiescherm</string>
+    <string name="sync_historical_data">Historische gegevens synchroniseren</string>
+    <string name="syncing_historical_data">Historische gegevens synchroniseren…</string>
+    <string name="historical_sync_completed">Historische gegevens bijgewerkt</string>
+    <string name="historical_sync_failed">Synchronisatie van historische gegevens mislukt: %1$s</string>
     <string name="about">Over</string>
     <string name="version_format">Versie %1$s</string>
     <string name="about_description">Valutaconverter aangedreven door Frankfurter API. Ondersteunt 160+ valuta.</string>

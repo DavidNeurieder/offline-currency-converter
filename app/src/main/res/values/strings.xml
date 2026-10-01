@@ -64,6 +64,10 @@
     <string name="multi_currency_view_description">Show conversions to all favorite currencies below the result</string>
     <string name="historical_rates_chart">Historical Rate Chart</string>
     <string name="historical_rates_chart_description">Show trend chart on the convert screen</string>
+    <string name="sync_historical_data">Sync Historical Data</string>
+    <string name="syncing_historical_data">Syncing historical data…</string>
+    <string name="historical_sync_completed">Historical data updated</string>
+    <string name="historical_sync_failed">Historical sync failed: %1$s</string>
     <string name="theme">Theme</string>
     <string name="theme_system">Follow System</string>
     <string name="theme_light">Light</string>

@@ -66,6 +66,19 @@ class SettingsScreenUiTest {
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Test
+    fun TC_025_syncHistoricalButton_verifyEnabled() {
+        composeTestRule.onNodeWithTag("open_settings")
+            .performClick()
+
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("sync_historical_button")
+            .performScrollTo()
+            .assertIsDisplayed()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class)
+    @Test
     fun TC_024_aboutSection_verifyAppInfo() {
         composeTestRule.onNodeWithTag("open_settings")
             .performClick()

@@ -59,7 +59,7 @@ class ConvertViewModelTest {
             TestFixtures.createConversionResult()
         )
         coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
-        coEvery { historicalRateRepository.getHistoricalRates(any(), any()) } returns emptyList()
+        every { historicalRateRepository.observeHistoricalRates(any(), any()) } returns flowOf(emptyList())
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
         every { preferencesManager.targetCurrency } returns flowOf("EUR")
@@ -237,7 +237,7 @@ class ConvertViewModelTest {
         viewModel.onSourceCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify { historicalRateRepository.getHistoricalRates(any(), any()) }
+        io.mockk.verify { historicalRateRepository.observeHistoricalRates(any(), any()) }
     }
 
     @Test
@@ -245,7 +245,7 @@ class ConvertViewModelTest {
         viewModel.onTargetCurrencyChange(TestFixtures.GBP)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify { historicalRateRepository.getHistoricalRates(any(), any()) }
+        io.mockk.verify { historicalRateRepository.observeHistoricalRates(any(), any()) }
     }
 
     @Test
@@ -254,7 +254,7 @@ class ConvertViewModelTest {
         viewModel.onTargetCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        io.mockk.coVerify(atLeast = 1) { historicalRateRepository.getHistoricalRates(any(), any()) }
+        io.mockk.verify(atLeast = 1) { historicalRateRepository.observeHistoricalRates(any(), any()) }
     }
 
     @Test
@@ -267,7 +267,7 @@ class ConvertViewModelTest {
                 baseCurrency = "USD", targetCurrency = "EUR", rate = 0.93, date = "2024-01-02"
             )
         )
-        coEvery { historicalRateRepository.getHistoricalRates(any(), any()) } returns historicalRates
+        every { historicalRateRepository.observeHistoricalRates(any(), any()) } returns flowOf(historicalRates)
 
         viewModel.onSourceCurrencyChange(TestFixtures.EUR)
         testDispatcher.scheduler.advanceUntilIdle()

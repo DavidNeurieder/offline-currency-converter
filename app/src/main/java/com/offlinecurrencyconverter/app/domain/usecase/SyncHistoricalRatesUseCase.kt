@@ -9,8 +9,8 @@ class SyncHistoricalRatesUseCase @Inject constructor(
     private val exchangeRateRepository: ExchangeRateRepository,
     private val preferencesManager: PreferencesManager
 ) {
-    suspend operator fun invoke(): Result<Unit> {
-        if (!preferencesManager.historicalRatesChart.first()) {
+    suspend operator fun invoke(force: Boolean = false): Result<Unit> {
+        if (!force && !preferencesManager.historicalRatesChart.first()) {
             return Result.success(Unit)
         }
         return exchangeRateRepository.fetchAndStoreHistoricalRates()

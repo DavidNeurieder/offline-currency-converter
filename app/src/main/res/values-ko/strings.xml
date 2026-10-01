@@ -40,6 +40,10 @@
     <string name="multi_currency_view_description">즐겨찾기 통화의 변환을 결과 아래에 표시</string>
     <string name="historical_rates_chart">과거 환율 추이</string>
     <string name="historical_rates_chart_description">변환 화면에 추이 차트 표시</string>
+    <string name="sync_historical_data">과거 데이터 동기화</string>
+    <string name="syncing_historical_data">과거 데이터 동기화 중…</string>
+    <string name="historical_sync_completed">과거 데이터가 업데이트되었습니다</string>
+    <string name="historical_sync_failed">과거 데이터 동기화 실패: %1$s</string>
     <string name="about">정보</string>
     <string name="version_format">버전 %1$s</string>
     <string name="about_description">Frankfurter API로 구동되는 환율 변환기. 160개 이상의 통화를 지원합니다.</string>

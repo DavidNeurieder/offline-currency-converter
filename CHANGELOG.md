@@ -5,10 +5,16 @@
 ### Added
 - Opening the app now focuses the amount field and opens the keyboard so you can start typing immediately
 - Clearing the amount keeps the field focused and opens the keyboard, ready for your next entry
+- "Sync historical data" button in Settings to retry the historical rate download manually
 
 ### Changed
 - The amount field no longer defaults to `1` — it starts empty on a fresh install, while a previously entered amount is still restored after restart
 - Much smaller app: code shrinking with R8 is now enabled, cutting the release APK from ~15 MB to ~2.6 MB (installed size from ~70 MB to ~6 MB) with reproducible builds
+
+### Fixed
+- Historical exchange-rate history now downloads automatically on a fresh install — background syncs previously failed silently because WorkManager was initialised without the Hilt worker factory
+- The rate trend chart now appears as soon as historical data is downloaded instead of showing "Historical rates unavailable" until the app is restarted
+- Fixed a first-launch race that could leave the currency list partially populated and permanently block rate syncs
 
 ## 0.6.0
 

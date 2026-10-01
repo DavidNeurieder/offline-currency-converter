@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.ui.convert
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
@@ -15,10 +16,12 @@ import com.offlinecurrencyconverter.app.domain.repository.RecentConversionReposi
 import com.offlinecurrencyconverter.app.domain.usecase.ConvertCurrencyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
@@ -75,6 +78,8 @@ class ConvertViewModel @Inject constructor(
 
     private val _recentCurrencies = MutableStateFlow<List<Currency>>(emptyList())
     val recentCurrencies: StateFlow<List<Currency>> = _recentCurrencies.asStateFlow()
+
+    private var historicalRatesJob: Job? = null
 
     init {
         loadSavedCurrencies()
@@ -235,6 +240,7 @@ class ConvertViewModel @Inject constructor(
                 if (enabled) {
                     loadHistoricalRates()
                 } else {
+                    historicalRatesJob?.cancel()
                     _uiState.value = _uiState.value.copy(historicalRates = emptyList())
                 }
             }
@@ -266,7 +272,9 @@ class ConvertViewModel @Inject constructor(
                 targetCurrencies = emptyList()
             )
             if (result.isSuccess) {
-                exchangeRateRepository.fetchAndStoreHistoricalRates()
+                exchangeRateRepository.fetchAndStoreHistoricalRates().onFailure {
+                    Log.w(TAG, "Historical sync failed after refresh: ${it.message}")
+                }
             }
             result.fold(
                 onSuccess = {
@@ -355,10 +363,13 @@ class ConvertViewModel @Inject constructor(
         val source = _uiState.value.sourceCurrency ?: return
         val target = _uiState.value.targetCurrency ?: return
 
-        viewModelScope.launch {
-            val rates = historicalRateRepository.getHistoricalRates(source.code, target.code)
-            _uiState.value = _uiState.value.copy(historicalRates = rates)
-            applyDateRangeFilter()
+        historicalRatesJob?.cancel()
+        historicalRatesJob = viewModelScope.launch {
+            historicalRateRepository.observeHistoricalRates(source.code, target.code)
+                .collect { rates ->
+                    _uiState.value = _uiState.value.copy(historicalRates = rates)
+                    applyDateRangeFilter()
+                }
         }
     }
 
@@ -445,5 +456,9 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesManager.saveAmount(_amount.value)
         }
+    }
+
+    companion object {
+        private const val TAG = "ConvertViewModel"
     }
 }

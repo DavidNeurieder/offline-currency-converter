@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.ui.settings
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.offlinecurrencyconverter.app.data.PreferencesManager
@@ -38,7 +39,10 @@ data class SettingsUiState(
     val syncSuccess: Boolean = false,
     val multiCurrencyView: Boolean = false,
     val historicalRatesChart: Boolean = true,
-    val themeMode: String = "system"
+    val themeMode: String = "system",
+    val isSyncingHistorical: Boolean = false,
+    val historicalSyncError: String? = null,
+    val historicalSyncSuccess: Boolean = false
 )
 
 @HiltViewModel
@@ -144,7 +148,9 @@ class SettingsViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(isSyncing = true, syncError = null, syncSuccess = false)
             val result = syncExchangeRatesUseCase.forceSync()
             if (result.isSuccess) {
-                syncHistoricalRatesUseCase()
+                syncHistoricalRatesUseCase().onFailure {
+                    Log.w(TAG, "Historical sync failed after latest rates sync: ${it.message}")
+                }
             }
             result.fold(
                 onSuccess = {
@@ -164,8 +170,38 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun syncHistoricalNow() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isSyncingHistorical = true,
+                historicalSyncError = null,
+                historicalSyncSuccess = false
+            )
+            val result = syncHistoricalRatesUseCase(force = true)
+            result.fold(
+                onSuccess = {
+                    _uiState.value = _uiState.value.copy(
+                        isSyncingHistorical = false,
+                        historicalSyncSuccess = true
+                    )
+                },
+                onFailure = { error ->
+                    _uiState.value = _uiState.value.copy(
+                        isSyncingHistorical = false,
+                        historicalSyncError = error.message ?: "Sync failed"
+                    )
+                }
+            )
+        }
+    }
+
     fun clearSyncStatus() {
-        _uiState.value = _uiState.value.copy(syncError = null, syncSuccess = false)
+        _uiState.value = _uiState.value.copy(
+            syncError = null,
+            syncSuccess = false,
+            historicalSyncError = null,
+            historicalSyncSuccess = false
+        )
     }
 
     fun onFavoriteToggle(currencyCode: String, isFavorite: Boolean) {
@@ -187,5 +223,9 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch {
             preferencesManager.saveThemeMode(mode)
         }
+    }
+
+    companion object {
+        private const val TAG = "SettingsViewModel"
     }
 }
