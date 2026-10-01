@@ -1,6 +1,6 @@
 # Offline Currency Converter
 
-**Version:** 0.7.0
+**Version:** 0.8.0
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
@@ -21,6 +21,7 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **Multi-currency view** — see conversions to all your favorites at once; favorites stay visible when the amount is cleared
 - **Stable layout** — the conversion card reserves a fixed result area, so the screen never jumps while typing, clearing, or converting, even with long values or larger font scales
 - **Rate trend charts** — 90-day historical charts with gradient fill, cubic curves, and trend colors
+- **History on first launch** — historical rates download automatically on install and the chart fills in as soon as they arrive
 - **Interactive charts** — long-press for crosshair tooltip with date and rate
 - **Date range tabs** — switch between 7D, 30D, and 90D views (persisted across restarts)
 - **Home screen widget** — Material You dynamic colors, works with any currency pair
