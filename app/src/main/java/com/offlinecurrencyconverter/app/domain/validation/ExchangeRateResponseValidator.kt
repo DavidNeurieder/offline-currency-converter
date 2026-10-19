@@ -57,11 +57,37 @@ class ExchangeRateResponseValidator @Inject constructor(
         return Result.success(Unit)
     }
 
+    /**
+     * Strict validation for a full historical window. Delegates to
+     * [validateHistoricalRange] using the configured minimum record count and
+     * treating an empty response as a failure.
+     */
     suspend fun validateHistorical(
         rates: List<ExchangeRateItem>,
         requestedBase: String,
         startDate: String,
         endDate: String
+    ): Result<Unit> = validateHistoricalRange(
+        rates, requestedBase, startDate, endDate,
+        minRecords = minHistoricalRecords,
+        allowEmpty = false
+    )
+
+    /**
+     * Validation for an arbitrary historical window, used by incremental
+     * synchronization. Unlike [validateHistorical] the expected record count is
+     * supplied by the caller (scaled to the window size, since a short window may
+     * legitimately contain only a handful of observations) and an empty response
+     * may be tolerated when [allowEmpty] is set — a weekend or holiday window can
+     * contain no new publications and that is not an error.
+     */
+    suspend fun validateHistoricalRange(
+        rates: List<ExchangeRateItem>,
+        requestedBase: String,
+        startDate: String,
+        endDate: String,
+        minRecords: Int,
+        allowEmpty: Boolean
     ): Result<Unit> {
         val supportedCurrencies = supportedCurrencies()
         if (supportedCurrencies.isEmpty()) {
@@ -71,6 +97,7 @@ class ExchangeRateResponseValidator @Inject constructor(
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
         if (rates.isEmpty()) {
+            if (allowEmpty) return Result.success(Unit)
             return Result.failure(SyncErrorException(SyncError.EmptyResponse))
         }
 
@@ -101,7 +128,7 @@ class ExchangeRateResponseValidator @Inject constructor(
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
 
-        if (validCount < minHistoricalRecords) {
+        if (validCount < minRecords) {
             return Result.failure(SyncErrorException(SyncError.IncompleteResponse))
         }
 
@@ -123,5 +150,19 @@ class ExchangeRateResponseValidator @Inject constructor(
 
     companion object {
         const val DEFAULT_MIN_HISTORICAL_RECORDS = 30
+
+        /**
+         * Scales the configured minimum record count down for short windows.
+         *
+         * Central-bank reference rates are not published on weekends or holidays,
+         * so a window of N calendar days yields roughly 4/5·N observations at most.
+         * Applying the configured absolute minimum (30) to a short incremental
+         * window would reject perfectly valid responses, so the expected count is
+         * capped by the window size.
+         */
+        fun scaledMinRecords(windowDays: Long, configured: Int): Int {
+            val expected = ((windowDays * 2 + 4) / 5).coerceAtLeast(1L)
+            return minOf(configured, expected.toInt())
+        }
     }
 }

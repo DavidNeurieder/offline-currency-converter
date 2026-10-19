@@ -60,6 +60,7 @@ class ConvertViewModelTest {
         )
         coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
         every { historicalRateRepository.observeHistoricalRates(any(), any()) } returns flowOf(emptyList())
+        coEvery { historicalRateRepository.ensureHistory(any(), any(), any()) } returns Result.success(Unit)
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
         every { preferencesManager.targetCurrency } returns flowOf("EUR")

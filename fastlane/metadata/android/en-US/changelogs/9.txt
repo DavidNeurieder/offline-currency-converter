@@ -1,4 +1,5 @@
 Version 0.8.0:
+- New 1-year and 5-year chart ranges; the long history downloads once, then only missing days are synced
 - New "Sync historical data" button in Settings to retry the historical rate download
 - Historical rates now download automatically on a fresh install, and the trend chart appears as soon as they arrive
 - Much smaller app size thanks to code shrinking (about 6 MB installed instead of 70 MB)

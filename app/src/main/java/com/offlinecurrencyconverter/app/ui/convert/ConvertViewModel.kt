@@ -371,11 +371,30 @@ class ConvertViewModel @Inject constructor(
                     applyDateRangeFilter()
                 }
         }
+        ensureHistoricalCoverage(_uiState.value.selectedDateRange)
+    }
+
+    /**
+     * Fetches any history the current chart range needs but is not cached yet.
+     * Writes go to Room, so the flow collected in [loadHistoricalRates] updates
+     * the chart as soon as the data lands.
+     */
+    private fun ensureHistoricalCoverage(days: Int) {
+        if (!_uiState.value.historicalRatesChart) return
+        val source = _uiState.value.sourceCurrency ?: return
+        val target = _uiState.value.targetCurrency ?: return
+        if (source.code == target.code) return
+
+        viewModelScope.launch {
+            historicalRateRepository.ensureHistory(source.code, target.code, days)
+                .onFailure { Log.w(TAG, "History backfill failed for ${days}d: ${it.message}") }
+        }
     }
 
     fun onDateRangeChange(days: Int) {
         _uiState.value = _uiState.value.copy(selectedDateRange = days)
         applyDateRangeFilter()
+        ensureHistoricalCoverage(days)
         viewModelScope.launch {
             preferencesManager.saveChartDateRange(days)
         }

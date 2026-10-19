@@ -426,4 +426,60 @@ class ExchangeRateResponseValidatorTest {
 
         assertTrue(result.isSuccess)
     }
+
+    @Test
+    fun `validateHistoricalRange tolerates an empty incremental window`() = runTest {
+        val result = validator().validateHistoricalRange(
+            emptyList(), "EUR", "2024-01-01", "2024-01-07",
+            minRecords = 5, allowEmpty = true
+        )
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `validateHistoricalRange rejects an empty backfill window`() = runTest {
+        val result = validator().validateHistoricalRange(
+            emptyList(), "EUR", "2024-01-01", "2024-01-31",
+            minRecords = 5, allowEmpty = false
+        )
+
+        assertTrue(result.isFailure)
+        assertEquals(
+            SyncError.EmptyResponse,
+            (result.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
+    fun `validateHistoricalRange honours the caller-supplied minimum over the configured one`() = runTest {
+        val items = historicalItems(3)
+
+        // 3 observations satisfy minRecords=2 even though the configured minimum is 30.
+        val ok = validator(minHistoricalRecords = 30).validateHistoricalRange(
+            items, "EUR", "2024-01-01", "2024-01-31",
+            minRecords = 2, allowEmpty = false
+        )
+        assertTrue(ok.isSuccess)
+
+        // The same 3 observations fail a higher caller-supplied minimum.
+        val tooFew = validator(minHistoricalRecords = 30).validateHistoricalRange(
+            items, "EUR", "2024-01-01", "2024-01-31",
+            minRecords = 10, allowEmpty = false
+        )
+        assertTrue(tooFew.isFailure)
+        assertEquals(
+            SyncError.IncompleteResponse,
+            (tooFew.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
+    fun `scaledMinRecords caps the minimum at the window size`() = runTest {
+        // A week cannot yield 30 observations, so the minimum shrinks.
+        assertEquals(3, ExchangeRateResponseValidator.scaledMinRecords(7, 30))
+        assertEquals(12, ExchangeRateResponseValidator.scaledMinRecords(30, 30))
+        // A long window keeps the configured minimum.
+        assertEquals(30, ExchangeRateResponseValidator.scaledMinRecords(366, 30))
+    }
 }

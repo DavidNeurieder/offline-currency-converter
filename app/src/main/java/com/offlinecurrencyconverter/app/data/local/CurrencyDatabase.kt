@@ -7,10 +7,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.offlinecurrencyconverter.app.data.local.dao.CurrencyDao
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
 import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalSyncStateDao
 import com.offlinecurrencyconverter.app.data.local.dao.RecentConversionDao
 import com.offlinecurrencyconverter.app.data.local.entity.CurrencyEntity
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
+import com.offlinecurrencyconverter.app.data.local.entity.HistoricalSyncStateEntity
 import com.offlinecurrencyconverter.app.data.local.entity.RecentConversionEntity
 
 @Database(
@@ -18,9 +20,10 @@ import com.offlinecurrencyconverter.app.data.local.entity.RecentConversionEntity
         CurrencyEntity::class,
         ExchangeRateEntity::class,
         RecentConversionEntity::class,
-        HistoricalRateEntity::class
+        HistoricalRateEntity::class,
+        HistoricalSyncStateEntity::class
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class CurrencyDatabase : RoomDatabase() {
@@ -28,6 +31,7 @@ abstract class CurrencyDatabase : RoomDatabase() {
     abstract fun exchangeRateDao(): ExchangeRateDao
     abstract fun recentConversionDao(): RecentConversionDao
     abstract fun historicalRateDao(): HistoricalRateDao
+    abstract fun historicalSyncStateDao(): HistoricalSyncStateDao
 
     companion object {
         val MIGRATION_4_5 = object : Migration(4, 5) {
@@ -45,6 +49,21 @@ abstract class CurrencyDatabase : RoomDatabase() {
                         rate REAL NOT NULL,
                         date TEXT NOT NULL,
                         PRIMARY KEY(baseCurrency, targetCurrency, date)
+                    )
+                """)
+            }
+        }
+
+        val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("""
+                    CREATE TABLE IF NOT EXISTS historical_sync_state (
+                        baseCurrency TEXT NOT NULL,
+                        targetCurrency TEXT NOT NULL,
+                        coveredStartDate TEXT,
+                        coveredEndDate TEXT,
+                        lastSuccessfulSync INTEGER NOT NULL,
+                        PRIMARY KEY(baseCurrency, targetCurrency)
                     )
                 """)
             }

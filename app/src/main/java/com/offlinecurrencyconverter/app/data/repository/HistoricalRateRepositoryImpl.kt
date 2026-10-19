@@ -11,13 +11,20 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class HistoricalRateRepositoryImpl @Inject constructor(
-    private val historicalRateDao: HistoricalRateDao
+    private val historicalRateDao: HistoricalRateDao,
+    private val historicalRateSyncer: HistoricalRateSyncer
 ) : HistoricalRateRepository {
 
     override suspend fun getHistoricalRates(
         baseCurrency: String,
         targetCurrency: String
     ): List<HistoricalRateEntity> = observeHistoricalRates(baseCurrency, targetCurrency).first()
+
+    override suspend fun ensureHistory(
+        sourceCurrency: String,
+        targetCurrency: String,
+        days: Int
+    ): Result<Unit> = historicalRateSyncer.ensureHistory(sourceCurrency, targetCurrency, days)
 
     override fun observeHistoricalRates(
         baseCurrency: String,

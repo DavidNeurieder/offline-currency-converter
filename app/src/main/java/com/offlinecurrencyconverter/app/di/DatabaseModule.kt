@@ -6,6 +6,7 @@ import com.offlinecurrencyconverter.app.data.local.CurrencyDatabase
 import com.offlinecurrencyconverter.app.data.local.dao.CurrencyDao
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
 import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalSyncStateDao
 import com.offlinecurrencyconverter.app.data.local.dao.RecentConversionDao
 import dagger.Module
 import dagger.Provides
@@ -28,6 +29,7 @@ object DatabaseModule {
         )
             .addMigrations(CurrencyDatabase.MIGRATION_4_5)
             .addMigrations(CurrencyDatabase.MIGRATION_5_6)
+            .addMigrations(CurrencyDatabase.MIGRATION_6_7)
             .fallbackToDestructiveMigration(false)
             .build()
     }
@@ -50,5 +52,10 @@ object DatabaseModule {
     @Provides
     fun provideHistoricalRateDao(database: CurrencyDatabase): HistoricalRateDao {
         return database.historicalRateDao()
+    }
+
+    @Provides
+    fun provideHistoricalSyncStateDao(database: CurrencyDatabase): HistoricalSyncStateDao {
+        return database.historicalSyncStateDao()
     }
 }

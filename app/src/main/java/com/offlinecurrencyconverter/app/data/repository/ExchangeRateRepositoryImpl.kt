@@ -2,9 +2,7 @@ package com.offlinecurrencyconverter.app.data.repository
 
 import android.util.Log
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
-import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
-import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.domain.model.ExchangeRate
 import com.offlinecurrencyconverter.app.domain.model.SyncError
@@ -14,16 +12,13 @@ import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
 import com.offlinecurrencyconverter.app.domain.validation.ExchangeRateResponseValidator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import javax.inject.Inject
 
 class ExchangeRateRepositoryImpl @Inject constructor(
     private val exchangeRateDao: ExchangeRateDao,
-    private val historicalRateDao: HistoricalRateDao,
     private val frankfurterApi: FrankfurterApi,
-    private val responseValidator: ExchangeRateResponseValidator
+    private val responseValidator: ExchangeRateResponseValidator,
+    private val historicalRateSyncer: HistoricalRateSyncer
 ) : ExchangeRateRepository {
 
     override fun getRatesForCurrency(baseCurrency: String): Flow<List<ExchangeRate>> {
@@ -212,66 +207,8 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchAndStoreHistoricalRates(): Result<Unit> {
-        return try {
-            val startedAt = System.currentTimeMillis()
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-            val calendar = Calendar.getInstance()
-            val endDate = dateFormat.format(calendar.time)
-            calendar.add(Calendar.DAY_OF_YEAR, -90)
-            val startDate = dateFormat.format(calendar.time)
-
-            val response = frankfurterApi.getHistoricalRates(
-                baseCurrency = BASE_CURRENCY,
-                targetCurrencies = null,
-                startDate = startDate,
-                endDate = endDate
-            )
-
-            if (!response.isSuccessful) {
-                Log.d(TAG, "History sync failed: reason=${mapHttpError(response.code())} code=${response.code()}")
-                return Result.failure(mapHttpError(response.code()))
-            }
-
-            val body = response.body()
-                ?: return Result.failure(SyncErrorException(SyncError.EmptyResponse))
-
-            responseValidator.validateHistorical(body, BASE_CURRENCY, startDate, endDate)
-                .getOrElse { error ->
-                    Log.d(
-                        TAG,
-                        "History sync failed: reason=${reasonOf(error)} " +
-                            "window=$startDate..$endDate received=${body.size}"
-                    )
-                    return Result.failure(error)
-                }
-
-            val entities = body
-                .filterNot { it.quote == BASE_CURRENCY }
-                .map { item ->
-                    HistoricalRateEntity(
-                        baseCurrency = item.base,
-                        targetCurrency = item.quote,
-                        rate = item.rate,
-                        date = item.date
-                    )
-                }
-            historicalRateDao.replaceAll(entities)
-            Log.d(
-                TAG,
-                "History sync: base=$BASE_CURRENCY window=$startDate..$endDate " +
-                    "received=${body.size} validated=${body.size} stored=${entities.size} " +
-                    "duration=${System.currentTimeMillis() - startedAt}ms"
-            )
-            Result.success(Unit)
-        } catch (e: java.io.IOException) {
-            Log.d(TAG, "History sync failed: reason=Network")
-            Result.failure(SyncErrorException(SyncError.Network))
-        } catch (e: Exception) {
-            Log.d(TAG, "History sync failed: reason=Unexpected")
-            Result.failure(e)
-        }
-    }
+    override suspend fun fetchAndStoreHistoricalRates(): Result<Unit> =
+        historicalRateSyncer.syncRecentHistory()
 
     override suspend fun getLastUpdateTime(): Long? {
         return exchangeRateDao.getLastUpdateTime()

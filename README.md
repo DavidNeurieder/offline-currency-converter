@@ -20,10 +20,10 @@ The app fetches exchange rates from the free [Frankfurter API](https://frankfurt
 - **Favorites** — star your most-used currencies for quick access
 - **Multi-currency view** — see conversions to all your favorites at once; favorites stay visible when the amount is cleared
 - **Stable layout** — the conversion card reserves a fixed result area, so the screen never jumps while typing, clearing, or converting, even with long values or larger font scales
-- **Rate trend charts** — 90-day historical charts with gradient fill, cubic curves, and trend colors
-- **History on first launch** — historical rates download automatically on install and the chart fills in as soon as they arrive
+- **Rate trend charts** — historical charts with gradient fill, cubic curves, and trend colors
+- **History on first launch** — historical rates download automatically on install and the chart fills in as soon as they arrive; the long-range history is downloaded only once, then only the missing days are synced
 - **Interactive charts** — long-press for crosshair tooltip with date and rate
-- **Date range tabs** — switch between 7D, 30D, and 90D views (persisted across restarts)
+- **Date range tabs** — switch between 7D, 30D, 90D, 1Y, and 5Y views (persisted across restarts)
 - **Home screen widget** — Material You dynamic colors, works with any currency pair
 - **Sync status** — colored badge shows how fresh your rates are
 - **Copy result** — tap to copy any conversion to clipboard

@@ -1,7 +1,6 @@
 package com.offlinecurrencyconverter.app.data.repository
 
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
-import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.data.remote.dto.ExchangeRateItem
@@ -20,14 +19,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class ExchangeRateRepositoryImplTest {
 
     private lateinit var exchangeRateDao: ExchangeRateDao
-    private lateinit var historicalRateDao: HistoricalRateDao
+    private lateinit var historicalRateSyncer: HistoricalRateSyncer
     private lateinit var frankfurterApi: FrankfurterApi
     private lateinit var responseValidator: ExchangeRateResponseValidator
     private lateinit var repository: ExchangeRateRepositoryImpl
@@ -35,16 +31,16 @@ class ExchangeRateRepositoryImplTest {
     @Before
     fun setup() {
         exchangeRateDao = mockk(relaxed = true)
-        historicalRateDao = mockk(relaxed = true)
+        historicalRateSyncer = mockk(relaxed = true)
         frankfurterApi = mockk(relaxed = true)
         responseValidator = mockk()
         coEvery { responseValidator.validateLatest(any(), any(), any()) } returns Result.success(Unit)
-        coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns Result.success(Unit)
+        coEvery { historicalRateSyncer.syncRecentHistory(any()) } returns Result.success(Unit)
         repository = ExchangeRateRepositoryImpl(
             exchangeRateDao,
-            historicalRateDao,
             frankfurterApi,
-            responseValidator
+            responseValidator,
+            historicalRateSyncer
         )
     }
 
@@ -61,15 +57,6 @@ class ExchangeRateRepositoryImplTest {
         isOfflineAvailable = isOfflineAvailable,
         lastUpdated = lastUpdated
     )
-
-    private fun inWindowDates(): Pair<String, String> {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
-        val calendar = Calendar.getInstance()
-        val today = dateFormat.format(calendar.time)
-        calendar.add(Calendar.DAY_OF_YEAR, -1)
-        val yesterday = dateFormat.format(calendar.time)
-        return today to yesterday
-    }
 
     @Test
     fun `getRate returns 1_0 for same currency`() = runTest {
@@ -304,69 +291,17 @@ class ExchangeRateRepositoryImplTest {
     }
 
     @Test
-    fun `fetchAndStoreHistoricalRates fetches from API and stores in dao`() = runTest {
-        val (today, yesterday) = inWindowDates()
-        val rateItems = listOf(
-            ExchangeRateItem(yesterday, "EUR", "USD", 1.09),
-            ExchangeRateItem(today, "EUR", "USD", 1.08),
-            ExchangeRateItem(today, "EUR", "EUR", 1.0)
-        )
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
-
+    fun `fetchAndStoreHistoricalRates delegates to the incremental syncer`() = runTest {
         val result = repository.fetchAndStoreHistoricalRates()
 
         assertTrue(result.isSuccess)
-        coVerify { historicalRateDao.replaceAll(match { entities ->
-            entities.size == 2 &&
-            entities.none { it.targetCurrency == "EUR" } &&
-            entities[0].baseCurrency == "EUR" &&
-            entities[0].targetCurrency == "USD" &&
-            entities[0].rate == 1.09
-        }) }
+        coVerify(exactly = 1) { historicalRateSyncer.syncRecentHistory(any()) }
     }
 
     @Test
-    fun `fetchAndStoreHistoricalRates with invalid rate does not replace history`() = runTest {
-        coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns
-            Result.failure(SyncErrorException(SyncError.InvalidResponse))
-
-        val result = repository.fetchAndStoreHistoricalRates()
-
-        assertTrue(result.isFailure)
-        coVerify(exactly = 0) { historicalRateDao.replaceAll(any()) }
-    }
-
-    @Test
-    fun `fetchAndStoreHistoricalRates with partial history does not replace history`() = runTest {
-        val (today, _) = inWindowDates()
-        val rateItems = listOf(
-            ExchangeRateItem(today, "EUR", "USD", 1.09),
-            ExchangeRateItem(today, "EUR", "GBP", 0.8562)
-        )
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.success(rateItems)
-        coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns
-            Result.failure(SyncErrorException(SyncError.IncompleteResponse))
-
-        val result = repository.fetchAndStoreHistoricalRates()
-
-        assertTrue(result.isFailure)
-        coVerify(exactly = 0) { historicalRateDao.replaceAll(any()) }
-    }
-
-    @Test
-    fun `fetchAndStoreHistoricalRates rejects null body`() = runTest {
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns
-            Response.success<List<ExchangeRateItem>>(null)
-
-        val result = repository.fetchAndStoreHistoricalRates()
-
-        assertTrue(result.isFailure)
-        coVerify(exactly = 0) { historicalRateDao.replaceAll(any()) }
-    }
-
-    @Test
-    fun `fetchAndStoreHistoricalRates handles API failure`() = runTest {
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } returns Response.error(500, mockk(relaxed = true))
+    fun `fetchAndStoreHistoricalRates propagates syncer failure`() = runTest {
+        coEvery { historicalRateSyncer.syncRecentHistory(any()) } returns
+            Result.failure(SyncErrorException(SyncError.Network))
 
         val result = repository.fetchAndStoreHistoricalRates()
 
@@ -374,11 +309,9 @@ class ExchangeRateRepositoryImplTest {
     }
 
     @Test
-    fun `fetchAndStoreHistoricalRates handles network exception`() = runTest {
-        coEvery { frankfurterApi.getHistoricalRates("EUR", null, any(), any()) } throws java.io.IOException("No connection")
+    fun `fetchAndStoreHistoricalRates does not hit the API directly`() = runTest {
+        repository.fetchAndStoreHistoricalRates()
 
-        val result = repository.fetchAndStoreHistoricalRates()
-
-        assertTrue(result.isFailure)
+        coVerify(exactly = 0) { frankfurterApi.getHistoricalRates(any(), any(), any(), any()) }
     }
 }

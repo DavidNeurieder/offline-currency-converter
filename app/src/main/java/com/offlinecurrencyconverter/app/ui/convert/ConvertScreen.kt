@@ -53,6 +53,9 @@ import com.offlinecurrencyconverter.app.ui.components.RateChart
 import com.offlinecurrencyconverter.app.ui.components.RateChartSummary
 import com.offlinecurrencyconverter.app.ui.components.RecentConversionItem
 
+private const val ONE_YEAR_DAYS = 365
+private const val FIVE_YEAR_DAYS = 1825
+
 @OptIn(ExperimentalMaterialApi::class, androidx.compose.material3.ExperimentalMaterial3Api::class)
 @Composable
 fun ConvertScreen(
@@ -189,16 +192,20 @@ fun ConvertScreen(
                                     modifier = Modifier.fillMaxWidth(),
                                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                                 ) {
-                                    listOf(7, 30, 90).forEach { days ->
+                                    listOf(7, 30, 90, 365, 1825).forEach { days ->
                                         FilterChip(
                                             selected = uiState.selectedDateRange == days,
                                             onClick = { viewModel.onDateRangeChange(days) },
                                             label = {
                                                 Text(
-                                                    text = stringResource(
-                                                        R.string.chart_range_days,
-                                                        days
-                                                    )
+                                                    text = when (days) {
+                                                        ONE_YEAR_DAYS -> stringResource(R.string.chart_range_1y)
+                                                        FIVE_YEAR_DAYS -> stringResource(R.string.chart_range_5y)
+                                                        else -> stringResource(
+                                                            R.string.chart_range_days,
+                                                            days
+                                                        )
+                                                    }
                                                 )
                                             }
                                         )

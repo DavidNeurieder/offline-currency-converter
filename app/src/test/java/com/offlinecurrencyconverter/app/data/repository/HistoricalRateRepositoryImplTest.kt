@@ -22,12 +22,15 @@ import org.junit.Test
 class HistoricalRateRepositoryImplTest {
 
     private lateinit var historicalRateDao: HistoricalRateDao
+    private lateinit var historicalRateSyncer: HistoricalRateSyncer
     private lateinit var repository: HistoricalRateRepositoryImpl
 
     @Before
     fun setup() {
         historicalRateDao = mockk(relaxed = true)
-        repository = HistoricalRateRepositoryImpl(historicalRateDao)
+        historicalRateSyncer = mockk(relaxed = true)
+        coEvery { historicalRateSyncer.ensureHistory(any(), any(), any()) } returns Result.success(Unit)
+        repository = HistoricalRateRepositoryImpl(historicalRateDao, historicalRateSyncer)
     }
 
     @Test
@@ -230,5 +233,22 @@ class HistoricalRateRepositoryImplTest {
 
         assertEquals(1.0 / 1.10, emissions.first()[0].rate, 0.01)
         assertEquals(1.0 / 1.25, emissions.last()[0].rate, 0.01)
+    }
+
+    @Test
+    fun `ensureHistory delegates to the syncer`() = runTest {
+        val result = repository.ensureHistory("USD", "EUR", 1825)
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `ensureHistory propagates syncer failure`() = runTest {
+        coEvery { historicalRateSyncer.ensureHistory(any(), any(), any()) } returns
+            Result.failure(RuntimeException("no network"))
+
+        val result = repository.ensureHistory("USD", "EUR", 365)
+
+        assertTrue(result.isFailure)
     }
 }
