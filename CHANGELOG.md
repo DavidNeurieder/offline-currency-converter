@@ -1,10 +1,14 @@
 # Changelog
 
-## 0.8.0
+## 0.9.0
 
 ### Added
 - 1-year and 5-year chart ranges alongside the existing 7D/30D/90D views
 - Historical rates for the long ranges are downloaded once and cached on the device; later syncs only fetch the days that are still missing, so switching tabs or pulling to refresh never re-downloads the full history
+
+## 0.8.0
+
+### Added
 - "Sync historical data" button in Settings to retry the historical rate download manually
 
 ### Changed
