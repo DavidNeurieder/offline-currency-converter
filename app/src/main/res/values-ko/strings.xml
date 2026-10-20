@@ -37,6 +37,7 @@
     <string name="chart_range_days">%1$dD</string>
     <string name="chart_range_1y">1Y</string>
     <string name="chart_range_5y">5Y</string>
+    <string name="chart_range_needs_internet">1년 및 5년 기록을 다운로드하려면 인터넷 연결이 필요합니다</string>
     <string name="quick_convert">즐겨찾기</string>
     <string name="multi_currency_view">다중 통화 뷰</string>
     <string name="multi_currency_view_description">즐겨찾기 통화의 변환을 결과 아래에 표시</string>

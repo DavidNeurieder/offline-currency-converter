@@ -61,6 +61,7 @@
     <string name="chart_range_days">%1$dD</string>
     <string name="chart_range_1y">1Y</string>
     <string name="chart_range_5y">5Y</string>
+    <string name="chart_range_needs_internet">Needs internet to download 1Y and 5Y history</string>
     <string name="quick_convert">Favorites</string>
     <string name="multi_currency_view">Multi-Currency View</string>
     <string name="multi_currency_view_description">Show conversions to all favorite currencies below the result</string>

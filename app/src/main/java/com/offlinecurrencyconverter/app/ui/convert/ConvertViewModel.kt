@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
+import com.offlinecurrencyconverter.app.data.NetworkMonitor
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.domain.model.ConversionResult
@@ -49,8 +50,20 @@ data class ConvertUiState(
     val selectedDateRange: Int = 30,
     val multiCurrencyConversions: List<MultiCurrencyResult> = emptyList(),
     val multiCurrencyView: Boolean = false,
-    val historicalRatesChart: Boolean = true
-)
+    val historicalRatesChart: Boolean = true,
+    /** Days of history cached for the current pair; 0 when it was never downloaded. */
+    val coveredHistoryDays: Int = 0,
+    /** Whether the device can currently download anything. */
+    val isOnline: Boolean = true
+) {
+    /**
+     * A range is selectable when its history is already cached (so it works
+     * offline) or when the device is online and the download can still be
+     * started. Otherwise the chip is disabled rather than drawing a shorter
+     * series under a misleading label.
+     */
+    fun isRangeAvailable(days: Int): Boolean = days <= coveredHistoryDays || isOnline
+}
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -61,7 +74,8 @@ class ConvertViewModel @Inject constructor(
     private val exchangeRateRepository: ExchangeRateRepository,
     private val historicalRateRepository: HistoricalRateRepository,
     private val preferencesManager: PreferencesManager,
-    private val currencyInitializer: CurrencyInitializer
+    private val currencyInitializer: CurrencyInitializer,
+    private val networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConvertUiState())
@@ -93,6 +107,19 @@ class ConvertViewModel @Inject constructor(
         loadSavedAmount()
         loadSavedChartDateRange()
         observeAmountForConversion()
+        observeNetworkStatus()
+    }
+
+    /**
+     * Drives the "needs internet" state of the chart ranges that are not cached
+     * yet, so they become usable again as soon as the connection comes back.
+     */
+    private fun observeNetworkStatus() {
+        viewModelScope.launch {
+            networkMonitor.isOnline.collect { online ->
+                _uiState.value = _uiState.value.copy(isOnline = online)
+            }
+        }
     }
 
     private fun observeAmountForConversion() {
@@ -372,6 +399,7 @@ class ConvertViewModel @Inject constructor(
                 }
         }
         ensureHistoricalCoverage(_uiState.value.selectedDateRange)
+        refreshCoveredHistoryDays()
     }
 
     /**
@@ -387,7 +415,27 @@ class ConvertViewModel @Inject constructor(
 
         viewModelScope.launch {
             historicalRateRepository.ensureHistory(source.code, target.code, days)
-                .onFailure { Log.w(TAG, "History backfill failed for ${days}d: ${it.message}") }
+                .onSuccess { refreshCoveredHistoryDays() }
+                .onFailure { error ->
+                    Log.w(TAG, "History backfill failed for ${days}d: ${error.message}")
+                    // A chunked backfill stores every chunk that succeeded before
+                    // failing, so the cached depth can have grown anyway.
+                    refreshCoveredHistoryDays()
+                }
+        }
+    }
+
+    /**
+     * Re-reads how deep the cached history is for the current pair, so the chart
+     * ranges that need downloading can be enabled again once they were fetched.
+     */
+    private fun refreshCoveredHistoryDays() {
+        val source = _uiState.value.sourceCurrency ?: return
+        val target = _uiState.value.targetCurrency ?: return
+
+        viewModelScope.launch {
+            val days = historicalRateRepository.coveredHistoryDays(source.code, target.code)
+            _uiState.value = _uiState.value.copy(coveredHistoryDays = days)
         }
     }
 

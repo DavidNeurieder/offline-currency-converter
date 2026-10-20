@@ -15,4 +15,16 @@ interface HistoricalRateRepository {
      * written to Room, so [observeHistoricalRates] updates the chart reactively.
      */
     suspend fun ensureHistory(sourceCurrency: String, targetCurrency: String, days: Int): Result<Unit>
+
+    /**
+     * Days of history currently cached for the given pair, measured from the
+     * oldest covered date up to today. Zero when the pair has never been
+     * downloaded.
+     *
+     * Used by the UI to tell "this range is already cached" from "this range
+     * still has to be downloaded", so a range that is not cached yet can be
+     * disabled while offline instead of drawing a shorter series under a
+     * misleading label.
+     */
+    suspend fun coveredHistoryDays(sourceCurrency: String, targetCurrency: String): Int
 }

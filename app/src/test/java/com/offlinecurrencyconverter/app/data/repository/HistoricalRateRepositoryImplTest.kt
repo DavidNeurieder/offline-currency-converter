@@ -1,7 +1,9 @@
 package com.offlinecurrencyconverter.app.data.repository
 
 import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalSyncStateDao
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
+import com.offlinecurrencyconverter.app.data.local.entity.HistoricalSyncStateEntity
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
@@ -17,20 +19,23 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import java.time.LocalDate
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HistoricalRateRepositoryImplTest {
 
     private lateinit var historicalRateDao: HistoricalRateDao
     private lateinit var historicalRateSyncer: HistoricalRateSyncer
+    private lateinit var syncStateDao: HistoricalSyncStateDao
     private lateinit var repository: HistoricalRateRepositoryImpl
 
     @Before
     fun setup() {
         historicalRateDao = mockk(relaxed = true)
         historicalRateSyncer = mockk(relaxed = true)
+        syncStateDao = mockk(relaxed = true)
         coEvery { historicalRateSyncer.ensureHistory(any(), any(), any()) } returns Result.success(Unit)
-        repository = HistoricalRateRepositoryImpl(historicalRateDao, historicalRateSyncer)
+        repository = HistoricalRateRepositoryImpl(historicalRateDao, historicalRateSyncer, syncStateDao)
     }
 
     @Test
@@ -251,4 +256,43 @@ class HistoricalRateRepositoryImplTest {
 
         assertTrue(result.isFailure)
     }
+
+    @Test
+    fun `coveredHistoryDays reports the depth of a direct EUR pair`() = runTest {
+        coEvery { syncStateDao.get("EUR", "USD") } returns coverage(29)
+
+        assertEquals(30, repository.coveredHistoryDays("EUR", "USD"))
+        assertEquals(30, repository.coveredHistoryDays("USD", "EUR"))
+    }
+
+    @Test
+    fun `coveredHistoryDays is 0 when the pair was never downloaded`() = runTest {
+        coEvery { syncStateDao.get("EUR", "USD") } returns null
+
+        assertEquals(0, repository.coveredHistoryDays("EUR", "USD"))
+    }
+
+    @Test
+    fun `coveredHistoryDays is limited by the shallower side of a cross pair`() = runTest {
+        coEvery { syncStateDao.get("EUR", "USD") } returns coverage(179)
+        coEvery { syncStateDao.get("EUR", "GBP") } returns coverage(29)
+
+        // The chart joins both series by date, so the usable depth is the smaller one.
+        assertEquals(30, repository.coveredHistoryDays("USD", "GBP"))
+    }
+
+    @Test
+    fun `coveredHistoryDays is 0 for pairs without stored history`() = runTest {
+        assertEquals(0, repository.coveredHistoryDays("USD", "USD"))
+        assertEquals(0, repository.coveredHistoryDays("EUR", "EUR"))
+    }
+
+    private fun coverage(startDaysAgo: Long): HistoricalSyncStateEntity =
+        HistoricalSyncStateEntity(
+            baseCurrency = "EUR",
+            targetCurrency = "USD",
+            coveredStartDate = LocalDate.now().minusDays(startDaysAgo).toString(),
+            coveredEndDate = LocalDate.now().toString(),
+            lastSuccessfulSync = System.currentTimeMillis()
+        )
 }

@@ -195,6 +195,7 @@ fun ConvertScreen(
                                     listOf(7, 30, 90, 365, 1825).forEach { days ->
                                         FilterChip(
                                             selected = uiState.selectedDateRange == days,
+                                            enabled = uiState.isRangeAvailable(days),
                                             onClick = { viewModel.onDateRangeChange(days) },
                                             label = {
                                                 Text(
@@ -210,6 +211,16 @@ fun ConvertScreen(
                                             }
                                         )
                                     }
+                                }
+                                if (!uiState.isRangeAvailable(ONE_YEAR_DAYS) ||
+                                    !uiState.isRangeAvailable(FIVE_YEAR_DAYS)
+                                ) {
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        text = stringResource(R.string.chart_range_needs_internet),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
                                 }
                                 Spacer(modifier = Modifier.height(8.dp))
                                 when {

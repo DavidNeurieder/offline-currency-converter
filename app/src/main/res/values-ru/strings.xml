@@ -37,6 +37,7 @@
     <string name="chart_range_days">%1$dD</string>
     <string name="chart_range_1y">1Y</string>
     <string name="chart_range_5y">5Y</string>
+    <string name="chart_range_needs_internet">Для загрузки истории за 1 год и 5 лет требуется подключение к интернету</string>
     <string name="quick_convert">Избранное</string>
     <string name="multi_currency_view">Мультивалютный вид</string>
     <string name="multi_currency_view_description">Показывать конвертацию для всех избранных валют под результатом</string>

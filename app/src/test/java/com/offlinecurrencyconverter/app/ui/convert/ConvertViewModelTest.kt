@@ -2,6 +2,7 @@ package com.offlinecurrencyconverter.app.ui.convert
 
 import com.offlinecurrencyconverter.app.TestFixtures
 import com.offlinecurrencyconverter.app.data.CurrencyInitializer
+import com.offlinecurrencyconverter.app.data.NetworkMonitor
 import com.offlinecurrencyconverter.app.data.PreferencesManager
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import com.offlinecurrencyconverter.app.domain.repository.ExchangeRateRepository
@@ -21,6 +22,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -36,6 +38,7 @@ class ConvertViewModelTest {
     private lateinit var historicalRateRepository: HistoricalRateRepository
     private lateinit var preferencesManager: PreferencesManager
     private lateinit var currencyInitializer: CurrencyInitializer
+    private lateinit var networkMonitor: NetworkMonitor
     private lateinit var viewModel: ConvertViewModel
 
     private val testDispatcher = StandardTestDispatcher()
@@ -50,6 +53,7 @@ class ConvertViewModelTest {
         historicalRateRepository = mockk(relaxed = true)
         preferencesManager = mockk(relaxed = true)
         currencyInitializer = mockk(relaxed = true)
+        networkMonitor = mockk(relaxed = true)
 
         every { currencyRepository.getAllCurrencies() } returns flowOf(TestFixtures.currencies)
         every { recentConversionRepository.getRecentConversions(any()) } returns flowOf(emptyList())
@@ -61,6 +65,8 @@ class ConvertViewModelTest {
         coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
         every { historicalRateRepository.observeHistoricalRates(any(), any()) } returns flowOf(emptyList())
         coEvery { historicalRateRepository.ensureHistory(any(), any(), any()) } returns Result.success(Unit)
+        coEvery { historicalRateRepository.coveredHistoryDays(any(), any()) } returns 0
+        every { networkMonitor.isOnline } returns flowOf(true)
         every { preferencesManager.sourceCurrency } returns flowOf("USD")
         coEvery { preferencesManager.saveSourceCurrency(any()) } returns Unit
         every { preferencesManager.targetCurrency } returns flowOf("EUR")
@@ -79,7 +85,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
     }
@@ -107,7 +114,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -125,7 +133,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -298,7 +307,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -332,7 +342,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -367,7 +378,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -393,7 +405,8 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
@@ -418,10 +431,81 @@ class ConvertViewModelTest {
             exchangeRateRepository,
             historicalRateRepository,
             preferencesManager,
-            currencyInitializer
+            currencyInitializer,
+            networkMonitor
         )
         testDispatcher.scheduler.advanceUntilIdle()
 
         assertEquals(1788784013136L, vm.uiState.value.lastSyncTime)
+    }
+
+    @Test
+    fun `uncached chart ranges are disabled while offline`() = runTest {
+        every { networkMonitor.isOnline } returns flowOf(false)
+        coEvery { historicalRateRepository.coveredHistoryDays(any(), any()) } returns 90
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer,
+            networkMonitor
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertEquals(90, vm.uiState.value.coveredHistoryDays)
+        assertFalse(vm.uiState.value.isOnline)
+        // The warm window stays usable offline...
+        assertTrue(vm.uiState.value.isRangeAvailable(90))
+        // ...but the ranges that still have to be downloaded do not.
+        assertFalse(vm.uiState.value.isRangeAvailable(365))
+        assertFalse(vm.uiState.value.isRangeAvailable(1825))
+    }
+
+    @Test
+    fun `uncached chart ranges stay selectable while online`() = runTest {
+        every { networkMonitor.isOnline } returns flowOf(true)
+        coEvery { historicalRateRepository.coveredHistoryDays(any(), any()) } returns 90
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer,
+            networkMonitor
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        // Disabling these online would stop the backfill from ever starting,
+        // because selecting the range is what triggers the download.
+        assertTrue(vm.uiState.value.isRangeAvailable(365))
+        assertTrue(vm.uiState.value.isRangeAvailable(1825))
+    }
+
+    @Test
+    fun `deeply cached chart ranges stay selectable while offline`() = runTest {
+        every { networkMonitor.isOnline } returns flowOf(false)
+        coEvery { historicalRateRepository.coveredHistoryDays(any(), any()) } returns 1825
+
+        val vm = ConvertViewModel(
+            convertCurrencyUseCase,
+            currencyRepository,
+            recentConversionRepository,
+            exchangeRateRepository,
+            historicalRateRepository,
+            preferencesManager,
+            currencyInitializer,
+            networkMonitor
+        )
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        assertTrue(vm.uiState.value.isRangeAvailable(365))
+        assertTrue(vm.uiState.value.isRangeAvailable(1825))
     }
 }

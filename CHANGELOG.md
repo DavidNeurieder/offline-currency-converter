@@ -5,6 +5,7 @@
 ### Added
 - 1-year and 5-year chart ranges alongside the existing 7D/30D/90D views
 - Historical rates for the long ranges are downloaded once and cached on the device; later syncs only fetch the days that are still missing, so switching tabs or pulling to refresh never re-downloads the full history
+- 1Y and 5Y are greyed out with a "needs internet" hint until their history is downloaded, so an offline chart never passes off the shorter cached range as a long one
 
 ## 0.8.0
 

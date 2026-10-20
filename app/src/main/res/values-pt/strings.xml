@@ -37,6 +37,7 @@
     <string name="chart_range_days">%1$dD</string>
     <string name="chart_range_1y">1Y</string>
     <string name="chart_range_5y">5Y</string>
+    <string name="chart_range_needs_internet">É necessário internet para transferir o histórico de 1 ano e 5 anos</string>
     <string name="quick_convert">Favoritos</string>
     <string name="multi_currency_view">Vista multi-moeda</string>
     <string name="multi_currency_view_description">Mostrar conversões para todas as moedas favoritas abaixo do resultado</string>

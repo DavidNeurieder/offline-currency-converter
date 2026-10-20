@@ -1,6 +1,7 @@
 package com.offlinecurrencyconverter.app.data.repository
 
 import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
+import com.offlinecurrencyconverter.app.data.local.dao.HistoricalSyncStateDao
 import com.offlinecurrencyconverter.app.data.local.entity.HistoricalRateEntity
 import com.offlinecurrencyconverter.app.domain.repository.HistoricalRateRepository
 import kotlinx.coroutines.flow.Flow
@@ -8,11 +9,14 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 class HistoricalRateRepositoryImpl @Inject constructor(
     private val historicalRateDao: HistoricalRateDao,
-    private val historicalRateSyncer: HistoricalRateSyncer
+    private val historicalRateSyncer: HistoricalRateSyncer,
+    private val syncStateDao: HistoricalSyncStateDao
 ) : HistoricalRateRepository {
 
     override suspend fun getHistoricalRates(
@@ -25,6 +29,27 @@ class HistoricalRateRepositoryImpl @Inject constructor(
         targetCurrency: String,
         days: Int
     ): Result<Unit> = historicalRateSyncer.ensureHistory(sourceCurrency, targetCurrency, days)
+
+    override suspend fun coveredHistoryDays(sourceCurrency: String, targetCurrency: String): Int {
+        if (sourceCurrency == targetCurrency) return 0
+
+        // Only the non-EUR side(s) of the pair are stored; a range is only as
+        // deep as the shallowest of them, because the chart needs both series.
+        val quotes = listOfNotNull(
+            sourceCurrency.takeUnless { it == BASE_CURRENCY },
+            targetCurrency.takeUnless { it == BASE_CURRENCY }
+        ).distinct()
+        if (quotes.isEmpty()) return 0
+
+        val today = LocalDate.now()
+        return quotes.minOf { quote ->
+            val coveredStart = syncStateDao.get(BASE_CURRENCY, quote)
+                ?.coveredStartDate
+                ?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+                ?: return@minOf 0
+            (ChronoUnit.DAYS.between(coveredStart, today) + 1).coerceAtLeast(0).toInt()
+        }
+    }
 
     override fun observeHistoricalRates(
         baseCurrency: String,
