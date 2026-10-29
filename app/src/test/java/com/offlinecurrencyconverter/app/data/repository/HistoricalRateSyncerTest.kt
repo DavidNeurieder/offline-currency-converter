@@ -206,6 +206,86 @@ class HistoricalRateSyncerTest {
         coVerify(exactly = 0) { syncStateDao.upsert(any()) }
     }
 
+    @Test
+    fun `an interrupted backfill never claims the years it has not downloaded`() = runTest {
+        // The bootstrap warmed only the tail before the 5 year backfill started.
+        coEvery { syncStateDao.get("EUR", "USD") } returns HistoricalSyncStateEntity(
+            baseCurrency = "EUR",
+            targetCurrency = "USD",
+            coveredStartDate = today.minusDays(90).toString(),
+            coveredEndDate = today.toString(),
+            lastSuccessfulSync = 0L
+        )
+        var calls = 0
+        coEvery { frankfurterApi.getHistoricalRates(eq("EUR"), eq("USD"), any(), any()) } answers {
+            calls++
+            if (calls > 1) throw IOException("offline")
+            Response.success(items(LocalDate.parse(arg<String>(2))))
+        }
+
+        val result = syncer.ensureHistory("USD", "EUR", 1825)
+
+        assertTrue(result.isFailure)
+        val windowStart = today.minusDays(1825)
+        val covered = coverageUpdates.last()
+        assertEquals(windowStart.toString(), covered.coveredStartDate)
+        // Only the first chunk is covered: the record must not reach across the
+        // years that were skipped when the download stopped.
+        assertEquals(windowStart.plusDays(365).toString(), covered.coveredEndDate)
+    }
+
+    @Test
+    fun `an interrupted backfill resumes from where it stopped`() = runTest {
+        val windowStart = today.minusDays(1825)
+        val stoppedAt = windowStart.plusDays(365)
+        coEvery { syncStateDao.get("EUR", "USD") } returns HistoricalSyncStateEntity(
+            baseCurrency = "EUR",
+            targetCurrency = "USD",
+            coveredStartDate = windowStart.toString(),
+            coveredEndDate = stoppedAt.toString(),
+            lastSuccessfulSync = 0L
+        )
+        val windows = mutableListOf<Pair<String, String>>()
+        coEvery { frankfurterApi.getHistoricalRates(eq("EUR"), eq("USD"), any(), any()) } answers {
+            windows += arg<String>(2) to arg<String>(3)
+            Response.success(items(LocalDate.parse(arg<String>(2))))
+        }
+
+        val result = syncer.ensureHistory("USD", "EUR", 1825)
+
+        assertTrue(result.isSuccess)
+        // The hole after the last covered date is downloaded, with the usual overlap.
+        assertEquals(stoppedAt.minusDays(7).toString(), windows.first().first)
+        assertEquals(today.toString(), windows.last().second)
+    }
+
+    @Test
+    fun `a completed backfill covers the whole range including the earlier warm tail`() = runTest {
+        var coverage = HistoricalSyncStateEntity(
+            baseCurrency = "EUR",
+            targetCurrency = "USD",
+            coveredStartDate = today.minusDays(90).toString(),
+            coveredEndDate = today.toString(),
+            lastSuccessfulSync = 0L
+        )
+        coEvery { syncStateDao.get("EUR", "USD") } answers { coverage }
+        coEvery { syncStateDao.upsert(any()) } answers {
+            val entity = arg<HistoricalSyncStateEntity>(0)
+            coverageUpdates += entity
+            coverage = entity
+        }
+        coEvery { frankfurterApi.getHistoricalRates(eq("EUR"), eq("USD"), any(), any()) } answers {
+            Response.success(items(LocalDate.parse(arg<String>(2))))
+        }
+
+        val result = syncer.ensureHistory("USD", "EUR", 1825)
+
+        assertTrue(result.isSuccess)
+        // Each chunk joined the previous one, so the warm tail ends up included.
+        assertEquals(today.minusDays(1825).toString(), coverage.coveredStartDate)
+        assertEquals(today.toString(), coverage.coveredEndDate)
+    }
+
     // ------------------------------------------------------------------
     // Trivial pairs
     // ------------------------------------------------------------------

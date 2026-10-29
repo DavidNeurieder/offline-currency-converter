@@ -248,21 +248,59 @@ class HistoricalRateSyncer @Inject constructor(
         val coveredQuotes = requestedQuotes.ifEmpty {
             entities.map { it.targetCurrency }.distinct()
         }
-        val now = System.currentTimeMillis()
-        coveredQuotes.forEach { quote ->
-            val current = syncStateDao.get(BASE_CURRENCY, quote)
-            syncStateDao.upsert(
-                HistoricalSyncStateEntity(
-                    baseCurrency = BASE_CURRENCY,
-                    targetCurrency = quote,
-                    coveredStartDate = earlierOf(current?.coveredStartDate, from),
-                    coveredEndDate = laterOf(current?.coveredEndDate, to),
-                    lastSuccessfulSync = now
+        val chunkStart = parseDate(from)
+        val chunkEnd = parseDate(to)
+        if (chunkStart != null && chunkEnd != null) {
+            val now = System.currentTimeMillis()
+            coveredQuotes.forEach { quote ->
+                val current = syncStateDao.get(BASE_CURRENCY, quote)
+                val (coveredStart, coveredEnd) = mergeCoverage(
+                    currentStart = current?.coveredStartDate?.let(::parseDate),
+                    currentEnd = current?.coveredEndDate?.let(::parseDate),
+                    chunkStart = chunkStart,
+                    chunkEnd = chunkEnd
                 )
-            )
+                syncStateDao.upsert(
+                    HistoricalSyncStateEntity(
+                        baseCurrency = BASE_CURRENCY,
+                        targetCurrency = quote,
+                        coveredStartDate = coveredStart.format(DATE_FORMAT),
+                        coveredEndDate = coveredEnd.format(DATE_FORMAT),
+                        lastSuccessfulSync = now
+                    )
+                )
+            }
         }
 
         return Result.success(entities.size)
+    }
+
+    /**
+     * Merges a freshly downloaded window into the coverage recorded for a quote.
+     *
+     * Coverage describes one contiguous stretch, so a chunk only joins it when the
+     * two touch. A deep backfill starts years before the already covered warm tail,
+     * and merging the bounds unconditionally would make its very first chunk claim
+     * everything up to that tail: an interruption would then leave a hole that
+     * later syncs consider covered and never download again. Two disjoint stretches
+     * cannot both be recorded, so the one with the older start wins - it is the one
+     * that would be expensive to fetch a second time.
+     */
+    private fun mergeCoverage(
+        currentStart: LocalDate?,
+        currentEnd: LocalDate?,
+        chunkStart: LocalDate,
+        chunkEnd: LocalDate
+    ): Pair<LocalDate, LocalDate> {
+        if (currentStart == null || currentEnd == null) return chunkStart to chunkEnd
+
+        val touches = !chunkStart.isAfter(currentEnd.plusDays(1)) &&
+            !chunkEnd.isBefore(currentStart.minusDays(1))
+        return when {
+            touches -> minOf(currentStart, chunkStart) to maxOf(currentEnd, chunkEnd)
+            currentStart.isBefore(chunkStart) -> currentStart to currentEnd
+            else -> chunkStart to chunkEnd
+        }
     }
 
     private fun mapHttpError(code: Int): Exception =
@@ -297,6 +335,3 @@ class HistoricalRateSyncer @Inject constructor(
         private const val TAG = "HistoricalRateSyncer"
     }
 }
-
-private fun earlierOf(a: String?, b: String): String = if (a == null) b else minOf(a, b)
-private fun laterOf(a: String?, b: String): String = if (a == null) b else maxOf(a, b)

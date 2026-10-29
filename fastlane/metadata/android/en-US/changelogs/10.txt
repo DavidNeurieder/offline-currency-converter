@@ -1,4 +1,6 @@
 Version 0.9.0:
-- New 1-year and 5-year chart ranges; the long history downloads once, then only the missing days are synced
-- Switching between 7D/30D/90D/1Y/5Y reuses the history cached on your device instead of re-downloading it
-- 1Y and 5Y are greyed out until downloaded, so offline the chart never shows a shorter range by mistake
+- New 1-year and 5-year chart ranges; long history downloads once, then only missing days sync
+- Switching ranges reuses the history cached on your device instead of re-downloading it
+- 1Y and 5Y are greyed out offline until their history has been downloaded
+- Date labels under the chart show the day, month or year of each stretch
+- An interrupted history download resumes where it stopped instead of leaving a gap
