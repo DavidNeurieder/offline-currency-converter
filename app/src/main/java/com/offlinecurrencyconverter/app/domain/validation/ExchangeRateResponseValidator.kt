@@ -83,14 +83,13 @@ class ExchangeRateResponseValidator @Inject constructor(
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
 
-        val validCount = rates.count { item ->
+        val invalidItems = rates.filterNot { item ->
             item.base == requestedBase &&
                 item.quote in supportedCurrencies &&
                 item.rate.isValidExchangeRate() &&
-                isWithinWindow(item.date, start, end)
+                isParseableDate(item.date)
         }
-
-        if (validCount != rates.size) {
+        if (invalidItems.isNotEmpty()) {
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
 
@@ -101,7 +100,12 @@ class ExchangeRateResponseValidator @Inject constructor(
             return Result.failure(SyncErrorException(SyncError.InvalidResponse))
         }
 
-        if (validCount < minHistoricalRecords) {
+        // The API legitimately back-fills the last publication day when the
+        // requested window starts on a non-business day, so rows dated before
+        // start are valid data rather than a malformed response. They are still
+        // stored, but only observations inside the window count as coverage.
+        val inWindowCount = rates.count { isWithinWindow(it.date, start, end) }
+        if (inWindowCount < minHistoricalRecords) {
             return Result.failure(SyncErrorException(SyncError.IncompleteResponse))
         }
 
@@ -110,6 +114,15 @@ class ExchangeRateResponseValidator @Inject constructor(
 
     private suspend fun supportedCurrencies(): Set<String> {
         return currencyRepository.getAllCurrencies().first().map { it.code }.toSet()
+    }
+
+    private fun isParseableDate(date: String): Boolean {
+        return try {
+            LocalDate.parse(date)
+            true
+        } catch (e: DateTimeParseException) {
+            false
+        }
     }
 
     private fun isWithinWindow(date: String, start: LocalDate, end: LocalDate): Boolean {

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.1
+
+### Fixed
+- Historical rate downloads no longer fail with "Invalid exchange rate data" when the 90-day window starts on a weekend or holiday — the API back-fills rates from the previous publication day, and those are now accepted and stored instead of rejecting the whole response
+
 ## 0.8.0
 
 ### Added

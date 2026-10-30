@@ -335,15 +335,50 @@ class ExchangeRateResponseValidatorTest {
     }
 
     @Test
-    fun `validateHistorical rejects date outside requested window`() = runTest {
+    fun `validateHistorical accepts back-filled date before requested window`() = runTest {
+        // The API returns the last publication day before `from` when the
+        // window starts on a non-business day.
         val items = historicalItems().toMutableList()
-        items[0] = ExchangeRateItem("1999-01-01", "EUR", "USD", 1.1)
+        items.add(0, ExchangeRateItem("2023-12-29", "EUR", "USD", 1.1))
+
+        val result = validator().validateHistorical(items, "EUR", "2024-01-01", "2024-01-31")
+
+        assertTrue(result.isSuccess)
+    }
+
+    @Test
+    fun `validateHistorical rejects response entirely outside requested window`() = runTest {
+        val items = (0 until 31).map { index ->
+            ExchangeRateItem(
+                date = LocalDate.parse("2023-12-01").plusDays(index.toLong()).toString(),
+                base = "EUR",
+                quote = "USD",
+                rate = 1.0 + index * 0.001
+            )
+        }
 
         val result = validator().validateHistorical(items, "EUR", "2024-01-01", "2024-01-31")
 
         assertTrue(result.isFailure)
         assertEquals(
-            SyncError.InvalidResponse,
+            SyncError.IncompleteResponse,
+            (result.exceptionOrNull() as SyncErrorException).syncError
+        )
+    }
+
+    @Test
+    fun `validateHistorical does not count back-filled rows towards minimum`() = runTest {
+        val items = listOf(
+            ExchangeRateItem("2023-12-29", "EUR", "USD", 1.1),
+            ExchangeRateItem("2024-01-02", "EUR", "USD", 1.1)
+        )
+
+        val result = validator(minHistoricalRecords = 2)
+            .validateHistorical(items, "EUR", "2024-01-01", "2024-01-31")
+
+        assertTrue(result.isFailure)
+        assertEquals(
+            SyncError.IncompleteResponse,
             (result.exceptionOrNull() as SyncErrorException).syncError
         )
     }
