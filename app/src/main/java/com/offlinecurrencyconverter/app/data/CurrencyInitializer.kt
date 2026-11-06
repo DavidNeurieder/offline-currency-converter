@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.data
 
+import com.offlinecurrencyconverter.app.BuildConfig
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.Mutex
@@ -14,18 +15,26 @@ class CurrencyInitializer @Inject constructor(
 ) {
     companion object {
         val DEFAULT_FAVORITES = listOf("USD", "EUR", "GBP", "JPY", "CNY")
+        private const val CURRENCY_REFRESH_INTERVAL_MS = 7L * 24 * 60 * 60 * 1000
     }
 
     private val initMutex = Mutex()
 
-    suspend fun initializeIfNeeded(): Result<Unit> = initMutex.withLock {
+    suspend fun initializeIfNeeded(force: Boolean = false): Result<Unit> = initMutex.withLock {
         val isInitialized = preferencesManager.currenciesInitialized.first()
         val hasCurrencies = currencyRepository.hasCurrencies()
+        val lastInstalledVersion = preferencesManager.lastInstalledVersion.first()
+        val lastRefreshed = preferencesManager.currenciesLastRefreshed.first()
 
-        if (!isInitialized || !hasCurrencies) {
+        val isStale = force || !isInitialized || !hasCurrencies ||
+            lastInstalledVersion < BuildConfig.VERSION_CODE ||
+            System.currentTimeMillis() - lastRefreshed > CURRENCY_REFRESH_INTERVAL_MS
+
+        if (isStale) {
             val result = currencyRepository.fetchAndSaveCurrenciesFromApi()
             if (result.isSuccess) {
                 preferencesManager.setCurrenciesInitialized(true)
+                preferencesManager.setCurrenciesLastRefreshed(System.currentTimeMillis())
             }
             seedDefaultFavoritesIfNeeded()
             result

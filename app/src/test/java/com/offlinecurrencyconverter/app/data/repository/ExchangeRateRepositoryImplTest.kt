@@ -2,6 +2,7 @@ package com.offlinecurrencyconverter.app.data.repository
 
 import com.offlinecurrencyconverter.app.data.local.dao.ExchangeRateDao
 import com.offlinecurrencyconverter.app.data.local.dao.HistoricalRateDao
+import com.offlinecurrencyconverter.app.data.CurrencyInitializer
 import com.offlinecurrencyconverter.app.data.local.entity.ExchangeRateEntity
 import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.data.remote.dto.ExchangeRateItem
@@ -30,6 +31,7 @@ class ExchangeRateRepositoryImplTest {
     private lateinit var historicalRateDao: HistoricalRateDao
     private lateinit var frankfurterApi: FrankfurterApi
     private lateinit var responseValidator: ExchangeRateResponseValidator
+    private lateinit var currencyInitializer: CurrencyInitializer
     private lateinit var repository: ExchangeRateRepositoryImpl
 
     @Before
@@ -40,11 +42,14 @@ class ExchangeRateRepositoryImplTest {
         responseValidator = mockk()
         coEvery { responseValidator.validateLatest(any(), any(), any()) } returns Result.success(Unit)
         coEvery { responseValidator.validateHistorical(any(), any(), any(), any()) } returns Result.success(Unit)
+        currencyInitializer = mockk()
+        coEvery { currencyInitializer.initializeIfNeeded() } returns Result.success(Unit)
         repository = ExchangeRateRepositoryImpl(
             exchangeRateDao,
             historicalRateDao,
             frankfurterApi,
-            responseValidator
+            responseValidator,
+            currencyInitializer
         )
     }
 

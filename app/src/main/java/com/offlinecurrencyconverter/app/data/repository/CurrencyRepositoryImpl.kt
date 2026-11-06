@@ -6,6 +6,7 @@ import com.offlinecurrencyconverter.app.data.remote.api.FrankfurterApi
 import com.offlinecurrencyconverter.app.domain.model.Currency
 import com.offlinecurrencyconverter.app.domain.repository.CurrencyRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -61,7 +62,10 @@ class CurrencyRepositoryImpl @Inject constructor(
             val response = frankfurterApi.getCurrencies()
             if (response.isSuccessful) {
                 val currencies = response.body() ?: emptyList()
+                val existing = runCatching { currencyDao.getAllCurrencies().first() }.getOrNull() ?: emptyList()
+                val existingByCode = existing.associateBy { it.code }
                 val entities = currencies.map { item ->
+                    val previous = existingByCode[item.isoCode]
                     CurrencyEntity(
                         code = item.isoCode,
                         name = item.name,
@@ -69,7 +73,9 @@ class CurrencyRepositoryImpl @Inject constructor(
                         isoNumeric = item.isoNumeric,
                         startDate = item.startDate,
                         endDate = item.endDate,
-                        isSelectedForOffline = item.isoCode in DEFAULT_SELECTED_CURRENCIES,
+                        isSelectedForOffline = previous?.isSelectedForOffline
+                            ?: (item.isoCode in DEFAULT_SELECTED_CURRENCIES),
+                        isFavorite = previous?.isFavorite ?: false,
                     )
                 }
                 currencyDao.deleteAll()

@@ -1,0 +1,4 @@
+Version 0.8.2:
+- Currency list now refreshes automatically so newly added currencies no longer break syncs
+- Refreshing currencies keeps your favorites and offline selections
+- Rate sync retries after refreshing currencies if needed

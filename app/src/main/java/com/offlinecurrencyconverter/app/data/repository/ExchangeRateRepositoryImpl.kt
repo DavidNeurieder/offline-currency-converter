@@ -23,7 +23,8 @@ class ExchangeRateRepositoryImpl @Inject constructor(
     private val exchangeRateDao: ExchangeRateDao,
     private val historicalRateDao: HistoricalRateDao,
     private val frankfurterApi: FrankfurterApi,
-    private val responseValidator: ExchangeRateResponseValidator
+    private val responseValidator: ExchangeRateResponseValidator,
+    private val currencyInitializer: com.offlinecurrencyconverter.app.data.CurrencyInitializer
 ) : ExchangeRateRepository {
 
     override fun getRatesForCurrency(baseCurrency: String): Flow<List<ExchangeRate>> {
@@ -152,6 +153,20 @@ class ExchangeRateRepositoryImpl @Inject constructor(
         baseCurrency: String,
         targetCurrencies: List<String>
     ): Result<Unit> {
+        currencyInitializer.initializeIfNeeded()
+        val first = fetchLatestRatesOnce(baseCurrency, targetCurrencies)
+        val error = first.exceptionOrNull()
+        if (error is SyncErrorException && error.syncError == SyncError.InvalidResponse) {
+            currencyInitializer.initializeIfNeeded(force = true)
+            return fetchLatestRatesOnce(baseCurrency, targetCurrencies)
+        }
+        return first
+    }
+
+    private suspend fun fetchLatestRatesOnce(
+        baseCurrency: String,
+        targetCurrencies: List<String>
+    ): Result<Unit> {
         return try {
             val startedAt = System.currentTimeMillis()
             val quotesParam = targetCurrencies.takeIf { it.isNotEmpty() }
@@ -213,6 +228,17 @@ class ExchangeRateRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchAndStoreHistoricalRates(): Result<Unit> {
+        currencyInitializer.initializeIfNeeded()
+        val first = fetchAndStoreHistoricalRatesOnce()
+        val error = first.exceptionOrNull()
+        if (error is SyncErrorException && error.syncError == SyncError.InvalidResponse) {
+            currencyInitializer.initializeIfNeeded(force = true)
+            return fetchAndStoreHistoricalRatesOnce()
+        }
+        return first
+    }
+
+    private suspend fun fetchAndStoreHistoricalRatesOnce(): Result<Unit> {
         return try {
             val startedAt = System.currentTimeMillis()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)

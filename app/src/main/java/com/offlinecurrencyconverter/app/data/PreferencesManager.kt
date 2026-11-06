@@ -29,6 +29,7 @@ class PreferencesManager @Inject constructor(
         val TARGET_CURRENCY = stringPreferencesKey("target_currency")
         val SYNC_INTERVAL = longPreferencesKey("sync_interval")
         val CURRENCIES_INITIALIZED = booleanPreferencesKey("currencies_initialized")
+        val CURRENCIES_LAST_REFRESHED = longPreferencesKey("currencies_last_refreshed")
         val RECENT_CURRENCIES = stringPreferencesKey("recent_currencies")
         val MULTI_CURRENCY_VIEW = booleanPreferencesKey("multi_currency_view")
         val HISTORICAL_RATES_CHART = booleanPreferencesKey("historical_rates_chart")
@@ -57,6 +58,10 @@ class PreferencesManager @Inject constructor(
 
     val currenciesInitialized: Flow<Boolean> = dataStore.data.map { prefs ->
         prefs[Keys.CURRENCIES_INITIALIZED] ?: false
+    }
+
+    val currenciesLastRefreshed: Flow<Long> = dataStore.data.map { prefs ->
+        prefs[Keys.CURRENCIES_LAST_REFRESHED] ?: 0L
     }
 
     val recentCurrencies: Flow<List<String>> = dataStore.data.map { prefs ->
@@ -114,6 +119,12 @@ class PreferencesManager @Inject constructor(
     suspend fun setCurrenciesInitialized(initialized: Boolean) {
         dataStore.edit { prefs ->
             prefs[Keys.CURRENCIES_INITIALIZED] = initialized
+        }
+    }
+
+    suspend fun setCurrenciesLastRefreshed(timestamp: Long) {
+        dataStore.edit { prefs ->
+            prefs[Keys.CURRENCIES_LAST_REFRESHED] = timestamp
         }
     }
 

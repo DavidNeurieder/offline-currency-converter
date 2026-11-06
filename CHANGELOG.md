@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.8.2
+
+### Fixed
+- Currency list now refreshes automatically (on app update, weekly, and whenever a rate sync reports unknown currencies), so added currencies no longer break syncs with "Invalid exchange rate data"
+- Refreshing currencies now preserves your favorites and offline selections instead of wiping them
+- Rate sync retries once after refreshing currencies if it still encounters an unknown currency
+
 ## 0.8.1
 
 ### Fixed

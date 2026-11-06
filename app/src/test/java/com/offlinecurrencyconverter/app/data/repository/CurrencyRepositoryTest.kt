@@ -121,6 +121,7 @@ class CurrencyRepositoryTest {
             CurrencyItem("EUR", "978", "Euro", "€", null, null)
         )
         coEvery { frankfurterApi.getCurrencies() } returns Response.success(currencyItems)
+        coEvery { currencyDao.getAllCurrencies() } returns flowOf(emptyList())
 
         val result = currencyRepository.fetchAndSaveCurrenciesFromApi()
 
