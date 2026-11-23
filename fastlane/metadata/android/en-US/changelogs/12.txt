@@ -1,0 +1,2 @@
+Version 0.8.3:
+- Amounts are now formatted automatically as you type, with locale-appropriate grouping separators (commas for US, dots for countries where appropriate)

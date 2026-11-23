@@ -247,7 +247,7 @@ fun ConversionCard(
                         Text(
                             text = result.convertedAmount?.let {
                                 "${result.currency.symbol}${
-                                    DecimalFormat("#,##0.00").format(it)
+                                    NumberFormatter.formatAmount(it, 2)
                                 }"
                             } ?: "-",
                             style = MaterialTheme.typography.bodyMedium,
@@ -321,7 +321,7 @@ private fun ConversionSuccess(conversionResult: ConversionResult) {
             Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "${conversionResult.targetCurrency.symbol}${
-                    DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
+                    NumberFormatter.formatAmount(conversionResult.targetAmount, 2)
                 }",
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Bold,
@@ -335,11 +335,11 @@ private fun ConversionSuccess(conversionResult: ConversionResult) {
             IconButton(
                 onClick = {
                     val copyText = "${conversionResult.sourceCurrency.symbol}${
-                        DecimalFormat("#,##0.00").format(conversionResult.sourceAmount)
+                        NumberFormatter.formatAmount(conversionResult.sourceAmount, 2)
                     } ${conversionResult.sourceCurrency.code} = ${conversionResult.targetCurrency.symbol}${
-                        DecimalFormat("#,##0.00").format(conversionResult.targetAmount)
+                        NumberFormatter.formatAmount(conversionResult.targetAmount, 2)
                     } ${conversionResult.targetCurrency.code} (1 ${conversionResult.sourceCurrency.code} = ${
-                        DecimalFormat("#,##0.####").format(conversionResult.rate)
+                        NumberFormatter.formatRate(conversionResult.rate)
                     } ${conversionResult.targetCurrency.code})"
                     clipboardManager.setText(AnnotatedString(copyText))
                     Toast.makeText(context, R.string.result_copied, Toast.LENGTH_SHORT).show()
@@ -355,7 +355,7 @@ private fun ConversionSuccess(conversionResult: ConversionResult) {
         }
         Text(
             text = "1 ${conversionResult.sourceCurrency.code} = ${
-                DecimalFormat("#,##0.####").format(conversionResult.rate)
+                NumberFormatter.formatRate(conversionResult.rate)
             } ${conversionResult.targetCurrency.code}",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -438,13 +438,13 @@ fun RecentConversionItem(conversion: ConversionResult) {
             Column {
                 Text(
                     text = "${conversion.sourceCurrency.symbol}${
-                        DecimalFormat("#,##0.00").format(conversion.sourceAmount)
+                        NumberFormatter.formatAmount(conversion.sourceAmount, 2)
                     } ${conversion.sourceCurrency.code}",
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Text(
                     text = "→ ${conversion.targetCurrency.symbol}${
-                        DecimalFormat("#,##0.00").format(conversion.targetAmount)
+                        NumberFormatter.formatAmount(conversion.targetAmount, 2)
                     } ${conversion.targetCurrency.code}",
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.SemiBold

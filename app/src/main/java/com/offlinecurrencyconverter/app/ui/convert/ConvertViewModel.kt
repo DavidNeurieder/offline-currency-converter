@@ -27,6 +27,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.offlinecurrencyconverter.app.ui.components.NumberFormatter
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 data class MultiCurrencyResult(
     val currency: Currency,
@@ -100,8 +103,9 @@ class ConvertViewModel @Inject constructor(
             _amount.debounce(300).collect { amount ->
                 val source = _uiState.value.sourceCurrency ?: return@collect
                 val target = _uiState.value.targetCurrency ?: return@collect
-                if (amount.isNotEmpty() && amount.toDoubleOrNull() != null) {
-                    performConversion(amount.toDouble(), source, target)
+                val parsedAmount = NumberFormatter.parseInput(amount, Locale.getDefault())
+            if (amount.isNotEmpty() && parsedAmount != null) {
+                    performConversion(parsedAmount, source, target)
                 } else {
                     _uiState.value = _uiState.value.copy(conversionResult = null)
                     recomputeMultiCurrency()
@@ -131,7 +135,7 @@ class ConvertViewModel @Inject constructor(
                         targetCurrency = targetCurrency
                     )
 
-                    val amount = _amount.value.toDoubleOrNull()
+                    val amount = NumberFormatter.parseInput(_amount.value, Locale.getDefault())
                     if (amount != null) {
                         performConversion(amount, sourceCurrency, targetCurrency)
                     }
@@ -194,7 +198,7 @@ class ConvertViewModel @Inject constructor(
         viewModelScope.launch {
             val saved = preferencesManager.amount.first()
             if (saved.isNotEmpty()) {
-                _amount.value = saved
+                _amount.value = NumberFormatter.formatInput(saved, Locale.getDefault())
             }
         }
     }
@@ -229,7 +233,7 @@ class ConvertViewModel @Inject constructor(
     private fun recomputeMultiCurrency() {
         val source = _uiState.value.sourceCurrency
         if (_uiState.value.multiCurrencyView && source != null) {
-            performMultiCurrencyConversion(_amount.value.toDoubleOrNull(), source)
+            performMultiCurrencyConversion(NumberFormatter.parseInput(_amount.value, Locale.getDefault()), source)
         }
     }
 
@@ -292,9 +296,15 @@ class ConvertViewModel @Inject constructor(
     }
 
     fun onAmountChange(newAmount: String) {
-        val filtered = newAmount.filter { it.isDigit() || it == '.' }
-        _amount.value = filtered
-        if (filtered.isEmpty() || filtered.toDoubleOrNull() == null) {
+        val locale = Locale.getDefault()
+        val symbols = DecimalFormatSymbols.getInstance(locale)
+        val decimalSep = symbols.decimalSeparator
+        val groupingSep = symbols.groupingSeparator
+        val filtered = newAmount.filter { it.isDigit() || it == decimalSep || it == groupingSep || it == ' ' }
+        val formatted = NumberFormatter.formatInput(filtered, locale)
+        _amount.value = formatted
+        val parsed = NumberFormatter.parseInput(formatted, locale)
+        if (formatted.isEmpty() || parsed == null) {
             _uiState.value = _uiState.value.copy(conversionResult = null)
             recomputeMultiCurrency()
         }
@@ -306,7 +316,7 @@ class ConvertViewModel @Inject constructor(
             preferencesManager.saveSourceCurrency(currency.code)
             preferencesManager.addRecentCurrency(currency.code)
         }
-        val amount = _amount.value.toDoubleOrNull()
+        val amount = NumberFormatter.parseInput(_amount.value, Locale.getDefault())
         if (amount != null) {
             performConversion(amount, currency, _uiState.value.targetCurrency ?: return)
         }
@@ -320,7 +330,7 @@ class ConvertViewModel @Inject constructor(
             preferencesManager.saveTargetCurrency(currency.code)
             preferencesManager.addRecentCurrency(currency.code)
         }
-        val amount = _amount.value.toDoubleOrNull()
+        val amount = NumberFormatter.parseInput(_amount.value, Locale.getDefault())
         if (amount != null) {
             performConversion(amount, _uiState.value.sourceCurrency ?: return, currency)
         }
@@ -350,7 +360,7 @@ class ConvertViewModel @Inject constructor(
             newTarget?.let { preferencesManager.saveTargetCurrency(it.code) }
         }
 
-        val amount = _amount.value.toDoubleOrNull()
+        val amount = NumberFormatter.parseInput(_amount.value, Locale.getDefault())
         if (amount != null && newSource != null && newTarget != null) {
             performConversion(amount, newSource, newTarget)
         }

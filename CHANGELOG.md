@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.3
+
+### Added
+- Automatic grouping separators while typing amounts (commas for US, dots/points for locales where appropriate)
+
 ## 0.8.2
 
 ### Fixed

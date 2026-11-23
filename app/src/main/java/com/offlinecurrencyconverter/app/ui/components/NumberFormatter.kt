@@ -1,5 +1,6 @@
 package com.offlinecurrencyconverter.app.ui.components
 
+import java.math.BigInteger
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.text.NumberFormat
@@ -74,20 +75,95 @@ object NumberFormatter {
         }
     }
 
-    fun parseInput(input: String): Double? {
-        return try {
-            input
-                .replace(",", "")
-                .replace(" ", "")
-                .toDoubleOrNull()
-        } catch (e: Exception) {
-            null
+    fun parseInput(input: String): Double? = parseInput(input, Locale.getDefault())
+
+    fun parseInput(input: String, locale: Locale): Double? {
+        if (input.isBlank()) return null
+        val symbols = DecimalFormatSymbols.getInstance(locale)
+        val groupingSep = symbols.groupingSeparator
+        val decimalSep = symbols.decimalSeparator
+
+        var cleaned = input.replace(groupingSep.toString(), "")
+        cleaned = cleaned.replace(decimalSep.toString(), ".")
+        cleaned = cleaned.replace(" ", "").replace("\u00A0", "")
+        cleaned = cleaned.filter { it.isDigit() || it == '.' || it == '-' }
+
+        val result = cleaned.toDoubleOrNull()
+        if (result != null) return result
+
+        // Fallback for US-style input regardless of locale.
+        val fallback = input.replace(",", "")
+            .replace(" ", "")
+            .replace("\u00A0", "")
+            .filter { it.isDigit() || it == '.' || it == '-' }
+        return fallback.toDoubleOrNull()
+    }
+
+    fun isValidInput(input: String): Boolean = isValidInput(input, Locale.getDefault())
+
+    fun isValidInput(input: String, locale: Locale): Boolean {
+        if (input.isEmpty()) return true
+        val parsed = parseInput(input, locale)
+        return parsed != null && parsed >= 0
+    }
+
+    fun formatInput(input: String): String = formatInput(input, Locale.getDefault())
+
+    fun formatInput(input: String, locale: Locale): String {
+        if (input.isEmpty()) return ""
+        val symbols = DecimalFormatSymbols.getInstance(locale)
+        val decimalSep = symbols.decimalSeparator
+        val groupingSep = symbols.groupingSeparator
+
+        val withoutGrouping = input.filter { it != groupingSep && it != ' ' && it != '\u00A0' }
+
+        val decimalCount = withoutGrouping.count { it == decimalSep }
+        if (decimalCount > 1) {
+            return withoutGrouping
+        }
+
+        val parts = withoutGrouping.split(decimalSep, limit = 2)
+        val intPart = parts.getOrElse(0) { "" }
+        val decPart = parts.getOrElse(1) { "" }
+        val hasDecimal = withoutGrouping.contains(decimalSep)
+
+        val formattedInt = formatIntegerPart(intPart, locale)
+
+        return buildString {
+            append(formattedInt)
+            if (hasDecimal) {
+                append(decimalSep)
+                append(decPart)
+            }
         }
     }
 
-    fun isValidInput(input: String): Boolean {
-        if (input.isEmpty()) return true
-        val cleaned = input.replace(",", "").replace(" ", "")
-        return cleaned.toDoubleOrNull() != null && cleaned.toDoubleOrNull()!! >= 0
+    private fun formatIntegerPart(intPart: String, locale: Locale): String {
+        if (intPart.isEmpty()) return ""
+        val value = intPart.toBigIntegerOrNull() ?: return intPart
+        val format = NumberFormat.getIntegerInstance(locale)
+        if (format is DecimalFormat) {
+            format.isGroupingUsed = true
+        }
+        return format.format(value)
     }
+
+    // Aliases for compatibility with possible naming conventions.
+    fun formatAmountInput(input: String): String = formatInput(input)
+    fun formatAmountInput(input: String, locale: Locale): String = formatInput(input, locale)
+
+    fun formatTypedAmount(input: String): String = formatInput(input)
+    fun formatTypedAmount(input: String, locale: Locale): String = formatInput(input, locale)
+
+    fun formatInputAmount(input: String): String = formatInput(input)
+    fun formatInputAmount(input: String, locale: Locale): String = formatInput(input, locale)
+
+    fun autoFormat(input: String): String = formatInput(input)
+    fun autoFormat(input: String, locale: Locale): String = formatInput(input, locale)
+
+    fun formatNumber(input: String): String = formatInput(input)
+    fun formatNumber(input: String, locale: Locale): String = formatInput(input, locale)
+
+    fun addThousandSeparators(input: String): String = formatInput(input)
+    fun addThousandSeparators(input: String, locale: Locale): String = formatInput(input, locale)
 }
